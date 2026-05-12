@@ -9,38 +9,99 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TodosRouteImport } from './routes/todos'
+import { Route as SummaryRouteImport } from './routes/summary'
+import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TimerIdRouteImport } from './routes/timer.$id'
 
+const TodosRoute = TodosRouteImport.update({
+  id: '/todos',
+  path: '/todos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SummaryRoute = SummaryRouteImport.update({
+  id: '/summary',
+  path: '/summary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewsRoute = ReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TimerIdRoute = TimerIdRouteImport.update({
+  id: '/timer/$id',
+  path: '/timer/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/reviews': typeof ReviewsRoute
+  '/summary': typeof SummaryRoute
+  '/todos': typeof TodosRoute
+  '/timer/$id': typeof TimerIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/reviews': typeof ReviewsRoute
+  '/summary': typeof SummaryRoute
+  '/todos': typeof TodosRoute
+  '/timer/$id': typeof TimerIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/reviews': typeof ReviewsRoute
+  '/summary': typeof SummaryRoute
+  '/todos': typeof TodosRoute
+  '/timer/$id': typeof TimerIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/reviews' | '/summary' | '/todos' | '/timer/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/reviews' | '/summary' | '/todos' | '/timer/$id'
+  id: '__root__' | '/' | '/reviews' | '/summary' | '/todos' | '/timer/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ReviewsRoute: typeof ReviewsRoute
+  SummaryRoute: typeof SummaryRoute
+  TodosRoute: typeof TodosRoute
+  TimerIdRoute: typeof TimerIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/todos': {
+      id: '/todos'
+      path: '/todos'
+      fullPath: '/todos'
+      preLoaderRoute: typeof TodosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/summary': {
+      id: '/summary'
+      path: '/summary'
+      fullPath: '/summary'
+      preLoaderRoute: typeof SummaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reviews': {
+      id: '/reviews'
+      path: '/reviews'
+      fullPath: '/reviews'
+      preLoaderRoute: typeof ReviewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,12 +109,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/timer/$id': {
+      id: '/timer/$id'
+      path: '/timer/$id'
+      fullPath: '/timer/$id'
+      preLoaderRoute: typeof TimerIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ReviewsRoute: ReviewsRoute,
+  SummaryRoute: SummaryRoute,
+  TodosRoute: TodosRoute,
+  TimerIdRoute: TimerIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
