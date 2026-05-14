@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { put, uid, type Activity, type TimeEntry, getAll } from "@/lib/db";
+import { LeafBack } from "./LeafBack";
 
 function fmt(ms: number) {
   const s = Math.floor(ms / 1000);
@@ -20,27 +21,56 @@ export function TimerPage({
   const [start, setStart] = useState<number | null>(null);
   const [now, setNow] = useState(Date.now());
   const [recent, setRecent] = useState<TimeEntry[]>([]);
+  const [recentIdx, setRecentIdx] = useState(0);
   const ref = useRef<number | null>(null);
 
   const load = async () => {
     const rows = await getAll<TimeEntry>("entries");
-    setRecent(rows.sort((a, b) => b.startAt - a.startAt).slice(0, 5));
+    setRecent(rows.sort((a, b) => b.startAt - a.startAt).slice(0, 3));
   };
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
+
+  // 自动开始计时
+  useEffect(() => {
+    if (activity && !running && start === null) {
+      setStart(Date.now());
+      setNow(Date.now());
+      setRunning(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activity]);
 
   useEffect(() => {
     if (running) {
-      ref.current = window.setInterval(() => setNow(Date.now()), 1000) as unknown as number;
-      return () => { if (ref.current) clearInterval(ref.current); };
+      ref.current = window.setInterval(
+        () => setNow(Date.now()),
+        1000,
+      ) as unknown as number;
+      return () => {
+        if (ref.current) clearInterval(ref.current);
+      };
     }
   }, [running]);
 
-  const begin = () => {
-    setStart(Date.now());
-    setNow(Date.now());
-    setRunning(true);
-  };
-  const stop = async () => {
+  // 最近记录 3 条以上的轮播（>3 自动隐藏，但严格只保存 3）
+  useEffect(() => {
+    if (recent.length <= 1) return;
+    const t = window.setInterval(
+      () => setRecentIdx((i) => (i + 1) % recent.length),
+      3000,
+    );
+    return () => clearInterval(t);
+  }, [recent.length]);
+
+  const toggle = async () => {
+    if (!running) {
+      setStart(Date.now());
+      setNow(Date.now());
+      setRunning(true);
+      return;
+    }
     if (!start) return;
     const endAt = Date.now();
     const e: TimeEntry = {
@@ -60,52 +90,53 @@ export function TimerPage({
   const elapsed = running && start ? now - start : 0;
 
   return (
-    <div className="flex flex-col items-center pt-6">
-      <div className="text-sm text-foreground/60">
-        {activity ? `正在记录：${activity.name}` : "请先在「事件」选择一项活动"}
+    <div className="flex flex-col items-center pt-2">
+      <div className="w-full">
+        <LeafBack onClick={onDone} />
       </div>
-      <div className="mt-8 grid h-64 w-64 place-items-center rounded-full glass shadow-xl">
-        <div className="text-4xl font-light tabular-nums text-foreground/85">
+
+      <button
+        onClick={toggle}
+        className="mt-10 grid h-72 w-72 place-items-center rounded-full glass breathe-slow shadow-2xl active:scale-95 transition"
+      >
+        <div className="text-5xl font-light tabular-nums text-foreground/85">
           {fmt(elapsed)}
         </div>
+      </button>
+
+      {/* 仅一行小字显示事件名 */}
+      <div className="mt-5 text-sm text-foreground/65">
+        {activity?.name ?? "未指定"}
       </div>
 
-      <div className="mt-10 flex gap-4">
-        {!running ? (
-          <button
-            disabled={!activity}
-            onClick={begin}
-            className="rounded-full bg-primary px-10 py-3 text-primary-foreground shadow-lg disabled:opacity-50 active:scale-95 transition"
-          >
-            开始
-          </button>
-        ) : (
-          <button
-            onClick={stop}
-            className="rounded-full bg-destructive px-10 py-3 text-destructive-foreground shadow-lg active:scale-95 transition"
-          >
-            结束
-          </button>
-        )}
-        <button
-          onClick={onDone}
-          className="rounded-full glass px-6 py-3 text-foreground/80"
-        >
-          返回
-        </button>
-      </div>
+      <button
+        onClick={toggle}
+        className={`mt-10 rounded-full px-12 py-3 text-base shadow-lg active:scale-95 transition ${
+          running
+            ? "bg-destructive text-destructive-foreground"
+            : "bg-primary text-primary-foreground"
+        }`}
+      >
+        {running ? "结束" : "开始"}
+      </button>
 
       {recent.length > 0 && (
-        <div className="mt-10 w-full">
+        <div className="mt-10 w-full max-w-sm">
           <h3 className="px-2 pb-2 text-sm text-foreground/60">最近记录</h3>
           <div className="space-y-2">
-            {recent.map((r) => (
-              <div key={r.id} className="glass rounded-2xl px-4 py-3 flex justify-between text-sm">
+            {recent.slice(0, 3).map((r) => (
+              <div
+                key={r.id}
+                className="glass rounded-2xl px-4 py-3 flex justify-between text-sm"
+              >
                 <span>{r.activityName}</span>
-                <span className="tabular-nums text-foreground/70">{fmt(r.duration)}</span>
+                <span className="tabular-nums text-foreground/70">
+                  {fmt(r.duration)}
+                </span>
               </div>
             ))}
           </div>
+          <div className="hidden">{recentIdx}</div>
         </div>
       )}
     </div>
