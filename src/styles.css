@@ -30,29 +30,31 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --animate-breathe: breathe 3.6s ease-in-out infinite;
 }
 
 :root {
   --radius: 1rem;
-  --background: oklch(0.96 0.04 150);
-  --foreground: oklch(0.28 0.06 150);
-  --card: oklch(1 0 0 / 0.55);
-  --card-foreground: oklch(0.25 0.06 150);
-  --popover: oklch(0.98 0.02 150);
-  --popover-foreground: oklch(0.25 0.06 150);
-  --primary: oklch(0.55 0.15 145);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.92 0.05 150 / 0.7);
-  --secondary-foreground: oklch(0.3 0.08 150);
-  --muted: oklch(0.93 0.03 150 / 0.6);
-  --muted-foreground: oklch(0.45 0.05 150);
-  --accent: oklch(0.85 0.12 140);
-  --accent-foreground: oklch(0.25 0.08 150);
-  --destructive: oklch(0.6 0.2 25);
+  /* 米白色与绿色的调和 */
+  --background: oklch(0.965 0.022 105);          /* 米白偏暖 */
+  --foreground: oklch(0.30 0.05 150);            /* 深墨绿 */
+  --card: oklch(0.985 0.018 105 / 0.7);
+  --card-foreground: oklch(0.28 0.05 150);
+  --popover: oklch(0.985 0.018 105);
+  --popover-foreground: oklch(0.28 0.05 150);
+  --primary: oklch(0.52 0.13 148);               /* 主绿 */
+  --primary-foreground: oklch(0.985 0.012 100);
+  --secondary: oklch(0.92 0.04 130 / 0.75);      /* 米绿 */
+  --secondary-foreground: oklch(0.32 0.07 148);
+  --muted: oklch(0.93 0.025 110 / 0.7);
+  --muted-foreground: oklch(0.46 0.05 145);
+  --accent: oklch(0.78 0.10 140);
+  --accent-foreground: oklch(0.25 0.07 150);
+  --destructive: oklch(0.6 0.18 25);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.5 0.08 150 / 0.2);
-  --input: oklch(1 0 0 / 0.7);
-  --ring: oklch(0.55 0.15 145);
+  --border: oklch(0.55 0.08 148 / 0.22);
+  --input: oklch(0.99 0.012 105 / 0.75);
+  --ring: oklch(0.52 0.13 148);
 }
 
 @layer base {
@@ -60,13 +62,32 @@
   html, body, #root { height: 100%; }
   body {
     color: var(--color-foreground);
-    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    /* 全局楷体 */
+    font-family: "Kaiti SC", "STKaiti", "Kaiti", "楷体", "BiauKai", "DFKai-SB", Kai, serif;
+    letter-spacing: 0.02em;
   }
 }
 
+/* 玻璃拟态 —— 米白偏绿 */
 .glass {
-  background: color-mix(in oklab, white 55%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid color-mix(in oklab, white 40%, transparent);
+  background: color-mix(in oklab, oklch(0.985 0.018 105) 55%, transparent);
+  backdrop-filter: blur(16px) saturate(1.05);
+  -webkit-backdrop-filter: blur(16px) saturate(1.05);
+  border: 1px solid color-mix(in oklab, oklch(0.52 0.13 148) 22%, transparent);
+  box-shadow: 0 6px 24px -10px color-mix(in oklab, oklch(0.40 0.10 148) 30%, transparent);
+}
+
+/* 呼吸动效 */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); box-shadow: 0 4px 18px -8px color-mix(in oklab, oklch(0.52 0.13 148) 25%, transparent); }
+  50%      { transform: scale(1.035); box-shadow: 0 8px 26px -8px color-mix(in oklab, oklch(0.52 0.13 148) 40%, transparent); }
+}
+.breathe { animation: breathe 3.6s ease-in-out infinite; }
+.breathe-slow { animation: breathe 5s ease-in-out infinite; }
+
+/* 复盘下划线 */
+.leaf-underline {
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 4px;
+  display: inline-block;
 }
