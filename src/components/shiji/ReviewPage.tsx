@@ -20,7 +20,7 @@ const CAT_BUCKETS: { key: ReviewCategory; label: string }[] = [
 export function ReviewPage() {
   const [list, setList] = useState<Review[]>([]);
   const [editing, setEditing] = useState<Review | null>(null);
-  const [openCat, setOpenCat] = useState<ReviewCategory | null>(null);
+  const [openCat, setOpenCat] = useState<ReviewCategory | "long" | null>(null);
   const [longView, setLongView] = useState<"week" | "month">("week");
   const [longSplit, setLongSplit] = useState(false);
   const [hoverCat, setHoverCat] = useState<string | null>(null);
