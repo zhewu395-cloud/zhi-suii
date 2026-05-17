@@ -107,27 +107,35 @@ export function SummaryPage() {
 
   return (
     <div className="pt-2 space-y-5">
-      {/* 维度切换 */}
-      <div className="glass flex rounded-full p-1 shadow-[0_8px_26px_-22px_oklch(0.42_0.05_125/0.24)]">
-        {(
-          [
-            ["day", "日总结"],
-            ["week", "周总结"],
-            ["month", "月总结"],
-          ] as [Range, string][]
-        ).map(([k, l]) => (
-          <button
-            key={k}
-            onClick={() => setRange(k)}
-            className={`flex-1 rounded-full py-1.5 text-sm transition ${
-              range === k
-                ? "bg-primary text-primary-foreground font-medium shadow-[0_1px_0_oklch(1_0_0/0.75)_inset]"
-                : "text-foreground/65"
-            }`}
-          >
-            {l}
-          </button>
-        ))}
+      {/* 维度切换 —— 固定在顶部 */}
+      <div
+        className="sticky -top-2 z-20 -mx-4 px-4 pt-2 pb-3"
+        style={{
+          backgroundImage:
+            "linear-gradient(180deg, #FFFDF9 0%, #FFFDF9 78%, oklch(0.998 0.004 88 / 0) 100%)",
+        }}
+      >
+        <div className="glass flex rounded-full p-1 shadow-[0_8px_26px_-22px_oklch(0.42_0.05_125/0.24)]">
+          {(
+            [
+              ["day", "日总结"],
+              ["week", "周总结"],
+              ["month", "月总结"],
+            ] as [Range, string][]
+          ).map(([k, l]) => (
+            <button
+              key={k}
+              onClick={() => setRange(k)}
+              className={`flex-1 rounded-full py-1.5 text-sm transition ${
+                range === k
+                  ? "bg-primary text-primary-foreground font-medium shadow-[0_1px_0_oklch(1_0_0/0.75)_inset]"
+                  : "text-foreground/65"
+              }`}
+            >
+              {l}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* 日期筛选 —— 随维度切换视图 */}
