@@ -159,23 +159,23 @@ export function ReviewPage() {
   // ===== 主视图 =====
   return (
     <div className="pt-2 space-y-5">
-      {/* 信纸书写区 —— 第一行显示今日日期 */}
+      {/* 信纸书写区 —— 纯色奶白底，浅绿横线 + 细腻竖向纹路 */}
       <button
         onClick={startNew}
         className="block w-full text-left rounded-3xl px-6 py-5 transition active:scale-[0.99] overflow-hidden"
         style={{
           height: "32vh",
           minHeight: 200,
-          background:
-            "linear-gradient(180deg, oklch(0.985 0.020 105) 0%, oklch(0.97 0.038 138 / 0.55) 100%)",
-          border: "1px solid oklch(0.82 0.04 138 / 0.32)",
+          backgroundColor: "#FBFAF4",
           backgroundImage:
-            "repeating-linear-gradient(to bottom, transparent 0px, transparent 31px, oklch(0.78 0.06 140 / 0.30) 31px, oklch(0.78 0.06 140 / 0.30) 32px), linear-gradient(180deg, oklch(0.985 0.020 105) 0%, oklch(0.97 0.038 138 / 0.55) 100%)",
-          backgroundSize: "100% 32px, 100% 100%",
+            "repeating-linear-gradient(to bottom, transparent 0px, transparent 31px, oklch(0.82 0.06 142 / 0.42) 31px, oklch(0.82 0.06 142 / 0.42) 32px), repeating-linear-gradient(to right, transparent 0px, transparent 3px, oklch(0.90 0.02 100 / 0.18) 3px, oklch(0.90 0.02 100 / 0.18) 4px)",
+          border: "1px solid oklch(0.85 0.03 130 / 0.35)",
           lineHeight: "32px",
         }}
       >
-        <div className="text-foreground/75 text-sm">{today}</div>
+        <div className="text-foreground/55 text-[11px] tracking-wide">
+          {today}
+        </div>
       </button>
 
       {/* 横向并排：琐碎记 / 日复盘 / 长复盘 */}
