@@ -354,38 +354,6 @@ function HDropZone({
   );
 }
 
-function DropZone({
-  label,
-  active,
-  onClick,
-  onDragOver,
-  onDragLeave,
-  onDrop,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-  onDragOver: (e: React.DragEvent) => void;
-  onDragLeave: () => void;
-  onDrop?: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      onDragOver={onDragOver}
-      onDragLeave={onDragLeave}
-      onDrop={onDrop}
-      className={`w-full rounded-2xl px-5 py-4 text-left text-base transition ${
-        active
-          ? "bg-primary/10 border border-primary"
-          : "glass border-transparent"
-      }`}
-    >
-      {label}
-    </button>
-  );
-}
-
 function CardList({
   rows,
   onOpen,
