@@ -12,17 +12,55 @@ const DEFAULT: Activity[] = [
 const DEFAULT_COLOR = "#bfe3c6";
 
 const PRESET_SWATCHES = [
-  "#f4a8a8", "#f6c177", "#f5e29a", "#c9e29a", "#a3dca8",
-  "#9ad6c1", "#a8d8f0", "#a8b8ee", "#c9a8ee", "#eba8d8",
-  "#e8d4b0", "#b9a890", "#d8d8d8", "#7a7a7a", "#2d2d2d",
+  "#FFFDF9", "#F5E9D4", "#E8C9A0", "#D89A6B", "#C46A4A",
+  "#E8A0A0", "#E0B8D4", "#B8A0D8", "#A0B8E0", "#A0D8E0",
+  "#BFE3C6", "#D6E7B8", "#E7DCB8", "#7A7A7A", "#2D2D2D",
 ];
+
+function hslToHex(h: number, s: number, l: number) {
+  s /= 100; l /= 100;
+  const k = (n: number) => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = (n: number) => {
+    const c = l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+    return Math.round(255 * c).toString(16).padStart(2, "0");
+  };
+  return `#${f(0)}${f(8)}${f(4)}`;
+}
+
+function SliderRow({
+  label, value, min, max, onChange, trackBg,
+}: {
+  label: string; value: number; min: number; max: number;
+  onChange: (v: number) => void; trackBg: string;
+}) {
+  return (
+    <div>
+      <div className="flex justify-between text-[11px] text-foreground/55 mb-1">
+        <span>{label}</span><span className="tabular-nums">{value}</span>
+      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="w-full h-3 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border [&::-webkit-slider-thumb]:border-foreground/30 [&::-webkit-slider-thumb]:shadow"
+        style={{ background: trackBg }}
+      />
+    </div>
+  );
+}
 
 export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
   const [list, setList] = useState<Activity[]>([]);
   const [adding, setAdding] = useState(false);
   const [name, setName] = useState("");
   
-  const [color, setColor] = useState<string>("#a3dca8");
+  const [color, setColor] = useState<string>("#BFE3C6");
+  const [hue, setHue] = useState(140);
+  const [sat, setSat] = useState(50);
+  const [light, setLight] = useState(75);
   const [longPressed, setLongPressed] = useState<string | null>(null);
 
   const load = async () => {
@@ -74,11 +112,11 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
       <p className="px-2 pb-4 text-sm text-foreground/60">选择一项活动开始记录</p>
 
       {/* 2 列对称椭圆按钮 —— 宽度 80%，高度拉长 */}
-      <div className="grid grid-cols-2 gap-4 px-4">
+      <div className="grid grid-cols-2 gap-3 px-2">
         {list.map((a, i) => {
           const color = a.color ?? DEFAULT_COLOR;
           return (
-            <div key={a.id} className="relative mx-auto w-[80%]">
+            <div key={a.id} className="relative mx-auto w-[94%]">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -149,40 +187,65 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
               className="w-full rounded-xl border border-border bg-input px-4 py-3 outline-none focus:ring-2 focus:ring-ring"
             />
 
-            {/* 标准全色调色盘 */}
-            <div className="mt-4 space-y-3">
+            {/* 标准双层调色盘：固定色卡 + 三条渐变色条 */}
+            <div className="mt-4 space-y-4">
               <div className="flex items-center gap-3">
-                <label
-                  className="h-12 w-12 rounded-full shadow-inner border border-border overflow-hidden cursor-pointer"
-                  style={{ background: currentColor }}
-                >
-                  <input
-                    type="color"
-                    value={color}
-                    onChange={(e) => setColor(e.target.value)}
-                    className="opacity-0 w-full h-full cursor-pointer"
-                  />
-                </label>
+                <div
+                  className="h-11 w-11 rounded-full shadow-inner border border-border"
+                  style={{ background: color }}
+                />
                 <div className="flex-1">
-                  <div className="text-xs text-foreground/60 mb-1">点击圆形从全色谱中选取</div>
+                  <div className="text-xs text-foreground/60 mb-0.5">当前颜色</div>
                   <div className="text-[11px] text-foreground/50 tabular-nums">{color.toUpperCase()}</div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-8 gap-1.5">
-                {PRESET_SWATCHES.map((c) => (
-                  <button
-                    key={c}
-                    onClick={() => setColor(c)}
-                    className={`h-7 w-7 rounded-full border ${
-                      color.toLowerCase() === c.toLowerCase()
-                        ? "ring-2 ring-foreground/60"
-                        : "border-border"
-                    }`}
-                    style={{ background: c }}
-                    aria-label={c}
-                  />
-                ))}
+              {/* 固定色卡 */}
+              <div>
+                <div className="text-xs text-foreground/55 mb-1.5">常用色卡</div>
+                <div className="grid grid-cols-8 gap-1.5">
+                  {PRESET_SWATCHES.map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => setColor(c)}
+                      className={`h-7 w-7 rounded-full border ${
+                        color.toLowerCase() === c.toLowerCase()
+                          ? "ring-2 ring-foreground/60"
+                          : "border-border"
+                      }`}
+                      style={{ background: c }}
+                      aria-label={c}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* 渐变色条 —— 色相 / 饱和 / 明度 */}
+              <div className="space-y-2.5">
+                <SliderRow
+                  label="色相"
+                  value={hue}
+                  min={0}
+                  max={360}
+                  onChange={(v) => { setHue(v); setColor(hslToHex(v, sat, light)); }}
+                  trackBg="linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)"
+                />
+                <SliderRow
+                  label="饱和"
+                  value={sat}
+                  min={0}
+                  max={100}
+                  onChange={(v) => { setSat(v); setColor(hslToHex(hue, v, light)); }}
+                  trackBg={`linear-gradient(to right, hsl(${hue} 0% ${light}%), hsl(${hue} 100% ${light}%))`}
+                />
+                <SliderRow
+                  label="明度"
+                  value={light}
+                  min={10}
+                  max={95}
+                  onChange={(v) => { setLight(v); setColor(hslToHex(hue, sat, v)); }}
+                  trackBg={`linear-gradient(to right, hsl(${hue} ${sat}% 15%), hsl(${hue} ${sat}% 55%), hsl(${hue} ${sat}% 92%))`}
+                />
               </div>
             </div>
 
