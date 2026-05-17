@@ -43,16 +43,34 @@ function fmtDur(ms: number) {
   return mm === 0 ? `${h} 时` : `${h} 时 ${mm} 分`;
 }
 
+type Range = "day" | "week" | "month";
+
+function inRange(d: Date, ref: Date, range: Range) {
+  if (range === "day") return ymd(d) === ymd(ref);
+  if (range === "week") {
+    const r = new Date(ref);
+    const day = (r.getDay() + 6) % 7; // 周一=0
+    const start = new Date(r);
+    start.setDate(r.getDate() - day);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 7);
+    return d >= start && d < end;
+  }
+  // month
+  return d.getFullYear() === ref.getFullYear() && d.getMonth() === ref.getMonth();
+}
+
 export function SummaryPage() {
   const [entries, setEntries] = useState<TimeEntry[]>([]);
   const [date, setDate] = useState<Date>(new Date());
+  const [range, setRange] = useState<Range>("day");
   const [view, setView] = useState<"grid" | "line">("grid");
 
   useEffect(() => {
     getAll<TimeEntry>("entries").then(setEntries);
   }, []);
 
-  // 自动切换网格 / 折线
   useEffect(() => {
     const t = window.setInterval(
       () => setView((v) => (v === "grid" ? "line" : "grid")),
@@ -61,12 +79,11 @@ export function SummaryPage() {
     return () => clearInterval(t);
   }, []);
 
-  // 同名合并
+  // 同名合并 + 时间范围筛选
   const merged = useMemo(() => {
-    const target = ymd(date);
     const map = new Map<string, number>();
     for (const e of entries) {
-      if (ymd(new Date(e.startAt)) !== target) continue;
+      if (!inRange(new Date(e.startAt), date, range)) continue;
       map.set(e.activityName, (map.get(e.activityName) ?? 0) + e.duration);
     }
     const arr = Array.from(map.entries()).map(([name, value]) => ({
@@ -75,7 +92,7 @@ export function SummaryPage() {
     }));
     arr.sort((a, b) => b.value - a.value);
     return arr;
-  }, [entries, date]);
+  }, [entries, date, range]);
 
   const total = merged.reduce((s, x) => s + x.value, 0);
   const top3 = merged.slice(0, 3);
