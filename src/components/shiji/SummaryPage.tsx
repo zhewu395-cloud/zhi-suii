@@ -130,23 +130,51 @@ export function SummaryPage() {
         ))}
       </div>
 
-      {/* 日期筛选 */}
+      {/* 日期筛选 —— 随维度切换视图 */}
       <div className="flex items-center justify-between px-1">
         <div className="text-sm text-foreground/70">{rangeLabel}</div>
         <Popover>
           <PopoverTrigger asChild>
             <button className="glass flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-foreground/80">
               <CalendarIcon className="h-4 w-4" />
-              选择日期
+              {range === "day" ? "选日" : range === "week" ? "选周" : "选月"}
             </button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="end">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={(d) => d && setDate(d)}
-              className={cn("p-3 pointer-events-auto")}
-            />
+            {range === "month" ? (
+              <MonthYearPicker value={date} onChange={setDate} />
+            ) : (
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={(d) => {
+                  if (!d) return;
+                  if (range === "week") {
+                    // 归一到当周周一
+                    const r = new Date(d);
+                    const day = (r.getDay() + 6) % 7;
+                    r.setDate(r.getDate() - day);
+                    setDate(r);
+                  } else {
+                    setDate(d);
+                  }
+                }}
+                showWeekNumber={range === "week"}
+                modifiers={
+                  range === "week"
+                    ? {
+                        inweek: (d) => inRange(d, date, "week"),
+                      }
+                    : undefined
+                }
+                modifiersClassNames={
+                  range === "week"
+                    ? { inweek: "bg-primary/30 rounded-none" }
+                    : undefined
+                }
+                className={cn("p-3 pointer-events-auto")}
+              />
+            )}
           </PopoverContent>
         </Popover>
       </div>
