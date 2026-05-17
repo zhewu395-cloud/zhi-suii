@@ -274,33 +274,47 @@ export function TodosPage() {
         );
       })}
 
-      {/* 1/5 屏弹窗 */}
+      {/* 视觉中心：屏幕上方 38%，高度随内容自适应 */}
       {adding && (
         <div
-          className="fixed inset-0 z-30 flex items-end justify-center bg-black/35 px-4 pb-16"
+          className="fixed inset-0 z-30 bg-black/35 px-4"
           onClick={() => setAdding(false)}
         >
           <div
-            className="w-full max-w-sm rounded-3xl bg-background shadow-2xl p-4"
-            style={{ height: "20vh", minHeight: 180 }}
+            className="absolute left-1/2 -translate-x-1/2 w-[92%] max-w-sm rounded-[28px] bg-background shadow-2xl flex flex-col overflow-hidden animate-scale-in"
+            style={{ top: "30%" }}
             onClick={(e) => e.stopPropagation()}
           >
-            <input
-              autoFocus
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="任务名"
-              className="w-full bg-transparent px-1 py-1 text-base font-medium outline-none"
-            />
-            <div className="my-2 h-px bg-border" />
-            <textarea
-              value={details}
-              onChange={(e) => setDetails(e.target.value)}
-              placeholder="详细内容（可选）"
-              rows={2}
-              className="w-full resize-none bg-transparent px-1 text-sm text-foreground/75 outline-none"
-            />
-            <div className="mt-1 flex items-center justify-between">
+            {/* 顶部：任务名 —— 固定不被挤压 */}
+            <div className="px-5 pt-4 pb-2 shrink-0">
+              <input
+                autoFocus
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="任务名"
+                className="w-full bg-transparent text-base font-medium outline-none"
+              />
+            </div>
+            {/* 分割线 —— 固定不被挤压 */}
+            <div className="mx-5 h-px bg-border shrink-0" />
+            {/* 中部：详情 —— 自动延伸 */}
+            <div className="px-5 pt-2 pb-1">
+              <textarea
+                value={details}
+                onChange={(e) => {
+                  setDetails(e.target.value);
+                  const ta = e.currentTarget;
+                  ta.style.height = "auto";
+                  ta.style.height = Math.min(ta.scrollHeight, 280) + "px";
+                }}
+                placeholder="详细内容（可选）"
+                rows={2}
+                className="block w-full resize-none bg-transparent text-sm text-foreground/75 outline-none min-h-[48px]"
+                style={{ maxHeight: 280 }}
+              />
+            </div>
+            {/* 底部：日期 + 操作 —— 固定 */}
+            <div className="px-5 pb-4 pt-1 flex items-center justify-between shrink-0">
               <Popover>
                 <PopoverTrigger asChild>
                   <button className="flex items-center gap-1 rounded-full bg-muted/70 px-3 py-1 text-xs text-foreground/70">
