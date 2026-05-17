@@ -91,10 +91,11 @@ export function TimerPage({
 
   return (
     <div className="flex flex-col items-center pt-2">
-      <div className="w-full">
+      <div className="w-full sticky top-0 z-10">
         <LeafBack onClick={onDone} />
       </div>
 
+      {/* 大圆 —— 与页面一起平滑滚动 */}
       <button
         onClick={toggle}
         className="mt-10 grid h-72 w-72 place-items-center rounded-full glass breathe-slow shadow-2xl active:scale-95 transition"
@@ -104,8 +105,8 @@ export function TimerPage({
         </div>
       </button>
 
-      {/* 仅一行小字显示事件名 */}
-      <div className="mt-5 text-sm text-foreground/65">
+      {/* 事件名 —— 2倍字号 */}
+      <div className="mt-6 text-3xl font-medium text-foreground/85 tracking-wider">
         {activity?.name ?? "未指定"}
       </div>
 
@@ -139,6 +140,7 @@ export function TimerPage({
           <div className="hidden">{recentIdx}</div>
         </div>
       )}
+      <div className="h-20" />
     </div>
   );
 }

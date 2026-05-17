@@ -43,16 +43,34 @@ function fmtDur(ms: number) {
   return mm === 0 ? `${h} 时` : `${h} 时 ${mm} 分`;
 }
 
+type Range = "day" | "week" | "month";
+
+function inRange(d: Date, ref: Date, range: Range) {
+  if (range === "day") return ymd(d) === ymd(ref);
+  if (range === "week") {
+    const r = new Date(ref);
+    const day = (r.getDay() + 6) % 7; // 周一=0
+    const start = new Date(r);
+    start.setDate(r.getDate() - day);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 7);
+    return d >= start && d < end;
+  }
+  // month
+  return d.getFullYear() === ref.getFullYear() && d.getMonth() === ref.getMonth();
+}
+
 export function SummaryPage() {
   const [entries, setEntries] = useState<TimeEntry[]>([]);
   const [date, setDate] = useState<Date>(new Date());
+  const [range, setRange] = useState<Range>("day");
   const [view, setView] = useState<"grid" | "line">("grid");
 
   useEffect(() => {
     getAll<TimeEntry>("entries").then(setEntries);
   }, []);
 
-  // 自动切换网格 / 折线
   useEffect(() => {
     const t = window.setInterval(
       () => setView((v) => (v === "grid" ? "line" : "grid")),
@@ -61,12 +79,11 @@ export function SummaryPage() {
     return () => clearInterval(t);
   }, []);
 
-  // 同名合并
+  // 同名合并 + 时间范围筛选
   const merged = useMemo(() => {
-    const target = ymd(date);
     const map = new Map<string, number>();
     for (const e of entries) {
-      if (ymd(new Date(e.startAt)) !== target) continue;
+      if (!inRange(new Date(e.startAt), date, range)) continue;
       map.set(e.activityName, (map.get(e.activityName) ?? 0) + e.duration);
     }
     const arr = Array.from(map.entries()).map(([name, value]) => ({
@@ -75,17 +92,47 @@ export function SummaryPage() {
     }));
     arr.sort((a, b) => b.value - a.value);
     return arr;
-  }, [entries, date]);
+  }, [entries, date, range]);
 
   const total = merged.reduce((s, x) => s + x.value, 0);
   const top3 = merged.slice(0, 3);
   const last1 = merged.length > 0 ? merged[merged.length - 1] : null;
 
+  const rangeLabel =
+    range === "day"
+      ? ymd(date)
+      : range === "week"
+      ? `${ymd(date)} 所在周`
+      : `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+
   return (
-    <div className="pt-2 space-y-6">
+    <div className="pt-2 space-y-5">
+      {/* 维度切换 */}
+      <div className="glass flex rounded-full p-1">
+        {(
+          [
+            ["day", "日总结"],
+            ["week", "周总结"],
+            ["month", "月总结"],
+          ] as [Range, string][]
+        ).map(([k, l]) => (
+          <button
+            key={k}
+            onClick={() => setRange(k)}
+            className={`flex-1 rounded-full py-1.5 text-sm transition ${
+              range === k
+                ? "bg-primary text-primary-foreground font-medium"
+                : "text-foreground/65"
+            }`}
+          >
+            {l}
+          </button>
+        ))}
+      </div>
+
       {/* 日期筛选 */}
       <div className="flex items-center justify-between px-1">
-        <div className="text-sm text-foreground/70">{ymd(date)}</div>
+        <div className="text-sm text-foreground/70">{rangeLabel}</div>
         <Popover>
           <PopoverTrigger asChild>
             <button className="glass flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-foreground/80">
@@ -106,7 +153,7 @@ export function SummaryPage() {
 
       {merged.length === 0 ? (
         <div className="mt-20 text-center text-foreground/50 text-sm">
-          这一天还没有记录
+          这段时间还没有记录
         </div>
       ) : (
         <>
@@ -249,11 +296,16 @@ export function SummaryPage() {
           {/* 排行 */}
           <section className="glass rounded-3xl p-4">
             <div className="px-1 pb-3 text-sm text-foreground/70">
-              当日极端
+              {range === "day" ? "当日极端" : range === "week" ? "本周极端" : "本月极端"}
             </div>
             <div className="space-y-2">
               {top3.map((m, i) => (
-                <Row key={m.name} rank={`Top ${i + 1}`} m={m} accent />
+                <Row
+                  key={m.name}
+                  rank={i === 0 ? "1" : i === 1 ? "2." : "3."}
+                  m={m}
+                  accent={i === 0}
+                />
               ))}
               {last1 && top3.findIndex((x) => x.name === last1.name) === -1 && (
                 <Row rank="最少" m={last1} />

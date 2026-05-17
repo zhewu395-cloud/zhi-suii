@@ -35,27 +35,31 @@
 
 :root {
   --radius: 1rem;
-  /* 米白色与绿色的调和 */
-  --background: oklch(0.965 0.022 105);          /* 米白偏暖 */
-  --foreground: oklch(0.30 0.05 150);            /* 深墨绿 */
-  --card: oklch(0.985 0.018 105 / 0.7);
-  --card-foreground: oklch(0.28 0.05 150);
-  --popover: oklch(0.985 0.018 105);
-  --popover-foreground: oklch(0.28 0.05 150);
-  --primary: oklch(0.52 0.13 148);               /* 主绿 */
-  --primary-foreground: oklch(0.985 0.012 100);
-  --secondary: oklch(0.92 0.04 130 / 0.75);      /* 米绿 */
-  --secondary-foreground: oklch(0.32 0.07 148);
-  --muted: oklch(0.93 0.025 110 / 0.7);
-  --muted-foreground: oklch(0.46 0.05 145);
-  --accent: oklch(0.78 0.10 140);
-  --accent-foreground: oklch(0.25 0.07 150);
-  --destructive: oklch(0.6 0.18 25);
+  /* 米白与玉绿白色调和 —— 浅淡、柔和、白绿融合 */
+  --background: oklch(0.972 0.018 110);          /* 米白偏暖 */
+  --foreground: oklch(0.38 0.05 150);            /* 沉静墨绿 */
+  --card: oklch(0.985 0.014 115 / 0.72);
+  --card-foreground: oklch(0.36 0.05 150);
+  --popover: oklch(0.985 0.014 115);
+  --popover-foreground: oklch(0.36 0.05 150);
+  --primary: oklch(0.74 0.07 148);               /* 玉绿白 */
+  --primary-foreground: oklch(0.30 0.06 150);
+  --secondary: oklch(0.94 0.025 130 / 0.78);
+  --secondary-foreground: oklch(0.40 0.06 148);
+  --muted: oklch(0.95 0.018 115 / 0.72);
+  --muted-foreground: oklch(0.52 0.04 145);
+  --accent: oklch(0.86 0.06 140);
+  --accent-foreground: oklch(0.32 0.06 150);
+  --destructive: oklch(0.66 0.14 25);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.55 0.08 148 / 0.22);
-  --input: oklch(0.99 0.012 105 / 0.75);
-  --ring: oklch(0.52 0.13 148);
+  --border: oklch(0.74 0.05 148 / 0.30);
+  --input: oklch(0.99 0.010 110 / 0.78);
+  --ring: oklch(0.74 0.07 148);
 }
+
+/* 全局隐藏滚动条 */
+*::-webkit-scrollbar { width: 0; height: 0; display: none; }
+* { scrollbar-width: none; -ms-overflow-style: none; }
 
 @layer base {
   * { border-color: var(--color-border); }
@@ -68,13 +72,13 @@
   }
 }
 
-/* 玻璃拟态 —— 米白偏绿 */
+/* 玻璃拟态 —— 玉绿白调和 */
 .glass {
-  background: color-mix(in oklab, oklch(0.985 0.018 105) 55%, transparent);
-  backdrop-filter: blur(16px) saturate(1.05);
-  -webkit-backdrop-filter: blur(16px) saturate(1.05);
-  border: 1px solid color-mix(in oklab, oklch(0.52 0.13 148) 22%, transparent);
-  box-shadow: 0 6px 24px -10px color-mix(in oklab, oklch(0.40 0.10 148) 30%, transparent);
+  background: color-mix(in oklab, oklch(0.985 0.014 115) 60%, transparent);
+  backdrop-filter: blur(18px) saturate(1.05);
+  -webkit-backdrop-filter: blur(18px) saturate(1.05);
+  border: 1px solid color-mix(in oklab, oklch(0.74 0.07 148) 35%, transparent);
+  box-shadow: 0 6px 24px -12px color-mix(in oklab, oklch(0.60 0.08 148) 28%, transparent);
 }
 
 /* 呼吸动效 */
