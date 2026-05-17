@@ -163,40 +163,65 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
               className="w-full rounded-xl border border-border bg-input px-4 py-3 outline-none focus:ring-2 focus:ring-ring"
             />
 
-            {/* 标准全色调色盘 */}
-            <div className="mt-4 space-y-3">
+            {/* 标准双层调色盘：固定色卡 + 三条渐变色条 */}
+            <div className="mt-4 space-y-4">
               <div className="flex items-center gap-3">
-                <label
-                  className="h-12 w-12 rounded-full shadow-inner border border-border overflow-hidden cursor-pointer"
-                  style={{ background: currentColor }}
-                >
-                  <input
-                    type="color"
-                    value={color}
-                    onChange={(e) => setColor(e.target.value)}
-                    className="opacity-0 w-full h-full cursor-pointer"
-                  />
-                </label>
+                <div
+                  className="h-11 w-11 rounded-full shadow-inner border border-border"
+                  style={{ background: color }}
+                />
                 <div className="flex-1">
-                  <div className="text-xs text-foreground/60 mb-1">点击圆形从全色谱中选取</div>
+                  <div className="text-xs text-foreground/60 mb-0.5">当前颜色</div>
                   <div className="text-[11px] text-foreground/50 tabular-nums">{color.toUpperCase()}</div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-8 gap-1.5">
-                {PRESET_SWATCHES.map((c) => (
-                  <button
-                    key={c}
-                    onClick={() => setColor(c)}
-                    className={`h-7 w-7 rounded-full border ${
-                      color.toLowerCase() === c.toLowerCase()
-                        ? "ring-2 ring-foreground/60"
-                        : "border-border"
-                    }`}
-                    style={{ background: c }}
-                    aria-label={c}
-                  />
-                ))}
+              {/* 固定色卡 */}
+              <div>
+                <div className="text-xs text-foreground/55 mb-1.5">常用色卡</div>
+                <div className="grid grid-cols-8 gap-1.5">
+                  {PRESET_SWATCHES.map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => setColor(c)}
+                      className={`h-7 w-7 rounded-full border ${
+                        color.toLowerCase() === c.toLowerCase()
+                          ? "ring-2 ring-foreground/60"
+                          : "border-border"
+                      }`}
+                      style={{ background: c }}
+                      aria-label={c}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* 渐变色条 —— 色相 / 饱和 / 明度 */}
+              <div className="space-y-2.5">
+                <SliderRow
+                  label="色相"
+                  value={hue}
+                  min={0}
+                  max={360}
+                  onChange={(v) => { setHue(v); setColor(hslToHex(v, sat, light)); }}
+                  trackBg="linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)"
+                />
+                <SliderRow
+                  label="饱和"
+                  value={sat}
+                  min={0}
+                  max={100}
+                  onChange={(v) => { setSat(v); setColor(hslToHex(hue, v, light)); }}
+                  trackBg={`linear-gradient(to right, hsl(${hue} 0% ${light}%), hsl(${hue} 100% ${light}%))`}
+                />
+                <SliderRow
+                  label="明度"
+                  value={light}
+                  min={10}
+                  max={95}
+                  onChange={(v) => { setLight(v); setColor(hslToHex(hue, sat, v)); }}
+                  trackBg={`linear-gradient(to right, hsl(${hue} ${sat}% 15%), hsl(${hue} ${sat}% 55%), hsl(${hue} ${sat}% 92%))`}
+                />
               </div>
             </div>
 
