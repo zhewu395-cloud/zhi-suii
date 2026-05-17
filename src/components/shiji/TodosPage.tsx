@@ -90,8 +90,10 @@ export function TodosPage() {
 
   const toggle = async (t: Todo, ev: React.MouseEvent) => {
     if (!t.done) {
-      // 计算屏幕坐标百分比
-      const rect = (ev.currentTarget as HTMLElement).getBoundingClientRect();
+      // 以任务条整体的几何中心为发射源
+      const row = (ev.currentTarget as HTMLElement).closest<HTMLElement>("[data-todo-row]");
+      const target = row ?? (ev.currentTarget as HTMLElement);
+      const rect = target.getBoundingClientRect();
       const x = (rect.left + rect.width / 2) / window.innerWidth;
       const y = (rect.top + rect.height / 2) / window.innerHeight;
       fireBurst({ x, y });
