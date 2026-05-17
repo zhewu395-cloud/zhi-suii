@@ -83,6 +83,13 @@ body::-webkit-scrollbar,
     font-family: "Kaiti SC", "STKaiti", "Kaiti", "楷体", "BiauKai", "DFKai-SB", Kai, serif;
     letter-spacing: 0.02em;
   }
+  /* 关键：去掉 iOS/Safari 的系统按钮青蓝默认外观 */
+  button, [role="button"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    color: inherit;
+  }
 }
 
 /* 玻璃拟态 —— 阳光奶白主导，带兜底纯色避免回落到系统蓝 */
