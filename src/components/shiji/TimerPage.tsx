@@ -95,28 +95,26 @@ export function TimerPage({
         <LeafBack onClick={onDone} />
       </div>
 
-      {/* 大圆 —— 与页面一起平滑滚动 */}
-      <button
-        onClick={toggle}
-        className="mt-10 grid h-72 w-72 place-items-center rounded-full glass breathe-slow shadow-2xl active:scale-95 transition"
-      >
-        <div className="text-5xl font-light tabular-nums text-foreground/85">
-          {fmt(elapsed)}
-        </div>
-      </button>
+      {/* 大圆 —— sticky 跟随滚动，浮在最上层 */}
+      <div className="sticky top-2 z-40 mt-6 mb-2">
+        <button
+          onClick={toggle}
+          className="grid h-72 w-72 place-items-center rounded-full glass breathe-slow shadow-2xl active:scale-95 transition mx-auto"
+        >
+          <div className="text-5xl font-light tabular-nums text-foreground/85">
+            {fmt(elapsed)}
+          </div>
+        </button>
+      </div>
 
       {/* 事件名 —— 2倍字号 */}
-      <div className="mt-6 text-3xl font-medium text-foreground/85 tracking-wider">
+      <div className="mt-4 text-3xl font-medium text-foreground/85 tracking-wider">
         {activity?.name ?? "未指定"}
       </div>
 
       <button
         onClick={toggle}
-        className={`mt-10 rounded-full px-12 py-3 text-base shadow-lg active:scale-95 transition ${
-          running
-            ? "bg-destructive text-destructive-foreground"
-            : "bg-primary text-primary-foreground"
-        }`}
+        className="mt-10 rounded-full bg-primary text-primary-foreground px-12 py-3 text-base shadow-lg active:scale-95 transition"
       >
         {running ? "结束" : "开始"}
       </button>
