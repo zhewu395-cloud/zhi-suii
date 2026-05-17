@@ -142,8 +142,14 @@ export function TodosPage() {
       }}
     >
       <ParticleLayer />
-      <div className="flex items-center justify-between px-2 pb-3">
-        <p className="text-sm text-foreground/60">我的待办</p>
+      <div
+        className="sticky -top-2 z-20 -mx-4 px-4 pt-2 pb-2 flex items-center justify-between"
+        style={{
+          backgroundImage:
+            "linear-gradient(180deg, #FFFDF9 0%, #FFFDF9 75%, oklch(0.998 0.004 88 / 0) 100%)",
+        }}
+      >
+        <p className="text-sm text-foreground/60 px-1">我的待办</p>
         <button
           onClick={(e) => {
             e.stopPropagation();
