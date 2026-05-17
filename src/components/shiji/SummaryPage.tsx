@@ -296,11 +296,16 @@ export function SummaryPage() {
           {/* 排行 */}
           <section className="glass rounded-3xl p-4">
             <div className="px-1 pb-3 text-sm text-foreground/70">
-              当日极端
+              {range === "day" ? "当日极端" : range === "week" ? "本周极端" : "本月极端"}
             </div>
             <div className="space-y-2">
               {top3.map((m, i) => (
-                <Row key={m.name} rank={`Top ${i + 1}`} m={m} accent />
+                <Row
+                  key={m.name}
+                  rank={i === 0 ? "1" : i === 1 ? "2." : "3."}
+                  m={m}
+                  accent={i === 0}
+                />
               ))}
               {last1 && top3.findIndex((x) => x.name === last1.name) === -1 && (
                 <Row rank="最少" m={last1} />
