@@ -107,32 +107,41 @@ export function SummaryPage() {
 
   return (
     <div className="pt-2 space-y-5">
-      {/* 维度切换 —— 固定在顶部 */}
+      {/* 维度切换 —— 小巧淡绿胶囊，融入背景 */}
       <div
         className="sticky -top-2 z-20 -mx-4 px-4 pt-2 pb-3"
         style={{
           backgroundImage:
-            "linear-gradient(180deg, #FFFDF9 0%, #FFFDF9 78%, oklch(0.998 0.004 88 / 0) 100%)",
+            "linear-gradient(180deg, oklch(0.985 0.020 110 / 0.55) 0%, oklch(0.985 0.020 110 / 0) 100%)",
         }}
       >
-        <div className="glass flex rounded-full p-1 shadow-[0_8px_26px_-22px_oklch(0.42_0.05_125/0.24)]">
+        <div className="flex justify-center gap-2">
           {(
             [
-              ["day", "日总结"],
-              ["week", "周总结"],
-              ["month", "月总结"],
+              ["day", "日"],
+              ["week", "周"],
+              ["month", "月"],
             ] as [Range, string][]
           ).map(([k, l]) => (
             <button
               key={k}
               onClick={() => setRange(k)}
-              className={`flex-1 rounded-full py-1.5 text-sm transition ${
+              className="rounded-full px-3.5 py-1 text-xs transition"
+              style={
                 range === k
-                  ? "bg-primary text-primary-foreground font-medium shadow-[0_1px_0_oklch(1_0_0/0.75)_inset]"
-                  : "text-foreground/65"
-              }`}
+                  ? {
+                      background: "oklch(0.95 0.035 138 / 0.75)",
+                      color: "oklch(0.40 0.07 145)",
+                      border: "1px solid oklch(0.85 0.04 140 / 0.45)",
+                    }
+                  : {
+                      background: "oklch(0.98 0.015 110 / 0.45)",
+                      color: "oklch(0.50 0.04 140 / 0.85)",
+                      border: "1px solid oklch(0.88 0.025 120 / 0.30)",
+                    }
+              }
             >
-              {l}
+              {l}总结
             </button>
           ))}
         </div>

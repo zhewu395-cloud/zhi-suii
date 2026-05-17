@@ -143,21 +143,25 @@ export function TodosPage() {
     >
       <ParticleLayer />
       <div
-        className="sticky -top-2 z-20 -mx-4 px-4 pt-2 pb-2 flex items-center justify-between"
+        className="sticky -top-2 z-20 -mx-4 px-4 pt-2 pb-2 flex items-center justify-end"
         style={{
           backgroundImage:
-            "linear-gradient(180deg, #FFFDF9 0%, #FFFDF9 75%, oklch(0.998 0.004 88 / 0) 100%)",
+            "linear-gradient(180deg, oklch(0.985 0.020 110 / 0.55) 0%, oklch(0.985 0.020 110 / 0) 100%)",
         }}
       >
-        <p className="text-sm text-foreground/60 px-1">我的待办</p>
         <button
           onClick={(e) => {
             e.stopPropagation();
             setAdding(true);
           }}
-          className="glass flex items-center gap-1 rounded-full px-3 py-1.5 text-sm text-foreground/80"
+          className="flex items-center gap-1 rounded-full px-3 py-1 text-xs transition"
+          style={{
+            background: "oklch(0.95 0.035 138 / 0.70)",
+            color: "oklch(0.40 0.07 145)",
+            border: "1px solid oklch(0.85 0.04 140 / 0.45)",
+          }}
         >
-          <Plus className="h-4 w-4" /> 添加
+          <Plus className="h-3.5 w-3.5" /> 添加
         </button>
       </div>
 
