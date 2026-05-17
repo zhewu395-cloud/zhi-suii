@@ -163,49 +163,51 @@ export function ReviewPage() {
   // ===== 主视图 =====
   return (
     <div className="pt-2 space-y-5">
-      {/* 顶部日期下划线 */}
-      <div className="px-1">
-        <span className="leaf-underline text-base text-foreground/85">
-          {today}
-        </span>
-      </div>
-
-      {/* 1/3 圆角书写区 */}
+      {/* 信纸书写区 —— 第一行显示今日日期 */}
       <button
         onClick={startNew}
-        className="block w-full text-left rounded-3xl px-5 py-6 transition active:scale-[0.99]"
+        className="block w-full text-left rounded-3xl px-6 py-5 transition active:scale-[0.99] overflow-hidden"
         style={{
-          height: "33vh",
+          height: "32vh",
           minHeight: 200,
           background:
-            "color-mix(in oklab, oklch(0.55 0.13 148) 12%, oklch(0.985 0.018 105))",
-          border: "1px solid color-mix(in oklab, oklch(0.5 0.13 148) 25%, transparent)",
+            "linear-gradient(180deg, oklch(0.985 0.020 105) 0%, oklch(0.97 0.038 138 / 0.55) 100%)",
+          border: "1px solid oklch(0.82 0.04 138 / 0.32)",
+          backgroundImage:
+            "repeating-linear-gradient(to bottom, transparent 0px, transparent 31px, oklch(0.78 0.06 140 / 0.30) 31px, oklch(0.78 0.06 140 / 0.30) 32px), linear-gradient(180deg, oklch(0.985 0.020 105) 0%, oklch(0.97 0.038 138 / 0.55) 100%)",
+          backgroundSize: "100% 32px, 100% 100%",
+          lineHeight: "32px",
         }}
       >
-        <div className="text-foreground/55">点击此处书写……</div>
+        <div className="text-foreground/75 text-sm">{today}</div>
       </button>
 
-      {/* 4 个分类（无加号） */}
-      <div className="px-1 space-y-3">
-        {/* 琐碎记 / 日复盘 */}
-        {CAT_BUCKETS.map((b) => (
-          <DropZone
-            key={b.key}
-            label={b.label}
-            active={hoverCat === b.key && !!draggingId}
-            onClick={() => setOpenCat(b.key)}
-            onDragOver={(e) => {
-              e.preventDefault();
-              setHoverCat(b.key);
-            }}
-            onDragLeave={() => setHoverCat(null)}
-            onDrop={() => draggingId && moveTo(draggingId, b.key)}
-          />
-        ))}
-
-        {/* 长复盘：拖入时分裂为周 / 月 */}
+      {/* 横向并排：琐碎记 / 日复盘 / 长复盘 */}
+      <div className="grid grid-cols-3 gap-2 px-1">
+        <HDropZone
+          label="琐碎记"
+          active={hoverCat === "sundry" && !!draggingId}
+          onClick={() => setOpenCat("sundry")}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setHoverCat("sundry");
+          }}
+          onDragLeave={() => setHoverCat(null)}
+          onDrop={() => draggingId && moveTo(draggingId, "sundry")}
+        />
+        <HDropZone
+          label="日复盘"
+          active={hoverCat === "day" && !!draggingId}
+          onClick={() => setOpenCat("day")}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setHoverCat("day");
+          }}
+          onDragLeave={() => setHoverCat(null)}
+          onDrop={() => draggingId && moveTo(draggingId, "day")}
+        />
         {!longSplit ? (
-          <DropZone
+          <HDropZone
             label="长复盘"
             active={hoverCat === "long" && !!draggingId}
             onClick={() => {
@@ -220,10 +222,11 @@ export function ReviewPage() {
             onDragLeave={() => setHoverCat(null)}
           />
         ) : (
-          <div className="grid grid-cols-2 gap-3">
-            <DropZone
-              label="周复盘"
+          <div className="grid grid-rows-2 gap-1.5">
+            <HDropZone
+              label="周"
               active={hoverCat === "week" && !!draggingId}
+              compact
               onClick={() => {
                 setLongView("week");
                 setOpenCat("week");
@@ -238,9 +241,10 @@ export function ReviewPage() {
                 setLongSplit(false);
               }}
             />
-            <DropZone
-              label="月复盘"
+            <HDropZone
+              label="月"
               active={hoverCat === "month" && !!draggingId}
+              compact
               onClick={() => {
                 setLongView("month");
                 setOpenCat("month");
@@ -259,12 +263,19 @@ export function ReviewPage() {
         )}
       </div>
 
-      {/* 待定区域 */}
-      {pending.length > 0 && (
-        <div className="px-1">
-          <div className="px-1 pb-2 text-xs text-foreground/55">
-            待定（拖动到上方分类）
+      {/* 待定区域 —— 大留白拖拽区 */}
+      <div className="px-1 min-h-[40vh]">
+        <div className="px-1 pb-2 text-xs text-foreground/55">
+          待定（拖动到上方分类）
+        </div>
+        {pending.length === 0 ? (
+          <div
+            className="rounded-3xl border border-dashed py-10 text-center text-xs text-foreground/40"
+            style={{ borderColor: "oklch(0.80 0.04 130 / 0.40)" }}
+          >
+            暂无待定内容
           </div>
+        ) : (
           <div className="space-y-2">
             {pending.map((r) => (
               <div
@@ -290,8 +301,8 @@ export function ReviewPage() {
               </div>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {editing && (
         <ReviewEditor
@@ -304,6 +315,42 @@ export function ReviewPage() {
         />
       )}
     </div>
+  );
+}
+
+function HDropZone({
+  label,
+  active,
+  compact,
+  onClick,
+  onDragOver,
+  onDragLeave,
+  onDrop,
+}: {
+  label: string;
+  active: boolean;
+  compact?: boolean;
+  onClick: () => void;
+  onDragOver: (e: React.DragEvent) => void;
+  onDragLeave: () => void;
+  onDrop?: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      onDragOver={onDragOver}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
+      className={`w-full rounded-2xl text-center transition ${
+        compact ? "py-2 text-sm" : "py-5 text-base"
+      } ${
+        active
+          ? "bg-primary/15 border border-primary"
+          : "glass border-transparent"
+      }`}
+    >
+      {label}
+    </button>
   );
 }
 
