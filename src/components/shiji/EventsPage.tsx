@@ -50,6 +50,7 @@ function SliderRow({
       />
     </div>
   );
+}
 
 export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
   const [list, setList] = useState<Activity[]>([]);
