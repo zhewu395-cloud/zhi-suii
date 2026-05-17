@@ -154,11 +154,14 @@ export function TodosPage() {
             e.stopPropagation();
             setAdding(true);
           }}
-          className="flex items-center gap-1 rounded-full px-3 py-1 text-xs transition"
+          className="flex items-center gap-1 rounded-full px-3.5 py-1.5 text-xs transition"
           style={{
-            background: "oklch(0.95 0.035 138 / 0.70)",
-            color: "oklch(0.40 0.07 145)",
-            border: "1px solid oklch(0.85 0.04 140 / 0.45)",
+            background: "oklch(0.93 0.055 140 / 0.55)",
+            color: "oklch(0.38 0.075 145)",
+            border: "none",
+            boxShadow: "none",
+            backdropFilter: "none",
+            WebkitBackdropFilter: "none",
           }}
         >
           <Plus className="h-3.5 w-3.5" /> 添加

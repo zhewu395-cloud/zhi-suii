@@ -107,7 +107,7 @@ export function SummaryPage() {
 
   return (
     <div className="pt-2 space-y-5">
-      {/* 维度切换 —— 小巧淡绿胶囊，融入背景 */}
+      {/* 维度切换 + 日期 —— 一整条淡绿分段控件，横向占满 */}
       <div
         className="sticky -top-2 z-20 -mx-4 px-4 pt-2 pb-3"
         style={{
@@ -115,48 +115,53 @@ export function SummaryPage() {
             "linear-gradient(180deg, oklch(0.985 0.020 110 / 0.55) 0%, oklch(0.985 0.020 110 / 0) 100%)",
         }}
       >
-        <div className="flex justify-center gap-2">
+        <div
+          className="flex items-stretch w-full rounded-2xl overflow-hidden"
+          style={{
+            background: "oklch(0.94 0.045 140 / 0.40)",
+          }}
+        >
           {(
             [
-              ["day", "日"],
-              ["week", "周"],
-              ["month", "月"],
+              ["day", "日总结"],
+              ["week", "周总结"],
+              ["month", "月总结"],
             ] as [Range, string][]
           ).map(([k, l]) => (
             <button
               key={k}
               onClick={() => setRange(k)}
-              className="rounded-full px-3.5 py-1 text-xs transition"
+              className="flex-1 py-2.5 text-sm transition"
               style={
                 range === k
                   ? {
-                      background: "oklch(0.95 0.035 138 / 0.75)",
-                      color: "oklch(0.40 0.07 145)",
-                      border: "1px solid oklch(0.85 0.04 140 / 0.45)",
+                      background: "oklch(0.91 0.065 140 / 0.70)",
+                      color: "oklch(0.34 0.08 145)",
+                      fontWeight: 500,
                     }
                   : {
-                      background: "oklch(0.98 0.015 110 / 0.45)",
-                      color: "oklch(0.50 0.04 140 / 0.85)",
-                      border: "1px solid oklch(0.88 0.025 120 / 0.30)",
+                      background: "transparent",
+                      color: "oklch(0.48 0.05 142 / 0.85)",
                     }
               }
             >
-              {l}总结
+              {l}
             </button>
           ))}
-        </div>
-      </div>
-
-      {/* 日期筛选 —— 随维度切换视图 */}
-      <div className="flex items-center justify-between px-1">
-        <div className="text-sm text-foreground/70">{rangeLabel}</div>
-        <Popover>
-          <PopoverTrigger asChild>
-            <button className="glass flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-foreground/80">
-              <CalendarIcon className="h-4 w-4" />
-              {range === "day" ? "选日" : range === "week" ? "选周" : "选月"}
-            </button>
-          </PopoverTrigger>
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                className="flex-1 flex items-center justify-center gap-1 py-2.5 text-sm transition"
+                style={{
+                  background: "transparent",
+                  color: "oklch(0.48 0.05 142 / 0.85)",
+                  borderLeft: "1px solid oklch(0.85 0.04 140 / 0.30)",
+                }}
+              >
+                <CalendarIcon className="h-4 w-4" />
+                {range === "day" ? "选日" : range === "week" ? "选周" : "选月"}
+              </button>
+            </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="end">
             {range === "month" ? (
               <MonthYearPicker value={date} onChange={setDate} />
@@ -193,7 +198,9 @@ export function SummaryPage() {
               />
             )}
           </PopoverContent>
-        </Popover>
+          </Popover>
+        </div>
+        <div className="mt-2 px-1 text-xs text-foreground/55">{rangeLabel}</div>
       </div>
 
       {merged.length === 0 ? (
