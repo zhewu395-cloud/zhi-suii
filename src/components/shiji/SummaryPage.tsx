@@ -18,14 +18,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 
 const GREENS = [
-  "oklch(0.55 0.14 148)",
-  "oklch(0.65 0.12 140)",
-  "oklch(0.72 0.11 130)",
-  "oklch(0.45 0.13 155)",
-  "oklch(0.78 0.09 120)",
-  "oklch(0.60 0.10 165)",
-  "oklch(0.50 0.12 138)",
-  "oklch(0.68 0.13 150)",
+  "oklch(0.57 0.10 142)",
+  "oklch(0.66 0.08 122)",
+  "oklch(0.73 0.07 102)",
+  "oklch(0.50 0.08 150)",
+  "oklch(0.80 0.055 118)",
+  "oklch(0.62 0.07 135)",
+  "oklch(0.54 0.075 128)",
+  "oklch(0.70 0.07 145)",
 ];
 
 function ymd(d: Date) {
@@ -108,7 +108,7 @@ export function SummaryPage() {
   return (
     <div className="pt-2 space-y-5">
       {/* 维度切换 */}
-      <div className="glass flex rounded-full p-1">
+      <div className="glass flex rounded-full p-1 shadow-[0_8px_26px_-22px_oklch(0.42_0.05_125/0.24)]">
         {(
           [
             ["day", "日总结"],
@@ -121,7 +121,7 @@ export function SummaryPage() {
             onClick={() => setRange(k)}
             className={`flex-1 rounded-full py-1.5 text-sm transition ${
               range === k
-                ? "bg-primary text-primary-foreground font-medium"
+                ? "bg-primary text-primary-foreground font-medium shadow-[0_1px_0_oklch(1_0_0/0.75)_inset]"
                 : "text-foreground/65"
             }`}
           >
@@ -201,7 +201,7 @@ export function SummaryPage() {
                     cy="50%"
                     outerRadius={70}
                     label={renderLabelTime}
-                    labelLine={{ stroke: "oklch(0.5 0.1 148 / 0.5)" }}
+                    labelLine={{ stroke: "oklch(0.45 0.055 135 / 0.46)" }}
                   >
                     {merged.map((_, i) => (
                       <Cell key={i} fill={GREENS[i % GREENS.length]} />
@@ -229,7 +229,7 @@ export function SummaryPage() {
                     innerRadius={36}
                     outerRadius={70}
                     label={(p) => renderLabelPct(p, total)}
-                    labelLine={{ stroke: "oklch(0.5 0.1 148 / 0.5)" }}
+                    labelLine={{ stroke: "oklch(0.45 0.055 135 / 0.46)" }}
                   >
                     {merged.map((_, i) => (
                       <Cell key={i} fill={GREENS[i % GREENS.length]} />
@@ -272,13 +272,13 @@ export function SummaryPage() {
                     }))}
                     margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
                   >
-                    <CartesianGrid stroke="oklch(0.5 0.1 148 / 0.15)" />
+                    <CartesianGrid stroke="oklch(0.45 0.055 135 / 0.14)" />
                     <XAxis
                       dataKey="name"
-                      tick={{ fontSize: 11, fill: "oklch(0.35 0.06 148)" }}
+                      tick={{ fontSize: 11, fill: "oklch(0.34 0.035 140)" }}
                     />
                     <YAxis
-                      tick={{ fontSize: 11, fill: "oklch(0.35 0.06 148)" }}
+                      tick={{ fontSize: 11, fill: "oklch(0.34 0.035 140)" }}
                       label={{
                         value: "分钟",
                         angle: -90,
@@ -290,9 +290,9 @@ export function SummaryPage() {
                     <Line
                       type="monotone"
                       dataKey="minutes"
-                      stroke="oklch(0.5 0.14 148)"
+                      stroke="oklch(0.48 0.085 140)"
                       strokeWidth={2}
-                      dot={{ r: 5, fill: "oklch(0.55 0.14 148)" }}
+                      dot={{ r: 5, fill: "oklch(0.56 0.085 134)" }}
                       activeDot={{ r: 7 }}
                     />
                   </LineChart>
@@ -304,7 +304,7 @@ export function SummaryPage() {
                       key={m.name}
                       className="rounded-2xl px-3 py-3 text-sm"
                       style={{
-                        background: `color-mix(in oklab, ${GREENS[i % GREENS.length]} 22%, oklch(0.98 0.018 105))`,
+                        background: `color-mix(in oklab, ${GREENS[i % GREENS.length]} 14%, oklch(0.992 0.007 90))`,
                       }}
                     >
                       <div className="font-medium text-foreground/85 truncate">
@@ -412,15 +412,15 @@ function drawLabel(
     <g>
       <path
         d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
-        stroke="oklch(0.5 0.1 148 / 0.6)"
+        stroke="oklch(0.45 0.055 135 / 0.52)"
         fill="none"
       />
-      <circle cx={ex} cy={ey} r={2} fill="oklch(0.5 0.13 148)" />
+      <circle cx={ex} cy={ey} r={2} fill="oklch(0.47 0.075 135)" />
       <text
         x={tx}
         y={ey - (lines.length > 1 ? 6 : 0)}
         textAnchor={right ? "start" : "end"}
-        fill="oklch(0.30 0.06 148)"
+        fill="oklch(0.30 0.035 142)"
         fontSize="11"
       >
         {lines.map((ln, i) => (
@@ -433,7 +433,7 @@ function drawLabel(
         x={tx}
         y={ey + 12 + (lines.length - 1) * 12}
         textAnchor={right ? "start" : "end"}
-        fill="oklch(0.45 0.06 148)"
+        fill="oklch(0.44 0.035 140)"
         fontSize="10"
       >
         {sub}
