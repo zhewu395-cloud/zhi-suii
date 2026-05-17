@@ -12,10 +12,21 @@ const DEFAULT: Activity[] = [
 const DEFAULT_COLOR = "#bfe3c6";
 
 const PRESET_SWATCHES = [
-  "#f4a8a8", "#f6c177", "#f5e29a", "#c9e29a", "#a3dca8",
-  "#9ad6c1", "#a8d8f0", "#a8b8ee", "#c9a8ee", "#eba8d8",
-  "#e8d4b0", "#b9a890", "#d8d8d8", "#7a7a7a", "#2d2d2d",
+  "#FFFDF9", "#F5E9D4", "#E8C9A0", "#D89A6B", "#C46A4A",
+  "#E8A0A0", "#E0B8D4", "#B8A0D8", "#A0B8E0", "#A0D8E0",
+  "#BFE3C6", "#D6E7B8", "#E7DCB8", "#7A7A7A", "#2D2D2D",
 ];
+
+function hslToHex(h: number, s: number, l: number) {
+  s /= 100; l /= 100;
+  const k = (n: number) => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = (n: number) => {
+    const c = l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+    return Math.round(255 * c).toString(16).padStart(2, "0");
+  };
+  return `#${f(0)}${f(8)}${f(4)}`;
+}
 
 export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
   const [list, setList] = useState<Activity[]>([]);
