@@ -95,7 +95,7 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
                   background: `color-mix(in oklab, ${color} 55%, oklch(0.985 0.014 115))`,
                   borderColor: `color-mix(in oklab, ${color} 50%, transparent)`,
                 }}
-                className="breathe w-full rounded-full border px-5 py-6 text-lg text-foreground/85 font-medium active:scale-95 transition shadow-sm backdrop-blur-md"
+                className="breathe w-full rounded-full border px-6 py-7 text-lg text-foreground/85 font-medium active:scale-[0.97] transition shadow-[0_6px_20px_-14px_oklch(0.55_0.08_148/0.35)] backdrop-blur-md"
               >
                 {a.name}
               </button>
