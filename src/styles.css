@@ -85,26 +85,27 @@ body::-webkit-scrollbar,
   }
 }
 
-/* 玻璃拟态 —— 奶白主导，朦胧绿仅作雾边 */
+/* 玻璃拟态 —— 阳光奶白主导 */
 .glass {
   background:
-    radial-gradient(120% 120% at 0% 0%, color-mix(in oklab, oklch(0.92 0.05 148) 14%, transparent) 0%, transparent 55%),
-    color-mix(in oklab, oklch(0.995 0.004 100) 78%, transparent);
+    radial-gradient(120% 120% at 0% 0%, color-mix(in oklab, oklch(0.92 0.05 148) 8%, transparent) 0%, transparent 60%),
+    color-mix(in oklab, oklch(0.998 0.006 90) 80%, transparent);
   backdrop-filter: blur(22px) saturate(1.05);
   -webkit-backdrop-filter: blur(22px) saturate(1.05);
-  border: 1px solid color-mix(in oklab, oklch(0.80 0.04 148) 22%, transparent);
+  border: 1px solid color-mix(in oklab, oklch(0.85 0.02 110) 30%, transparent);
   box-shadow:
-    0 1px 0 0 oklch(1 0 0 / 0.6) inset,
-    0 8px 28px -16px color-mix(in oklab, oklch(0.55 0.08 148) 22%, transparent);
+    0 1px 0 0 oklch(1 0 0 / 0.7) inset,
+    0 10px 32px -18px color-mix(in oklab, oklch(0.55 0.06 120) 22%, transparent);
 }
 
-/* 呼吸动效 —— 像云端微浮 */
+/* 有机呼吸：scale + border-radius 微扰动，像活体起伏 */
 @keyframes breathe {
-  0%, 100% { transform: scale(1); box-shadow: 0 6px 22px -14px color-mix(in oklab, oklch(0.55 0.08 148) 22%, transparent); }
-  50%      { transform: scale(1.015); box-shadow: 0 12px 30px -16px color-mix(in oklab, oklch(0.55 0.08 148) 32%, transparent); }
+  0%, 100% { transform: scale(1); border-radius: 50%; }
+  33%      { transform: scale(1.012) translateY(-1px); border-radius: 49% 51% 50.5% 49.5% / 50.5% 49% 51% 49.5%; }
+  66%      { transform: scale(1.008) translateY(1px); border-radius: 50.5% 49.5% 49% 51% / 49.5% 50.5% 49% 50.5%; }
 }
-.breathe { animation: breathe 4.2s ease-in-out infinite; }
-.breathe-slow { animation: breathe 6s ease-in-out infinite; }
+.breathe { animation: breathe 5.5s ease-in-out infinite; }
+.breathe-slow { animation: breathe 7.5s ease-in-out infinite; }
 
 /* 复盘下划线 */
 .leaf-underline {
