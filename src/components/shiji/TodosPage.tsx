@@ -214,14 +214,18 @@ export function TodosPage() {
               </button>
             )}
 
-            <div className="space-y-2">
+            <div className="divide-y" style={{ borderColor: "oklch(0.72 0.05 138 / 0.30)" }}>
               {items.map((t) => (
                 <div
                   key={t.id}
                   data-todo-row
-                  className={`relative glass flex items-center gap-3 rounded-2xl px-4 py-3 transition-all duration-300 ${
+                  className={`relative flex items-center gap-3 px-3 py-3 transition-all duration-300 first:rounded-t-xl last:rounded-b-xl ${
                     t.done ? "opacity-55" : ""
                   }`}
+                  style={{
+                    background: "oklch(0.94 0.040 138 / 0.42)",
+                    borderTop: "1px solid oklch(0.70 0.06 138 / 0.32)",
+                  }}
                   onMouseDown={(e) => {
                     e.stopPropagation();
                     startPress(() => setPressedItem(t.id));
