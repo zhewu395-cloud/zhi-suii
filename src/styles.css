@@ -35,26 +35,26 @@
 
 :root {
   --radius: 1.25rem;
-  /* 阳光奶白主导，绿色仅做点缀 */
-  --background: oklch(0.996 0.006 88);           /* 更接近 #FFFDF9 的干净奶白 */
+  /* 主基调向柳绿微微加深，更有质感 */
+  --background: oklch(0.965 0.030 132);          /* 淡淡柳绿底，告别死白 */
   --foreground: oklch(0.32 0.028 145);
-  --card: oklch(0.998 0.004 88 / 0.92);
+  --card: oklch(0.96 0.035 135 / 0.62);
   --card-foreground: oklch(0.34 0.04 150);
-  --popover: oklch(0.998 0.004 88);
+  --popover: oklch(0.985 0.020 120);
   --popover-foreground: oklch(0.34 0.04 150);
-  --primary: oklch(0.982 0.010 92);              /* 按钮高亮也以奶白为主 */
-  --primary-foreground: oklch(0.39 0.065 145);
-  --secondary: oklch(0.992 0.008 90 / 0.90);
-  --secondary-foreground: oklch(0.42 0.06 148);
-  --muted: oklch(0.988 0.008 90 / 0.82);
-  --muted-foreground: oklch(0.52 0.03 145);
-  --accent: oklch(0.955 0.018 128);
-  --accent-foreground: oklch(0.36 0.06 150);
+  --primary: oklch(0.92 0.055 138);              /* 按钮主色：柔和柳绿 */
+  --primary-foreground: oklch(0.34 0.075 145);
+  --secondary: oklch(0.93 0.045 135 / 0.55);
+  --secondary-foreground: oklch(0.40 0.07 145);
+  --muted: oklch(0.93 0.040 135 / 0.45);
+  --muted-foreground: oklch(0.46 0.045 142);
+  --accent: oklch(0.92 0.055 138 / 0.55);
+  --accent-foreground: oklch(0.36 0.07 145);
   --destructive: oklch(0.86 0.05 150);
   --destructive-foreground: oklch(0.32 0.05 150);
-  --border: oklch(0.80 0.02 110 / 0.18);
-  --input: oklch(0.998 0.005 90 / 0.88);
-  --ring: oklch(0.86 0.04 140);
+  --border: oklch(0.70 0.055 138 / 0.28);
+  --input: oklch(0.96 0.030 132 / 0.85);
+  --ring: oklch(0.78 0.06 138);
 }
 
 /* 日历组件内部使用系统字体，避免楷体导致数字错位 */
