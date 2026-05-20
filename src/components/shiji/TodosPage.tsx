@@ -168,11 +168,11 @@ export function TodosPage() {
             className="relative mb-4 rounded-3xl px-3 py-3 backdrop-blur-sm"
             style={{
               background: isToday
-                ? "oklch(0.94 0.045 130 / 0.42)"
-                : "oklch(0.94 0.035 132 / 0.32)",
+                ? "linear-gradient(180deg, oklch(0.995 0.008 120 / 0.45) 0%, oklch(0.975 0.025 132 / 0.40) 50%, oklch(0.945 0.050 138 / 0.42) 100%)"
+                : "linear-gradient(180deg, oklch(0.995 0.008 120 / 0.32) 0%, oklch(0.975 0.025 132 / 0.30) 50%, oklch(0.945 0.050 138 / 0.32) 100%)",
               border: isToday
-                ? "1px solid oklch(0.72 0.065 130 / 0.32)"
-                : "1px solid oklch(0.78 0.045 132 / 0.25)",
+                ? "1px solid oklch(0.78 0.060 135 / 0.35)"
+                : "1px solid oklch(0.82 0.045 132 / 0.28)",
             }}
           >
             <div
@@ -214,9 +214,9 @@ export function TodosPage() {
                     t.done ? "opacity-55" : ""
                   }`}
                   style={{
-                    background: "oklch(0.88 0.180 138 / 0.85)",
-                    border: "1px solid oklch(0.60 0.165 140 / 0.55)",
-                    boxShadow: "0 2px 10px -6px oklch(0.42 0.15 140 / 0.45)",
+                    background: "linear-gradient(180deg, oklch(0.92 0.080 132 / 0.70) 0%, oklch(0.86 0.130 138 / 0.72) 50%, oklch(0.80 0.160 142 / 0.72) 100%)",
+                    border: "1px solid oklch(0.62 0.140 140 / 0.45)",
+                    boxShadow: "0 2px 10px -6px oklch(0.42 0.15 140 / 0.40)",
                   }}
                   onMouseDown={(e) => {
                     e.stopPropagation();
