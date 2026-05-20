@@ -114,7 +114,7 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
         {list.map((a, i) => {
           const color = a.color ?? DEFAULT_COLOR;
           return (
-            <div key={a.id} className="relative aspect-square w-[115px]">
+            <div key={a.id} className="relative w-[138px] h-[96px]">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
