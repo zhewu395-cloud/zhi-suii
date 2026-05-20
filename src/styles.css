@@ -104,37 +104,27 @@ body::-webkit-scrollbar,
   box-shadow: none;
 }
 
-/* 指定按钮：水彩柳叶绿质感 —— 更淡、微加白，与背景柔和呼应 */
+/* 指定按钮：纯色淡柳叶绿（无渐变、偏黄绿，绝不偏青） */
 .btn-jade {
   -webkit-appearance: none;
   appearance: none;
-  background-image:
-    radial-gradient(120% 90% at 25% 20%, oklch(1 0 0 / 0.55) 0%, transparent 60%),
-    radial-gradient(130% 100% at 80% 85%, oklch(0.94 0.045 140 / 0.45) 0%, transparent 65%),
-    linear-gradient(160deg,
-      oklch(0.985 0.020 138) 0%,
-      oklch(0.960 0.038 140) 55%,
-      oklch(0.935 0.050 142) 100%);
-  border: 1px solid oklch(0.82 0.045 140 / 0.45);
-  color: oklch(0.42 0.085 144);
-  box-shadow: 0 1px 0 oklch(1 0 0 / 0.6) inset,
-              0 4px 12px -10px oklch(0.55 0.06 142 / 0.30);
+  background-image: none;
+  background-color: oklch(0.945 0.045 128);
+  border: 1px solid oklch(0.82 0.050 128 / 0.45);
+  color: oklch(0.40 0.080 130);
+  box-shadow: none;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 .btn-jade-active {
-  background-image:
-    radial-gradient(120% 90% at 25% 20%, oklch(1 0 0 / 0.45) 0%, transparent 60%),
-    linear-gradient(160deg,
-      oklch(0.965 0.035 140) 0%,
-      oklch(0.930 0.055 142) 55%,
-      oklch(0.900 0.070 144) 100%);
-  color: oklch(0.32 0.110 146);
+  background-image: none;
+  background-color: oklch(0.915 0.060 128);
+  color: oklch(0.32 0.105 130);
   font-weight: 600;
 }
 /* 总结切换专用：选中时只加深绿色文字，底色保持 */
 .btn-jade-text-active {
-  color: oklch(0.34 0.125 146) !important;
+  color: oklch(0.34 0.120 130) !important;
   font-weight: 700;
 }
 
