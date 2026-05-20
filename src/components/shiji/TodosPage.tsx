@@ -171,15 +171,14 @@ export function TodosPage() {
         return (
           <div
             key={d}
-            className="relative mb-4 rounded-3xl px-3 py-3 border"
+            className="relative mb-4 rounded-3xl px-3 py-3"
             style={{
               background: isToday
-                ? "linear-gradient(180deg, oklch(0.97 0.035 145 / 0.55), oklch(0.99 0.012 95 / 0.45))"
-                : "linear-gradient(180deg, oklch(0.985 0.012 90 / 0.55), oklch(0.97 0.018 130 / 0.30))",
-              borderColor: isToday
-                ? "oklch(0.80 0.04 145 / 0.30)"
-                : "oklch(0.85 0.02 110 / 0.22)",
-              boxShadow: "0 6px 22px -18px oklch(0.55 0.06 130 / 0.35)",
+                ? "oklch(0.965 0.040 142)"
+                : "oklch(0.975 0.025 132)",
+              border: isToday
+                ? "1px solid oklch(0.78 0.065 142 / 0.35)"
+                : "1px solid oklch(0.82 0.045 132 / 0.28)",
             }}
           >
             <div
@@ -196,7 +195,13 @@ export function TodosPage() {
               onTouchEnd={cancelPress}
             >
               {isToday && (
-                <span className="rounded-full bg-primary/60 px-2 py-0.5 text-[10px] text-primary-foreground">
+                <span
+                  className="rounded-full px-2 py-0.5 text-[10px]"
+                  style={{
+                    background: "oklch(0.78 0.115 146)",
+                    color: "oklch(0.22 0.12 148)",
+                  }}
+                >
                   今日
                 </span>
               )}
@@ -214,17 +219,18 @@ export function TodosPage() {
               </button>
             )}
 
-            <div className="divide-y" style={{ borderColor: "oklch(0.72 0.05 138 / 0.30)" }}>
+            <div className="space-y-2">
               {items.map((t) => (
                 <div
                   key={t.id}
                   data-todo-row
-                  className={`relative flex items-center gap-3 px-3 py-3 transition-all duration-300 first:rounded-t-xl last:rounded-b-xl ${
+                  className={`relative flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 ${
                     t.done ? "opacity-55" : ""
                   }`}
                   style={{
-                    background: "oklch(0.94 0.040 138 / 0.42)",
-                    borderTop: "1px solid oklch(0.70 0.06 138 / 0.32)",
+                    background: "linear-gradient(160deg, oklch(0.88 0.085 142), oklch(0.81 0.105 146))",
+                    border: "1px solid oklch(0.66 0.10 144 / 0.50)",
+                    boxShadow: "0 2px 8px -6px oklch(0.40 0.10 144 / 0.45)",
                   }}
                   onMouseDown={(e) => {
                     e.stopPropagation();
