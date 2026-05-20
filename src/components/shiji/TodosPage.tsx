@@ -174,12 +174,14 @@ export function TodosPage() {
             className="relative mb-4 rounded-3xl px-3 py-3"
             style={{
               backgroundImage: isToday
-                ? "linear-gradient(160deg, oklch(0.990 0.030 130) 0%, oklch(0.968 0.060 140) 100%)"
-                : "linear-gradient(160deg, oklch(0.992 0.022 130) 0%, oklch(0.975 0.045 138) 100%)",
+                ? "linear-gradient(160deg, oklch(0.970 0.020 130 / 0.82) 0%, oklch(0.945 0.038 140 / 0.82) 100%)"
+                : "linear-gradient(160deg, oklch(0.972 0.016 130 / 0.78) 0%, oklch(0.952 0.030 138 / 0.78) 100%)",
               border: isToday
-                ? "1px solid oklch(0.78 0.060 138 / 0.35)"
-                : "1px solid oklch(0.82 0.045 138 / 0.28)",
-              boxShadow: "0 2px 10px -8px oklch(0.45 0.07 140 / 0.22)",
+                ? "1px solid oklch(0.76 0.050 138 / 0.30)"
+                : "1px solid oklch(0.80 0.040 138 / 0.24)",
+              boxShadow: "0 2px 10px -8px oklch(0.45 0.07 140 / 0.20)",
+              backdropFilter: "blur(6px)",
+              WebkitBackdropFilter: "blur(6px)",
             }}
           >
             <div
