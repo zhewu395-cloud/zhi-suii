@@ -109,27 +109,26 @@ body::-webkit-scrollbar,
   -webkit-appearance: none;
   appearance: none;
   background-image: linear-gradient(160deg,
-    oklch(0.965 0.040 138) 0%,
-    oklch(0.910 0.075 142) 55%,
-    oklch(0.875 0.090 144) 100%);
-  border: 1px solid oklch(0.72 0.075 142 / 0.55);
-  color: oklch(0.34 0.095 146);
-  box-shadow: 0 1px 0 oklch(1 0 0 / 0.45) inset,
-              0 4px 12px -8px oklch(0.50 0.085 142 / 0.40);
+    oklch(0.985 0.022 138) 0%,
+    oklch(0.960 0.045 140) 55%,
+    oklch(0.940 0.055 142) 100%);
+  border: 1px solid oklch(0.82 0.050 140 / 0.45);
+  color: oklch(0.40 0.075 145);
+  box-shadow: 0 1px 0 oklch(1 0 0 / 0.55) inset,
+              0 4px 12px -8px oklch(0.60 0.060 140 / 0.30);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 .btn-jade-active {
   background-image: linear-gradient(160deg,
-    oklch(0.930 0.055 138) 0%,
-    oklch(0.870 0.095 144) 55%,
-    oklch(0.825 0.110 146) 100%);
-  color: oklch(0.26 0.115 148);
+    oklch(0.970 0.035 138) 0%,
+    oklch(0.935 0.060 142) 55%,
+    oklch(0.905 0.072 144) 100%);
+  color: oklch(0.32 0.095 146);
   font-weight: 600;
 }
-/* 总结切换专用：选中时只加深绿色文字，底色保持 */
 .btn-jade-text-active {
-  color: oklch(0.30 0.135 148) !important;
+  color: oklch(0.30 0.130 148) !important;
   font-weight: 700;
 }
 
