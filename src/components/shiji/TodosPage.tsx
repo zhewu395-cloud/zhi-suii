@@ -168,11 +168,11 @@ export function TodosPage() {
             className="relative mb-4 rounded-3xl px-3 py-3 backdrop-blur-sm"
             style={{
               background: isToday
-                ? "oklch(0.94 0.045 130 / 0.42)"
-                : "oklch(0.94 0.035 132 / 0.32)",
+                ? "linear-gradient(180deg, oklch(0.995 0.008 120 / 0.45) 0%, oklch(0.975 0.025 132 / 0.40) 50%, oklch(0.945 0.050 138 / 0.42) 100%)"
+                : "linear-gradient(180deg, oklch(0.995 0.008 120 / 0.32) 0%, oklch(0.975 0.025 132 / 0.30) 50%, oklch(0.945 0.050 138 / 0.32) 100%)",
               border: isToday
-                ? "1px solid oklch(0.72 0.065 130 / 0.32)"
-                : "1px solid oklch(0.78 0.045 132 / 0.25)",
+                ? "1px solid oklch(0.78 0.060 135 / 0.35)"
+                : "1px solid oklch(0.82 0.045 132 / 0.28)",
             }}
           >
             <div
