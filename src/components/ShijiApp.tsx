@@ -71,11 +71,11 @@ export function ShijiApp() {
 
       {!inTimer && (
         <nav
-          className="absolute bottom-0 left-0 right-0 z-20 px-2 pt-2 pb-6 border-t border-white/40"
+          className="absolute bottom-0 left-0 right-0 z-20 px-2 pt-3 pb-7 border-t"
           style={{
-            backgroundColor: "#F9F9F6",
+            borderColor: "oklch(0.78 0.05 138 / 0.32)",
             backgroundImage:
-              "linear-gradient(180deg, oklch(0.94 0.060 140 / 0.62) 0%, oklch(0.97 0.030 120 / 0.42) 40%, #F9F9F6 100%)",
+              "linear-gradient(180deg, oklch(0.92 0.060 138 / 0.78) 0%, oklch(0.94 0.045 135 / 0.80) 45%, oklch(0.95 0.035 130 / 0.85) 100%)",
           }}
         >
           <div className="grid grid-cols-4 gap-1">
@@ -90,10 +90,10 @@ export function ShijiApp() {
               <button
                 key={k}
                 onClick={() => setTab(k)}
-                className={`py-2 text-base bg-transparent transition-colors ${
+                className={`py-2 text-base leading-relaxed bg-transparent transition-colors ${
                   tab === k
-                    ? "text-[oklch(0.55_0.12_148)] font-semibold"
-                    : "text-foreground/45"
+                    ? "text-[oklch(0.40_0.12_145)] font-semibold"
+                    : "text-foreground/55"
                 }`}
               >
                 {label}
