@@ -171,14 +171,14 @@ export function TodosPage() {
         return (
           <div
             key={d}
-            className="relative mb-4 rounded-3xl px-3 py-3"
+            className="relative mb-4 rounded-3xl px-3 py-3 backdrop-blur-sm"
             style={{
               background: isToday
-                ? "oklch(0.965 0.040 142)"
-                : "oklch(0.975 0.025 132)",
+                ? "oklch(0.94 0.045 130 / 0.42)"
+                : "oklch(0.94 0.035 132 / 0.32)",
               border: isToday
-                ? "1px solid oklch(0.78 0.065 142 / 0.35)"
-                : "1px solid oklch(0.82 0.045 132 / 0.28)",
+                ? "1px solid oklch(0.72 0.065 130 / 0.32)"
+                : "1px solid oklch(0.78 0.045 132 / 0.25)",
             }}
           >
             <div
