@@ -107,16 +107,12 @@ export function SummaryPage() {
 
   return (
     <div className="pt-2 space-y-5">
-      {/* 维度切换 + 日期 —— 椭圆胶囊按钮，淡绿透底 */}
+      {/* 维度切换 + 日期 —— 纯文字按钮，无气泡 */}
       <div
         className="sticky -top-2 z-20 -mx-4 px-4 pt-2 pb-3"
-        style={{
-          backgroundImage:
-            "linear-gradient(180deg, oklch(0.985 0.020 110 / 0.55) 0%, oklch(0.985 0.020 110 / 0) 100%)",
-        }}
       >
         <div className="flex items-center justify-between gap-2">
-          <div className="flex flex-1 items-center gap-2">
+          <div className="flex flex-1 items-center justify-around">
             {(
               [
                 ["day", "日总结"],
@@ -127,18 +123,17 @@ export function SummaryPage() {
               <button
                 key={k}
                 onClick={() => setRange(k)}
-                className="flex-1 py-2 text-sm transition"
+                className="px-2 py-1 text-sm bg-transparent transition-colors"
                 style={{
-                  borderRadius: "9999px",
-                  background:
-                    range === k
-                      ? "oklch(0.91 0.060 140 / 0.55)"
-                      : "oklch(0.96 0.030 140 / 0.30)",
                   color:
                     range === k
-                      ? "oklch(0.34 0.08 145)"
-                      : "oklch(0.48 0.05 142 / 0.85)",
-                  fontWeight: range === k ? 500 : 400,
+                      ? "oklch(0.38 0.10 145)"
+                      : "oklch(0.50 0.05 142 / 0.75)",
+                  fontWeight: range === k ? 600 : 400,
+                  borderBottom:
+                    range === k
+                      ? "1.5px solid oklch(0.55 0.10 145 / 0.7)"
+                      : "1.5px solid transparent",
                 }}
               >
                 {l}
@@ -148,16 +143,14 @@ export function SummaryPage() {
           <Popover>
             <PopoverTrigger asChild>
               <button
-                className="flex items-center justify-center gap-1 px-4 py-2 text-sm transition"
-                style={{
-                  borderRadius: "9999px",
-                  background: "oklch(0.96 0.030 140 / 0.30)",
-                  color: "oklch(0.48 0.05 142 / 0.85)",
-                }}
+                className="flex items-center justify-center bg-transparent p-1.5"
+                style={{ color: "oklch(0.45 0.07 145)" }}
+                aria-label="日历"
               >
-                <CalendarIcon className="h-4 w-4" />
+                <CalendarIcon className="h-5 w-5" />
               </button>
             </PopoverTrigger>
+
           <PopoverContent className="w-auto p-0" align="end">
             {range === "month" ? (
               <MonthYearPicker value={date} onChange={setDate} />
