@@ -123,7 +123,7 @@ export function SummaryPage() {
               <button
                 key={k}
                 onClick={() => setRange(k)}
-                className={`btn-jade ${range === k ? "btn-jade-active" : ""} flex-1 rounded-full px-3 py-1.5 text-sm transition`}
+                className={`btn-jade ${range === k ? "btn-jade-text-active" : ""} flex-1 rounded-full px-3 py-1.5 text-sm transition`}
               >
                 {l}
               </button>
