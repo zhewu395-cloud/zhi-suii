@@ -109,12 +109,12 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
 
   return (
     <div className="pt-2" onClick={() => longPressed && setLongPressed(null)}>
-      {/* 2 列圆形玻璃拟态按钮 */}
-      <div className="grid grid-cols-2 gap-5 px-4 pt-2">
+      {/* 3 列 不规则毛玻璃事件按钮 —— 缩小至 60% */}
+      <div className="grid grid-cols-3 gap-3 px-4 pt-2 justify-items-center">
         {list.map((a, i) => {
           const color = a.color ?? DEFAULT_COLOR;
           return (
-            <div key={a.id} className="relative mx-auto aspect-square w-full max-w-[160px]">
+            <div key={a.id} className="relative aspect-square w-[96px]">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -127,10 +127,10 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
                 onTouchStart={() => startPress(a.id)}
                 onTouchEnd={cancelPress}
                 style={{
-                  animationDelay: `${(i % 4) * 0.4}s`,
-                  backgroundColor: `color-mix(in oklab, ${color} 28%, transparent)`,
+                  animationDelay: `${(i % 4) * 0.6}s`,
+                  backgroundColor: `color-mix(in oklab, ${color} 45%, transparent)`,
                 }}
-                className="glass-circle breathe h-full w-full rounded-full text-lg text-foreground/85 font-medium"
+                className="event-blob h-full w-full text-sm text-foreground/85 font-medium"
               >
                 {a.name}
               </button>
@@ -143,28 +143,29 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
                   style={{
                     background: `color-mix(in oklab, ${color} 75%, oklch(0.4 0.08 150))`,
                   }}
-                  className="absolute right-1 top-1 grid h-6 w-6 place-items-center rounded-full text-foreground/90 text-xs shadow"
+                  className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full text-foreground/90 text-[10px] shadow"
                   aria-label="删除"
                 >
-                  <X className="h-3.5 w-3.5" />
+                  <X className="h-3 w-3" />
                 </button>
               )}
             </div>
           );
         })}
 
-        <div className="relative mx-auto aspect-square w-full max-w-[160px]">
+        <div className="relative aspect-square w-[96px]">
           <button
             onClick={(e) => {
               e.stopPropagation();
               setAdding(true);
             }}
-            className="glass-circle flex h-full w-full items-center justify-center gap-1 rounded-full text-foreground/70"
+            className="event-blob flex h-full w-full items-center justify-center gap-1 text-foreground/70 text-sm"
           >
-            <Plus className="h-5 w-5" /> 添加
+            <Plus className="h-4 w-4" /> 添加
           </button>
         </div>
       </div>
+
 
       {adding && (
         <div
