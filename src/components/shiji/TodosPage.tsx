@@ -171,14 +171,15 @@ export function TodosPage() {
         return (
           <div
             key={d}
-            className="relative mb-4 rounded-3xl px-3 py-3 backdrop-blur-sm"
+            className="relative mb-4 rounded-3xl px-3 py-3"
             style={{
-              background: isToday
-                ? "oklch(0.94 0.045 130 / 0.42)"
-                : "oklch(0.94 0.035 132 / 0.32)",
+              backgroundImage: isToday
+                ? "linear-gradient(160deg, oklch(0.990 0.030 130) 0%, oklch(0.968 0.060 140) 100%)"
+                : "linear-gradient(160deg, oklch(0.992 0.022 130) 0%, oklch(0.975 0.045 138) 100%)",
               border: isToday
-                ? "1px solid oklch(0.72 0.065 130 / 0.32)"
-                : "1px solid oklch(0.78 0.045 132 / 0.25)",
+                ? "1px solid oklch(0.78 0.060 138 / 0.35)"
+                : "1px solid oklch(0.82 0.045 138 / 0.28)",
+              boxShadow: "0 2px 10px -8px oklch(0.45 0.07 140 / 0.22)",
             }}
           >
             <div
