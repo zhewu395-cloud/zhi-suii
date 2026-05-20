@@ -104,28 +104,33 @@ body::-webkit-scrollbar,
   box-shadow: none;
 }
 
-/* 指定按钮：白绿交织、扎实不透底的玉色质感 */
+/* 指定按钮：扎实不透底的柳玉绿质感（取自书写界面背景柳绿） */
 .btn-jade {
   -webkit-appearance: none;
   appearance: none;
   background-image: linear-gradient(160deg,
-    oklch(0.985 0.012 130) 0%,
-    oklch(0.945 0.040 138) 55%,
-    oklch(0.915 0.055 140) 100%);
-  border: 1px solid oklch(0.80 0.045 138 / 0.55);
-  color: oklch(0.36 0.075 145);
-  box-shadow: 0 1px 0 oklch(1 0 0 / 0.55) inset,
-              0 4px 12px -8px oklch(0.55 0.07 140 / 0.35);
+    oklch(0.965 0.040 138) 0%,
+    oklch(0.910 0.075 142) 55%,
+    oklch(0.875 0.090 144) 100%);
+  border: 1px solid oklch(0.72 0.075 142 / 0.55);
+  color: oklch(0.34 0.095 146);
+  box-shadow: 0 1px 0 oklch(1 0 0 / 0.45) inset,
+              0 4px 12px -8px oklch(0.50 0.085 142 / 0.40);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 .btn-jade-active {
   background-image: linear-gradient(160deg,
-    oklch(0.955 0.030 130) 0%,
-    oklch(0.905 0.065 140) 55%,
-    oklch(0.870 0.080 142) 100%);
-  color: oklch(0.30 0.095 145);
+    oklch(0.930 0.055 138) 0%,
+    oklch(0.870 0.095 144) 55%,
+    oklch(0.825 0.110 146) 100%);
+  color: oklch(0.26 0.115 148);
   font-weight: 600;
+}
+/* 总结切换专用：选中时只加深绿色文字，底色保持 */
+.btn-jade-text-active {
+  color: oklch(0.30 0.135 148) !important;
+  font-weight: 700;
 }
 
 /* 蒙蒙毛玻璃事件按钮 —— 不规则有机形 + 高模糊 + 可调底色（由 inline style 提供） */
