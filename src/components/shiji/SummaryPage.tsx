@@ -107,7 +107,7 @@ export function SummaryPage() {
 
   return (
     <div className="pt-2 space-y-5">
-      {/* 维度切换 + 日期 —— 一整条淡绿分段控件，横向占满 */}
+      {/* 维度切换 + 日期 —— 椭圆胶囊按钮，淡绿透底 */}
       <div
         className="sticky -top-2 z-20 -mx-4 px-4 pt-2 pb-3"
         style={{
@@ -115,51 +115,47 @@ export function SummaryPage() {
             "linear-gradient(180deg, oklch(0.985 0.020 110 / 0.55) 0%, oklch(0.985 0.020 110 / 0) 100%)",
         }}
       >
-        <div
-          className="flex items-stretch w-full rounded-2xl overflow-hidden"
-          style={{
-            background: "oklch(0.94 0.045 140 / 0.40)",
-          }}
-        >
-          {(
-            [
-              ["day", "日总结"],
-              ["week", "周总结"],
-              ["month", "月总结"],
-            ] as [Range, string][]
-          ).map(([k, l]) => (
-            <button
-              key={k}
-              onClick={() => setRange(k)}
-              className="flex-1 py-2.5 text-sm transition"
-              style={
-                range === k
-                  ? {
-                      background: "oklch(0.91 0.065 140 / 0.70)",
-                      color: "oklch(0.34 0.08 145)",
-                      fontWeight: 500,
-                    }
-                  : {
-                      background: "transparent",
-                      color: "oklch(0.48 0.05 142 / 0.85)",
-                    }
-              }
-            >
-              {l}
-            </button>
-          ))}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex flex-1 items-center gap-2">
+            {(
+              [
+                ["day", "日总结"],
+                ["week", "周总结"],
+                ["month", "月总结"],
+              ] as [Range, string][]
+            ).map(([k, l]) => (
+              <button
+                key={k}
+                onClick={() => setRange(k)}
+                className="flex-1 py-2 text-sm transition"
+                style={{
+                  borderRadius: "9999px",
+                  background:
+                    range === k
+                      ? "oklch(0.91 0.060 140 / 0.55)"
+                      : "oklch(0.96 0.030 140 / 0.30)",
+                  color:
+                    range === k
+                      ? "oklch(0.34 0.08 145)"
+                      : "oklch(0.48 0.05 142 / 0.85)",
+                  fontWeight: range === k ? 500 : 400,
+                }}
+              >
+                {l}
+              </button>
+            ))}
+          </div>
           <Popover>
             <PopoverTrigger asChild>
               <button
-                className="flex-1 flex items-center justify-center gap-1 py-2.5 text-sm transition"
+                className="flex items-center justify-center gap-1 px-4 py-2 text-sm transition"
                 style={{
-                  background: "transparent",
+                  borderRadius: "9999px",
+                  background: "oklch(0.96 0.030 140 / 0.30)",
                   color: "oklch(0.48 0.05 142 / 0.85)",
-                  borderLeft: "1px solid oklch(0.85 0.04 140 / 0.30)",
                 }}
               >
                 <CalendarIcon className="h-4 w-4" />
-                {range === "day" ? "选日" : range === "week" ? "选周" : "选月"}
               </button>
             </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="end">

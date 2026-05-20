@@ -109,14 +109,12 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
 
   return (
     <div className="pt-2" onClick={() => longPressed && setLongPressed(null)}>
-      <p className="px-2 pb-4 text-sm text-foreground/60">选择一项活动开始记录</p>
-
-      {/* 2 列对称椭圆按钮 —— 宽度 80%，高度拉长 */}
-      <div className="grid grid-cols-2 gap-3 px-2">
+      {/* 2 列圆形玻璃拟态按钮 */}
+      <div className="grid grid-cols-2 gap-5 px-4 pt-2">
         {list.map((a, i) => {
           const color = a.color ?? DEFAULT_COLOR;
           return (
-            <div key={a.id} className="relative mx-auto w-[94%]">
+            <div key={a.id} className="relative mx-auto aspect-square w-full max-w-[160px]">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -130,10 +128,9 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
                 onTouchEnd={cancelPress}
                 style={{
                   animationDelay: `${(i % 4) * 0.4}s`,
-                  background: `color-mix(in oklab, ${color} 55%, oklch(0.985 0.014 115))`,
-                  borderColor: `color-mix(in oklab, ${color} 50%, transparent)`,
+                  backgroundColor: `color-mix(in oklab, ${color} 28%, transparent)`,
                 }}
-                className="breathe w-full rounded-full border px-6 py-7 text-lg text-foreground/85 font-medium active:scale-[0.97] transition shadow-[0_6px_20px_-14px_oklch(0.55_0.08_148/0.35)] backdrop-blur-md"
+                className="glass-circle breathe h-full w-full rounded-full text-lg text-foreground/85 font-medium"
               >
                 {a.name}
               </button>
@@ -146,7 +143,7 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
                   style={{
                     background: `color-mix(in oklab, ${color} 75%, oklch(0.4 0.08 150))`,
                   }}
-                  className="absolute -right-1 -top-1 grid h-6 w-6 place-items-center rounded-full text-foreground/90 text-xs shadow"
+                  className="absolute right-1 top-1 grid h-6 w-6 place-items-center rounded-full text-foreground/90 text-xs shadow"
                   aria-label="删除"
                 >
                   <X className="h-3.5 w-3.5" />
@@ -156,13 +153,13 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
           );
         })}
 
-        <div className="relative mx-auto w-[80%] col-span-2 flex justify-center">
+        <div className="relative mx-auto aspect-square w-full max-w-[160px]">
           <button
             onClick={(e) => {
               e.stopPropagation();
               setAdding(true);
             }}
-            className="glass flex items-center justify-center gap-1 rounded-full px-6 py-3 text-foreground/70 active:scale-95 transition"
+            className="glass-circle flex h-full w-full items-center justify-center gap-1 rounded-full text-foreground/70"
           >
             <Plus className="h-5 w-5" /> 添加
           </button>
