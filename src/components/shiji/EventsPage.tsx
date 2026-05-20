@@ -153,7 +153,7 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
           );
         })}
 
-        <div className="relative aspect-square w-[115px]">
+        <div className="relative w-[138px] h-[96px]">
           <button
             onClick={(e) => {
               e.stopPropagation();
