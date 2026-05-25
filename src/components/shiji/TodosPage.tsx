@@ -261,16 +261,10 @@ export function TodosPage() {
                   data-todo-row
                   className="relative flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-500"
                   style={{
-                    background: t.done
-                      ? "oklch(0.52 0.070 132 / 0.88)"
-                      : "oklch(0.93 0.050 132 / 0.85)",
-                    border: t.done
-                      ? "1px solid oklch(0.38 0.070 132 / 0.55)"
-                      : "1px solid oklch(0.75 0.060 132 / 0.40)",
-                    boxShadow: t.done
-                      ? "0 1px 6px -3px oklch(0.20 0.05 132 / 0.55) inset, 0 0 0 9999px oklch(0 0 0 / 0.08) inset"
-                      : "0 2px 8px -6px oklch(0.45 0.06 132 / 0.35)",
-                    color: t.done ? "oklch(0.96 0.02 132)" : undefined,
+                    background: "oklch(0.93 0.050 132 / 0.85)",
+                    border: "1px solid oklch(0.75 0.060 132 / 0.40)",
+                    boxShadow: "0 2px 8px -6px oklch(0.45 0.06 132 / 0.35)",
+                    filter: t.done ? "brightness(0.72)" : undefined,
                   }}
                   onMouseDown={(e) => {
                     e.stopPropagation();

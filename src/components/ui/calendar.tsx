@@ -181,17 +181,17 @@ function CalendarDayButton({
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
       className={cn(
-        // 基础：圆角正方形（撞色卡片感）
-        "flex aspect-square h-auto w-full min-w-(--cell-size) flex-col gap-1 font-normal leading-none rounded-[6px]",
+        // 基础：圆角矩形（不圆不方）
+        "flex aspect-square h-auto w-full min-w-(--cell-size) flex-col gap-1 font-normal leading-none rounded-[11px]",
         "text-[oklch(0.28_0.04_140)] hover:bg-[oklch(0.92_0.045_138_/_0.55)]",
-        // 当天：深色偏黑的绿
-        "data-[today=true]:bg-[oklch(0.32_0.060_148)] data-[today=true]:text-[oklch(0.97_0.020_140)] data-[today=true]:font-medium",
-        // 选中（筛选）：更淡的绿，保持圆角矩形
-        "data-[selected-single=true]:bg-[oklch(0.85_0.090_138)] data-[selected-single=true]:text-[oklch(0.22_0.06_148)] data-[selected-single=true]:rounded-[6px]",
+        // 当天：偏绿一点的深绿
+        "data-[today=true]:bg-[oklch(0.38_0.085_148)] data-[today=true]:text-[oklch(0.97_0.020_140)] data-[today=true]:font-medium data-[today=true]:rounded-[11px]",
+        // 选中（筛选）：凝实的淡绿，与当天协调
+        "data-[selected-single=true]:bg-[oklch(0.82_0.060_146)] data-[selected-single=true]:text-[oklch(0.22_0.06_148)] data-[selected-single=true]:rounded-[11px]",
         // range
-        "data-[range-middle=true]:bg-[oklch(0.92_0.060_138)] data-[range-middle=true]:text-[oklch(0.25_0.06_148)]",
-        "data-[range-start=true]:bg-[oklch(0.85_0.090_138)] data-[range-start=true]:text-[oklch(0.22_0.06_148)] data-[range-start=true]:rounded-l-[6px]",
-        "data-[range-end=true]:bg-[oklch(0.85_0.090_138)] data-[range-end=true]:text-[oklch(0.22_0.06_148)] data-[range-end=true]:rounded-r-[6px]",
+        "data-[range-middle=true]:bg-[oklch(0.88_0.050_146)] data-[range-middle=true]:text-[oklch(0.25_0.06_148)]",
+        "data-[range-start=true]:bg-[oklch(0.82_0.060_146)] data-[range-start=true]:text-[oklch(0.22_0.06_148)] data-[range-start=true]:rounded-l-[11px]",
+        "data-[range-end=true]:bg-[oklch(0.82_0.060_146)] data-[range-end=true]:text-[oklch(0.22_0.06_148)] data-[range-end=true]:rounded-r-[11px]",
         "group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50",
         "group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px]",
         "[&>span]:text-xs [&>span]:opacity-70",
