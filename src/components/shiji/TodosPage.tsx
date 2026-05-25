@@ -155,7 +155,6 @@ export function TodosPage() {
       }}
     >
       <ParticleLayer />
-      <div className="sticky -top-2 z-20 -mx-4 px-4 pt-1 pb-1 flex items-center justify-end">
       <div className="sticky -top-2 z-20 -mx-4 px-4 pt-1 pb-1 flex items-center justify-end gap-2">
         <Popover>
           <PopoverTrigger asChild>
