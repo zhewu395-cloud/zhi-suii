@@ -253,14 +253,17 @@ export function TodosPage() {
                 <div
                   key={t.id}
                   data-todo-row
-                  className={`relative flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 ${
-                    t.done ? "opacity-55" : ""
-                  }`}
+                  className="relative flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300"
                   style={{
-                    background: "oklch(0.86 0.075 130 / 0.85)",
-                    border: "1px solid oklch(0.58 0.085 132 / 0.50)",
-                    boxShadow: "0 2px 8px -6px oklch(0.40 0.08 132 / 0.40)",
+                    background: t.done
+                      ? "oklch(0.74 0.075 132 / 0.55)"
+                      : "oklch(0.93 0.050 130 / 0.70)",
+                    border: t.done
+                      ? "1px solid oklch(0.50 0.080 132 / 0.40)"
+                      : "1px solid oklch(0.72 0.060 132 / 0.42)",
+                    boxShadow: "0 2px 8px -6px oklch(0.40 0.08 132 / 0.30)",
                   }}
+
                   onMouseDown={(e) => {
                     e.stopPropagation();
                     startPress(() => setPressedItem(t.id));
