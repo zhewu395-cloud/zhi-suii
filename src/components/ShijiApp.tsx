@@ -56,7 +56,15 @@ export function ShijiApp() {
         </button>
       </header>
 
-      <main className="relative z-10 flex-1 overflow-y-auto px-4 pb-28">
+      <main
+        className="relative z-10 flex-1 overflow-y-auto px-4 pb-28"
+        style={{
+          WebkitMaskImage:
+            "linear-gradient(180deg, transparent 0, #000 24px, #000 100%)",
+          maskImage:
+            "linear-gradient(180deg, transparent 0, #000 24px, #000 100%)",
+        }}
+      >
         {inTimer ? (
           <TimerPage activity={timing} onDone={() => setInTimer(false)} />
         ) : (
