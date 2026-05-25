@@ -7,6 +7,19 @@ import { DayButton, DayPicker, getDefaultClassNames } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 
+const CN_WEEKDAYS = ["日", "一", "二", "三", "四", "五", "六"];
+
+const cnFormatters = {
+  formatWeekdayName: (date: Date) => CN_WEEKDAYS[date.getDay()],
+  formatCaption: (date: Date) =>
+    `${date.getFullYear()} 年 ${date.getMonth() + 1} 月`,
+  formatMonthCaption: (date: Date) =>
+    `${date.getFullYear()} 年 ${date.getMonth() + 1} 月`,
+  formatMonthDropdown: (date: Date) => `${date.getMonth() + 1} 月`,
+  formatYearDropdown: (date: Date) => `${date.getFullYear()} 年`,
+  formatYearCaption: (date: Date) => `${date.getFullYear()} 年`,
+};
+
 function Calendar({
   className,
   classNames,
@@ -24,15 +37,19 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
+      weekStartsOn={1}
       className={cn(
-        "bg-background group/calendar p-3 [--cell-size:2rem] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
+        // 高级奶白底色，覆盖 popover/card 容器
+        "group/calendar p-3 [--cell-size:2.1rem] rounded-2xl",
+        "bg-[oklch(0.985_0.012_85)] [[data-slot=card-content]_&]:bg-[oklch(0.985_0.012_85)] [[data-slot=popover-content]_&]:bg-[oklch(0.985_0.012_85)]",
+        "shadow-[0_8px_24px_-12px_oklch(0.30_0.05_140_/_0.25)] border border-[oklch(0.85_0.020_90_/_0.6)]",
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className,
       )}
       captionLayout={captionLayout}
       formatters={{
-        formatMonthDropdown: (date) => date.toLocaleString("default", { month: "short" }),
+        ...cnFormatters,
         ...formatters,
       }}
       classNames={{
@@ -67,7 +84,7 @@ function Calendar({
         ),
         dropdown: cn("bg-popover absolute inset-0 opacity-0", defaultClassNames.dropdown),
         caption_label: cn(
-          "select-none font-medium",
+          "select-none font-medium text-[oklch(0.30_0.06_140)]",
           captionLayout === "label"
             ? "text-sm"
             : "[&>svg]:text-muted-foreground flex h-8 items-center gap-1 rounded-md pl-2 pr-1 text-sm [&>svg]:size-3.5",
@@ -76,28 +93,25 @@ function Calendar({
         table: "w-full border-collapse",
         weekdays: cn("flex", defaultClassNames.weekdays),
         weekday: cn(
-          "text-muted-foreground flex-1 select-none rounded-md text-[0.8rem] font-normal",
+          "flex-1 select-none rounded-md text-[0.78rem] font-normal text-[oklch(0.45_0.05_140_/_0.75)]",
           defaultClassNames.weekday,
         ),
-        week: cn("mt-2 flex w-full", defaultClassNames.week),
+        week: cn("mt-1.5 flex w-full", defaultClassNames.week),
         week_number_header: cn("w-(--cell-size) select-none", defaultClassNames.week_number_header),
         week_number: cn(
           "text-muted-foreground select-none text-[0.8rem]",
           defaultClassNames.week_number,
         ),
         day: cn(
-          "group/day relative aspect-square h-full w-full select-none p-0 text-center [&:first-child[data-selected=true]_button]:rounded-l-md [&:last-child[data-selected=true]_button]:rounded-r-md",
+          "group/day relative aspect-square h-full w-full select-none p-0.5 text-center",
           defaultClassNames.day,
         ),
-        range_start: cn("bg-accent rounded-l-md", defaultClassNames.range_start),
+        range_start: cn("rounded-l-[6px]", defaultClassNames.range_start),
         range_middle: cn("rounded-none", defaultClassNames.range_middle),
-        range_end: cn("bg-accent rounded-r-md", defaultClassNames.range_end),
-        today: cn(
-          "bg-accent text-accent-foreground rounded-md data-[selected=true]:rounded-none",
-          defaultClassNames.today,
-        ),
+        range_end: cn("rounded-r-[6px]", defaultClassNames.range_end),
+        today: cn("", defaultClassNames.today),
         outside: cn(
-          "text-muted-foreground aria-selected:text-muted-foreground",
+          "text-muted-foreground/60 aria-selected:text-muted-foreground",
           defaultClassNames.outside,
         ),
         disabled: cn("text-muted-foreground opacity-50", defaultClassNames.disabled),
@@ -149,23 +163,38 @@ function CalendarDayButton({
     if (modifiers.focused) ref.current?.focus();
   }, [modifiers.focused]);
 
+  const isSelectedSingle =
+    modifiers.selected &&
+    !modifiers.range_start &&
+    !modifiers.range_end &&
+    !modifiers.range_middle;
+
   return (
     <Button
       ref={ref}
       variant="ghost"
       size="icon"
       data-day={day.date.toLocaleDateString()}
-      data-selected-single={
-        modifiers.selected &&
-        !modifiers.range_start &&
-        !modifiers.range_end &&
-        !modifiers.range_middle
-      }
+      data-today={modifiers.today ? "true" : undefined}
+      data-selected-single={isSelectedSingle}
       data-range-start={modifiers.range_start}
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
       className={cn(
-        "data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 flex aspect-square h-auto w-full min-w-(--cell-size) flex-col gap-1 font-normal leading-none data-[range-end=true]:rounded-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] [&>span]:text-xs [&>span]:opacity-70",
+        // 基础：圆角正方形（撞色卡片感）
+        "flex aspect-square h-auto w-full min-w-(--cell-size) flex-col gap-1 font-normal leading-none rounded-[6px]",
+        "text-[oklch(0.28_0.04_140)] hover:bg-[oklch(0.92_0.045_138_/_0.55)]",
+        // 当天：深色偏黑的绿
+        "data-[today=true]:bg-[oklch(0.32_0.060_148)] data-[today=true]:text-[oklch(0.97_0.020_140)] data-[today=true]:font-medium",
+        // 选中（筛选）：更淡的绿，保持圆角矩形
+        "data-[selected-single=true]:bg-[oklch(0.85_0.090_138)] data-[selected-single=true]:text-[oklch(0.22_0.06_148)] data-[selected-single=true]:rounded-[6px]",
+        // range
+        "data-[range-middle=true]:bg-[oklch(0.92_0.060_138)] data-[range-middle=true]:text-[oklch(0.25_0.06_148)]",
+        "data-[range-start=true]:bg-[oklch(0.85_0.090_138)] data-[range-start=true]:text-[oklch(0.22_0.06_148)] data-[range-start=true]:rounded-l-[6px]",
+        "data-[range-end=true]:bg-[oklch(0.85_0.090_138)] data-[range-end=true]:text-[oklch(0.22_0.06_148)] data-[range-end=true]:rounded-r-[6px]",
+        "group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50",
+        "group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px]",
+        "[&>span]:text-xs [&>span]:opacity-70",
         defaultClassNames.day,
         className,
       )}
