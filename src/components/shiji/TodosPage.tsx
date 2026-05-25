@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Plus, Check, X, Calendar as CalendarIcon } from "lucide-react";
+import { Plus, Check, X, Calendar as CalendarIcon, Filter } from "lucide-react";
 import { getAll, put, del, uid, type Todo } from "@/lib/db";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -27,6 +27,7 @@ export function TodosPage() {
   const [date, setDate] = useState<Date>(new Date());
   const [pressedItem, setPressedItem] = useState<string | null>(null);
   const [pressedGroup, setPressedGroup] = useState<string | null>(null);
+  const [filterDate, setFilterDate] = useState<Date | null>(null);
 
   const load = async () => {
     const rows = await getAll<Todo>("todos");
@@ -62,12 +63,24 @@ export function TodosPage() {
 
   const todayStr = today();
 
+  const fmtKey = (d: Date) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  };
+  const filterKey = filterDate ? fmtKey(filterDate) : null;
+
   // 分组：今日在最上，其余按日期降序（仅展示有未完成或当天的组）
   const groups = useMemo(() => {
     const map = new Map<string, Todo[]>();
     for (const t of list) {
-      // 往日只显示未完成 + 当天显示全部
-      if (t.date !== todayStr && t.done) continue;
+      if (filterKey) {
+        if (t.date !== filterKey) continue;
+      } else {
+        // 往日只显示未完成 + 当天显示全部
+        if (t.date !== todayStr && t.done) continue;
+      }
       (map.get(t.date) ?? map.set(t.date, []).get(t.date)!).push(t);
     }
     // 排序：今日优先，其后按日期降序
@@ -86,7 +99,7 @@ export function TodosPage() {
       });
     }
     return keys.map((k) => [k, map.get(k)!] as const);
-  }, [list, todayStr]);
+  }, [list, todayStr, filterKey]);
 
   const toggle = async (t: Todo, ev: React.MouseEvent) => {
     if (!t.done) {
@@ -142,27 +155,59 @@ export function TodosPage() {
       }}
     >
       <ParticleLayer />
-      <div className="sticky -top-2 z-20 -mx-4 px-4 pt-1 pb-1 flex items-center justify-end">
+      <div className="sticky -top-2 z-20 -mx-4 px-4 pt-1 pb-1 flex items-center justify-end gap-2">
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              onClick={(e) => e.stopPropagation()}
+              className="btn-jade grid h-10 w-10 place-items-center rounded-full active:scale-95 transition relative"
+              aria-label="按日期筛选"
+            >
+              <Filter className="h-4 w-4" />
+              {filterDate && (
+                <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-primary" />
+              )}
+            </button>
+          </PopoverTrigger>
+          <PopoverContent
+            className="w-auto p-0"
+            align="end"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-3 pt-2">
+              <span className="text-xs text-foreground/60">按日期筛选</span>
+              {filterDate && (
+                <button
+                  onClick={() => setFilterDate(null)}
+                  className="text-xs text-primary"
+                >
+                  清除
+                </button>
+              )}
+            </div>
+            <Calendar
+              mode="single"
+              selected={filterDate ?? undefined}
+              onSelect={(d) => setFilterDate(d ?? null)}
+              className={cn("p-3 pointer-events-auto")}
+            />
+          </PopoverContent>
+        </Popover>
         <button
           onClick={(e) => {
             e.stopPropagation();
             setAdding(true);
           }}
-          className="flex items-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-semibold transition active:scale-95"
-          style={{
-            background: "linear-gradient(160deg, oklch(0.86 0.095 142), oklch(0.78 0.115 146))",
-            color: "oklch(0.24 0.115 148)",
-            border: "1px solid oklch(0.62 0.10 144 / 0.55)",
-            boxShadow: "0 4px 14px -8px oklch(0.40 0.10 144 / 0.55)",
-          }}
+          className="btn-jade grid h-10 w-10 place-items-center rounded-full active:scale-95 transition"
+          aria-label="添加"
         >
-          <Plus className="h-5 w-5" /> 添加
+          <Plus className="h-5 w-5" />
         </button>
       </div>
 
       {groups.length === 0 && (
         <div className="mt-16 text-center text-foreground/50 text-sm">
-          还没有待办，点击右上角「添加」开始
+          {filterDate ? "该日期没有待办" : "还没有待办，点击右上角「+」开始"}
         </div>
       )}
 
@@ -173,12 +218,9 @@ export function TodosPage() {
             key={d}
             className="relative mb-4 rounded-3xl px-3 py-3"
             style={{
-              backgroundImage: isToday
-                ? "linear-gradient(160deg, oklch(0.970 0.020 130 / 0.82) 0%, oklch(0.945 0.038 140 / 0.82) 100%)"
-                : "linear-gradient(160deg, oklch(0.972 0.016 130 / 0.78) 0%, oklch(0.952 0.030 138 / 0.78) 100%)",
-              border: isToday
-                ? "1px solid oklch(0.76 0.050 138 / 0.30)"
-                : "1px solid oklch(0.80 0.040 138 / 0.24)",
+              backgroundImage:
+                "linear-gradient(160deg, oklch(0.972 0.016 130 / 0.78) 0%, oklch(0.952 0.030 138 / 0.78) 100%)",
+              border: "1px solid oklch(0.80 0.040 138 / 0.24)",
               boxShadow: "0 2px 10px -8px oklch(0.45 0.07 140 / 0.20)",
               backdropFilter: "blur(6px)",
               WebkitBackdropFilter: "blur(6px)",
@@ -197,17 +239,7 @@ export function TodosPage() {
               }}
               onTouchEnd={cancelPress}
             >
-              {isToday && (
-                <span
-                  className="rounded-full px-2 py-0.5 text-[10px]"
-                  style={{
-                    background: "oklch(0.78 0.115 146)",
-                    color: "oklch(0.22 0.12 148)",
-                  }}
-                >
-                  今日
-                </span>
-              )}
+              {isToday && <span>今日 ·</span>}
               <span>{fmtDate(d)}</span>
             </div>
             {pressedGroup === d && (
@@ -227,13 +259,18 @@ export function TodosPage() {
                 <div
                   key={t.id}
                   data-todo-row
-                  className={`relative flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 ${
-                    t.done ? "opacity-55" : ""
-                  }`}
+                  className="relative flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-500"
                   style={{
-                    background: "oklch(0.86 0.075 130 / 0.85)",
-                    border: "1px solid oklch(0.58 0.085 132 / 0.50)",
-                    boxShadow: "0 2px 8px -6px oklch(0.40 0.08 132 / 0.40)",
+                    background: t.done
+                      ? "oklch(0.70 0.070 132 / 0.78)"
+                      : "oklch(0.93 0.050 132 / 0.85)",
+                    border: t.done
+                      ? "1px solid oklch(0.45 0.080 132 / 0.45)"
+                      : "1px solid oklch(0.75 0.060 132 / 0.40)",
+                    boxShadow: t.done
+                      ? "0 1px 4px -3px oklch(0.30 0.08 132 / 0.50) inset"
+                      : "0 2px 8px -6px oklch(0.45 0.06 132 / 0.35)",
+                    color: t.done ? "oklch(0.30 0.04 132)" : undefined,
                   }}
                   onMouseDown={(e) => {
                     e.stopPropagation();

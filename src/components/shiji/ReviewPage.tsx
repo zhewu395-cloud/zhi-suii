@@ -158,18 +158,18 @@ export function ReviewPage() {
       {/* 信纸书写区 —— 奶白纯色底，仅浅绿横线，日期写在第一根横线上 */}
       <button
         onClick={startNew}
-        className="block w-full text-left rounded-3xl px-6 pt-3 pb-5 transition active:scale-[0.99] overflow-hidden"
+        className="block w-full text-left rounded-3xl px-6 pt-2 pb-5 transition active:scale-[0.99] overflow-hidden"
         style={{
           height: "32vh",
           minHeight: 200,
-          backgroundColor: "#FBFAF4",
+          backgroundColor: "oklch(0.945 0.045 128)",
           backgroundImage:
-            "repeating-linear-gradient(to bottom, transparent 0px, transparent 31px, oklch(0.82 0.06 142 / 0.42) 31px, oklch(0.82 0.06 142 / 0.42) 32px)",
-          border: "1px solid oklch(0.85 0.03 130 / 0.30)",
+            "repeating-linear-gradient(to bottom, transparent 0px, transparent 31px, oklch(0.70 0.07 132 / 0.35) 31px, oklch(0.70 0.07 132 / 0.35) 32px)",
+          border: "1px solid oklch(0.82 0.050 128 / 0.45)",
           lineHeight: "32px",
         }}
       >
-        <div className="text-foreground/55 text-[11px] tracking-wide leading-[32px]">
+        <div className="text-foreground/60 text-[11px] tracking-wide leading-[32px] h-[32px]">
           {today}
         </div>
       </button>
