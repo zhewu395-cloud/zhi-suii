@@ -218,12 +218,9 @@ export function TodosPage() {
             key={d}
             className="relative mb-4 rounded-3xl px-3 py-3"
             style={{
-              backgroundImage: isToday
-                ? "linear-gradient(160deg, oklch(0.970 0.020 130 / 0.82) 0%, oklch(0.945 0.038 140 / 0.82) 100%)"
-                : "linear-gradient(160deg, oklch(0.972 0.016 130 / 0.78) 0%, oklch(0.952 0.030 138 / 0.78) 100%)",
-              border: isToday
-                ? "1px solid oklch(0.76 0.050 138 / 0.30)"
-                : "1px solid oklch(0.80 0.040 138 / 0.24)",
+              backgroundImage:
+                "linear-gradient(160deg, oklch(0.972 0.016 130 / 0.78) 0%, oklch(0.952 0.030 138 / 0.78) 100%)",
+              border: "1px solid oklch(0.80 0.040 138 / 0.24)",
               boxShadow: "0 2px 10px -8px oklch(0.45 0.07 140 / 0.20)",
               backdropFilter: "blur(6px)",
               WebkitBackdropFilter: "blur(6px)",
@@ -242,17 +239,7 @@ export function TodosPage() {
               }}
               onTouchEnd={cancelPress}
             >
-              {isToday && (
-                <span
-                  className="rounded-full px-2 py-0.5 text-[10px]"
-                  style={{
-                    background: "oklch(0.78 0.115 146)",
-                    color: "oklch(0.22 0.12 148)",
-                  }}
-                >
-                  今日
-                </span>
-              )}
+              {isToday && <span>今日 ·</span>}
               <span>{fmtDate(d)}</span>
             </div>
             {pressedGroup === d && (
@@ -272,13 +259,18 @@ export function TodosPage() {
                 <div
                   key={t.id}
                   data-todo-row
-                  className={`relative flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 ${
-                    t.done ? "opacity-55" : ""
-                  }`}
+                  className="relative flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-500"
                   style={{
-                    background: "oklch(0.86 0.075 130 / 0.85)",
-                    border: "1px solid oklch(0.58 0.085 132 / 0.50)",
-                    boxShadow: "0 2px 8px -6px oklch(0.40 0.08 132 / 0.40)",
+                    background: t.done
+                      ? "oklch(0.70 0.070 132 / 0.78)"
+                      : "oklch(0.93 0.050 132 / 0.85)",
+                    border: t.done
+                      ? "1px solid oklch(0.45 0.080 132 / 0.45)"
+                      : "1px solid oklch(0.75 0.060 132 / 0.40)",
+                    boxShadow: t.done
+                      ? "0 1px 4px -3px oklch(0.30 0.08 132 / 0.50) inset"
+                      : "0 2px 8px -6px oklch(0.45 0.06 132 / 0.35)",
+                    color: t.done ? "oklch(0.30 0.04 132)" : undefined,
                   }}
                   onMouseDown={(e) => {
                     e.stopPropagation();
