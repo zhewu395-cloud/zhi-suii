@@ -39,10 +39,11 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       weekStartsOn={1}
       className={cn(
-        // 高级奶白底色，覆盖 popover/card 容器
+        // 玉石质感底：白绿交织、完全不透明
         "group/calendar p-3 [--cell-size:2.1rem] rounded-2xl",
-        "bg-[oklch(0.985_0.012_85)] [[data-slot=card-content]_&]:bg-[oklch(0.985_0.012_85)] [[data-slot=popover-content]_&]:bg-[oklch(0.985_0.012_85)]",
-        "shadow-[0_8px_24px_-12px_oklch(0.30_0.05_140_/_0.25)] border border-[oklch(0.85_0.020_90_/_0.6)]",
+        "bg-[oklch(0.955_0.030_132)] [background-image:linear-gradient(158deg,oklch(0.975_0.018_128)_0%,oklch(0.935_0.052_134)_48%,oklch(0.955_0.028_130)_100%)]",
+        "[[data-slot=card-content]_&]:bg-[oklch(0.955_0.030_132)] [[data-slot=popover-content]_&]:bg-[oklch(0.955_0.030_132)]",
+        "shadow-[0_8px_24px_-12px_oklch(0.35_0.07_140_/_0.30)] border border-[oklch(0.78_0.050_136_/_0.55)]",
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className,

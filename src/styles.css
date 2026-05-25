@@ -104,29 +104,46 @@ body::-webkit-scrollbar,
   box-shadow: 0 2px 10px -8px oklch(0.45 0.07 140 / 0.22);
 }
 
-/* 指定按钮：纯色淡柳叶绿（无渐变、偏黄绿，绝不偏青） */
+/* 玉石质感按钮：白绿交织 + 完全不透明，温润高级 */
 .btn-jade {
   -webkit-appearance: none;
   appearance: none;
-  background-image: none;
-  background-color: oklch(0.945 0.045 128);
-  border: 1px solid oklch(0.82 0.050 128 / 0.45);
-  color: oklch(0.40 0.080 130);
-  box-shadow: none;
+  background-color: oklch(0.955 0.030 132);
+  background-image: linear-gradient(
+    158deg,
+    oklch(0.975 0.018 128) 0%,
+    oklch(0.935 0.052 134) 48%,
+    oklch(0.955 0.028 130) 100%
+  );
+  border: 1px solid oklch(0.78 0.050 136 / 0.55);
+  color: oklch(0.34 0.085 134);
+  box-shadow:
+    0 1px 0 0 oklch(1 0 0 / 0.55) inset,
+    0 -1px 0 0 oklch(0.70 0.060 138 / 0.18) inset,
+    0 2px 6px -4px oklch(0.40 0.07 138 / 0.30);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 .btn-jade-active {
-  background-image: none;
-  background-color: oklch(0.915 0.060 128);
-  color: oklch(0.32 0.105 130);
+  background-image: linear-gradient(
+    158deg,
+    oklch(0.955 0.038 130) 0%,
+    oklch(0.895 0.075 136) 50%,
+    oklch(0.935 0.050 132) 100%
+  );
+  color: oklch(0.28 0.110 134);
   font-weight: 600;
+  box-shadow:
+    0 1px 0 0 oklch(1 0 0 / 0.50) inset,
+    0 -1px 0 0 oklch(0.60 0.080 138 / 0.25) inset,
+    0 2px 8px -4px oklch(0.35 0.09 138 / 0.40);
 }
 /* 总结切换专用：选中时只加深绿色文字，底色保持 */
 .btn-jade-text-active {
-  color: oklch(0.34 0.120 130) !important;
+  color: oklch(0.30 0.125 132) !important;
   font-weight: 700;
 }
+
 
 /* 蒙蒙毛玻璃事件按钮 —— 不规则有机形 + 高模糊 + 可调底色（由 inline style 提供） */
 .event-blob {
