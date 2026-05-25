@@ -27,6 +27,8 @@ export function TodosPage() {
   const [date, setDate] = useState<Date>(new Date());
   const [pressedItem, setPressedItem] = useState<string | null>(null);
   const [pressedGroup, setPressedGroup] = useState<string | null>(null);
+  const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
+
 
   const load = async () => {
     const rows = await getAll<Todo>("todos");
@@ -65,9 +67,11 @@ export function TodosPage() {
   // 分组：今日在最上，其余按日期降序（仅展示有未完成或当天的组）
   const groups = useMemo(() => {
     const map = new Map<string, Todo[]>();
+    const filterStr = filterDate ? fmtDateInput(filterDate) : null;
     for (const t of list) {
       // 往日只显示未完成 + 当天显示全部
       if (t.date !== todayStr && t.done) continue;
+      if (filterStr && t.date !== filterStr) continue;
       (map.get(t.date) ?? map.set(t.date, []).get(t.date)!).push(t);
     }
     // 排序：今日优先，其后按日期降序
@@ -86,7 +90,8 @@ export function TodosPage() {
       });
     }
     return keys.map((k) => [k, map.get(k)!] as const);
-  }, [list, todayStr]);
+  }, [list, todayStr, filterDate]);
+
 
   const toggle = async (t: Todo, ev: React.MouseEvent) => {
     if (!t.done) {
@@ -142,23 +147,51 @@ export function TodosPage() {
       }}
     >
       <ParticleLayer />
-      <div className="sticky -top-2 z-20 -mx-4 px-4 pt-1 pb-1 flex items-center justify-end">
+      <div className="sticky -top-2 z-20 -mx-4 px-4 pt-1 pb-1 flex items-center justify-end gap-2">
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              onClick={(e) => e.stopPropagation()}
+              className="btn-jade grid h-9 w-9 place-items-center rounded-full active:scale-95 transition relative"
+              aria-label="按日期筛选"
+            >
+              <CalendarIcon className="h-4 w-4" />
+              {filterDate && (
+                <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-primary" />
+              )}
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="end" onClick={(e) => e.stopPropagation()}>
+            <Calendar
+              mode="single"
+              selected={filterDate}
+              onSelect={(d) => setFilterDate(d)}
+              className={cn("p-3 pointer-events-auto")}
+            />
+            {filterDate && (
+              <div className="p-2 border-t flex justify-end">
+                <button
+                  onClick={() => setFilterDate(undefined)}
+                  className="text-xs text-foreground/65 px-2 py-1 rounded hover:bg-muted"
+                >
+                  清除筛选
+                </button>
+              </div>
+            )}
+          </PopoverContent>
+        </Popover>
         <button
           onClick={(e) => {
             e.stopPropagation();
             setAdding(true);
           }}
-          className="flex items-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-semibold transition active:scale-95"
-          style={{
-            background: "linear-gradient(160deg, oklch(0.86 0.095 142), oklch(0.78 0.115 146))",
-            color: "oklch(0.24 0.115 148)",
-            border: "1px solid oklch(0.62 0.10 144 / 0.55)",
-            boxShadow: "0 4px 14px -8px oklch(0.40 0.10 144 / 0.55)",
-          }}
+          className="btn-jade grid h-9 w-9 place-items-center rounded-full active:scale-95 transition"
+          aria-label="添加"
         >
-          <Plus className="h-5 w-5" /> 添加
+          <Plus className="h-5 w-5" />
         </button>
       </div>
+
 
       {groups.length === 0 && (
         <div className="mt-16 text-center text-foreground/50 text-sm">
@@ -198,17 +231,10 @@ export function TodosPage() {
               onTouchEnd={cancelPress}
             >
               {isToday && (
-                <span
-                  className="rounded-full px-2 py-0.5 text-[10px]"
-                  style={{
-                    background: "oklch(0.78 0.115 146)",
-                    color: "oklch(0.22 0.12 148)",
-                  }}
-                >
-                  今日
-                </span>
+                <span className="text-foreground/65">今日 ·</span>
               )}
               <span>{fmtDate(d)}</span>
+
             </div>
             {pressedGroup === d && (
               <button
@@ -227,14 +253,17 @@ export function TodosPage() {
                 <div
                   key={t.id}
                   data-todo-row
-                  className={`relative flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 ${
-                    t.done ? "opacity-55" : ""
-                  }`}
+                  className="relative flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300"
                   style={{
-                    background: "oklch(0.86 0.075 130 / 0.85)",
-                    border: "1px solid oklch(0.58 0.085 132 / 0.50)",
-                    boxShadow: "0 2px 8px -6px oklch(0.40 0.08 132 / 0.40)",
+                    background: t.done
+                      ? "oklch(0.74 0.075 132 / 0.55)"
+                      : "oklch(0.93 0.050 130 / 0.70)",
+                    border: t.done
+                      ? "1px solid oklch(0.50 0.080 132 / 0.40)"
+                      : "1px solid oklch(0.72 0.060 132 / 0.42)",
+                    boxShadow: "0 2px 8px -6px oklch(0.40 0.08 132 / 0.30)",
                   }}
+
                   onMouseDown={(e) => {
                     e.stopPropagation();
                     startPress(() => setPressedItem(t.id));
