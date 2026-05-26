@@ -160,7 +160,7 @@ export function SummaryPage() {
   }, []);
 
   return (
-    <div className="flex h-full flex-col -mx-4">
+    <div className="flex flex-col -mx-4 -mb-28" style={{ height: "calc(100% + 7rem)" }}>
       {headerSlot && createPortal(calendarPopover, headerSlot)}
 
       {/* 固定头部：日期 + 维度切换。不滚动、不透明、不毛玻璃 */}
