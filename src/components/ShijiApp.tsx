@@ -49,7 +49,7 @@ export function ShijiApp() {
         </h1>
         <button
           onClick={() => setSettingsOpen(true)}
-          className="btn-jade grid h-10 w-10 place-items-center rounded-full active:scale-95 transition"
+          className="btn-jade btn-jade-soft grid h-10 w-10 place-items-center rounded-full active:scale-95 transition"
           aria-label="设置"
         >
           <Settings className="h-5 w-5" />
