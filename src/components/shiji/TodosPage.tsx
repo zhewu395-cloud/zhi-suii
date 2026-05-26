@@ -198,7 +198,7 @@ export function TodosPage() {
             e.stopPropagation();
             setAdding(true);
           }}
-          className="btn-jade grid h-10 w-10 place-items-center rounded-full active:scale-95 transition"
+          className="btn-jade btn-jade-soft grid h-10 w-10 place-items-center rounded-full active:scale-95 transition"
           aria-label="添加"
         >
           <Plus className="h-5 w-5" />
