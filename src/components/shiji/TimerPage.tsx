@@ -91,7 +91,7 @@ export function TimerPage({
 
   return (
     <div className="flex flex-col items-center pt-2">
-      <div className="w-full">
+      <div className="w-full -mt-10 -ml-1">
         <LeafBack onClick={onDone} />
       </div>
 
@@ -120,7 +120,11 @@ export function TimerPage({
 
         <button
           onClick={toggle}
-          className="rounded-full bg-primary text-primary-foreground px-14 py-3 text-base shadow-[0_8px_24px_-12px_oklch(0.55_0.08_148/0.4)] active:scale-95 transition"
+          className="rounded-full px-14 py-3 text-base text-white active:scale-95 transition"
+          style={{
+            background: "linear-gradient(180deg, oklch(0.62 0.13 148) 0%, oklch(0.52 0.12 148) 100%)",
+            boxShadow: "0 8px 24px -12px oklch(0.45 0.10 148 / 0.55)",
+          }}
         >
           {running ? "结束" : "开始"}
         </button>
