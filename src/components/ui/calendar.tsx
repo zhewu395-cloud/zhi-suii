@@ -183,15 +183,15 @@ function CalendarDayButton({
       className={cn(
         // 基础：圆角矩形（不圆不方）
         "flex aspect-square h-auto w-full min-w-(--cell-size) flex-col gap-1 font-normal leading-none rounded-[11px]",
-        "text-[oklch(0.28_0.04_140)] hover:bg-[oklch(0.92_0.045_138_/_0.55)]",
+        "text-[oklch(0.28_0.04_152)] hover:bg-[oklch(0.92_0.045_152_/_0.55)]",
         // 当天：偏绿一点的深绿
-        "data-[today=true]:bg-[oklch(0.38_0.085_148)] data-[today=true]:text-[oklch(0.97_0.020_140)] data-[today=true]:font-medium data-[today=true]:rounded-[11px]",
+        "data-[today=true]:bg-[oklch(0.38_0.085_152)] data-[today=true]:text-[oklch(0.97_0.020_152)] data-[today=true]:font-medium data-[today=true]:rounded-[11px]",
         // 选中（筛选）：凝实的淡绿，与当天协调
-        "data-[selected-single=true]:bg-[oklch(0.90_0.055_142)] data-[selected-single=true]:text-[oklch(0.28_0.06_148)] data-[selected-single=true]:rounded-[11px]",
+        "data-[selected-single=true]:bg-[oklch(0.90_0.055_152)] data-[selected-single=true]:text-[oklch(0.28_0.06_152)] data-[selected-single=true]:rounded-[11px]",
         // range
-        "data-[range-middle=true]:bg-[oklch(0.88_0.050_146)] data-[range-middle=true]:text-[oklch(0.25_0.06_148)]",
-        "data-[range-start=true]:bg-[oklch(0.82_0.060_146)] data-[range-start=true]:text-[oklch(0.22_0.06_148)] data-[range-start=true]:rounded-l-[11px]",
-        "data-[range-end=true]:bg-[oklch(0.82_0.060_146)] data-[range-end=true]:text-[oklch(0.22_0.06_148)] data-[range-end=true]:rounded-r-[11px]",
+        "data-[range-middle=true]:bg-[oklch(0.88_0.050_152)] data-[range-middle=true]:text-[oklch(0.25_0.06_152)]",
+        "data-[range-start=true]:bg-[oklch(0.82_0.060_152)] data-[range-start=true]:text-[oklch(0.22_0.06_152)] data-[range-start=true]:rounded-l-[11px]",
+        "data-[range-end=true]:bg-[oklch(0.82_0.060_152)] data-[range-end=true]:text-[oklch(0.22_0.06_152)] data-[range-end=true]:rounded-r-[11px]",
         "group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50",
         "group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px]",
         "[&>span]:text-xs [&>span]:opacity-70",

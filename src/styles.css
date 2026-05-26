@@ -35,26 +35,26 @@
 
 :root {
   --radius: 1.25rem;
-  /* 主基调向柳绿微微加深，更有质感 */
-  --background: oklch(0.965 0.030 132);          /* 淡淡柳绿底，告别死白 */
-  --foreground: oklch(0.32 0.028 145);
-  --card: oklch(0.96 0.035 135 / 0.62);
-  --card-foreground: oklch(0.34 0.04 150);
-  --popover: oklch(0.985 0.020 120);
-  --popover-foreground: oklch(0.34 0.04 150);
-  --primary: oklch(0.92 0.055 138);              /* 按钮主色：柔和柳绿 */
-  --primary-foreground: oklch(0.34 0.075 145);
-  --secondary: oklch(0.93 0.045 135 / 0.55);
-  --secondary-foreground: oklch(0.40 0.07 145);
-  --muted: oklch(0.93 0.040 135 / 0.45);
-  --muted-foreground: oklch(0.46 0.045 142);
-  --accent: oklch(0.92 0.055 138 / 0.55);
-  --accent-foreground: oklch(0.36 0.07 145);
-  --destructive: oklch(0.86 0.05 150);
-  --destructive-foreground: oklch(0.32 0.05 150);
-  --border: oklch(0.70 0.055 138 / 0.28);
-  --input: oklch(0.96 0.030 132 / 0.85);
-  --ring: oklch(0.78 0.06 138);
+  /* 取自背景图：薄荷青绿主调 (#b0e0c0 ≈ hue 152) */
+  --background: oklch(0.88 0.055 152);
+  --foreground: oklch(0.32 0.035 152);
+  --card: oklch(0.93 0.045 152 / 0.62);
+  --card-foreground: oklch(0.32 0.045 152);
+  --popover: oklch(0.97 0.025 152);
+  --popover-foreground: oklch(0.32 0.045 152);
+  --primary: oklch(0.88 0.060 152);
+  --primary-foreground: oklch(0.32 0.080 152);
+  --secondary: oklch(0.90 0.050 152 / 0.55);
+  --secondary-foreground: oklch(0.38 0.070 152);
+  --muted: oklch(0.90 0.045 152 / 0.45);
+  --muted-foreground: oklch(0.44 0.050 152);
+  --accent: oklch(0.88 0.060 152 / 0.55);
+  --accent-foreground: oklch(0.34 0.070 152);
+  --destructive: oklch(0.82 0.060 152);
+  --destructive-foreground: oklch(0.30 0.060 152);
+  --border: oklch(0.66 0.060 152 / 0.30);
+  --input: oklch(0.93 0.040 152 / 0.85);
+  --ring: oklch(0.74 0.065 152);
 }
 
 /* 日历组件内部使用系统字体，避免楷体导致数字错位 */
@@ -92,16 +92,16 @@ body::-webkit-scrollbar,
   }
 }
 
-/* 卡片底图：白绿交织，更偏白、亮度略降，微微透出背景 */
+/* 卡片底图：取自背景图的薄荷青绿，微透 */
 .glass {
   -webkit-appearance: none;
   appearance: none;
   background-color: transparent;
-  background-image: linear-gradient(160deg, oklch(0.965 0.022 130 / 0.82) 0%, oklch(0.940 0.040 138 / 0.82) 100%);
+  background-image: linear-gradient(160deg, oklch(0.95 0.035 152 / 0.82) 0%, oklch(0.90 0.055 152 / 0.82) 100%);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  border: 1px solid oklch(0.78 0.045 138 / 0.28);
-  box-shadow: 0 2px 10px -8px oklch(0.45 0.07 140 / 0.22);
+  border: 1px solid oklch(0.74 0.055 152 / 0.30);
+  box-shadow: 0 2px 10px -8px oklch(0.42 0.07 152 / 0.24);
 }
 
 /* 指定按钮：温润玉石质感（不透背景；保留原基色 oklch ~0.945 0.045 128） */
