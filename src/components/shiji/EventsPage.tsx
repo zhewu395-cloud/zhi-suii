@@ -174,7 +174,8 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
           onClick={() => setAdding(false)}
         >
           <div
-            className="w-full max-w-sm rounded-3xl bg-background p-5 shadow-xl"
+            className="w-full max-w-sm rounded-3xl p-5 shadow-xl"
+            style={{ background: "rgba(245, 250, 247, 1)" }}
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="mb-3 text-lg font-medium">新增活动</h3>

@@ -148,7 +148,8 @@ export function TodosPage() {
 
   return (
     <div
-      className="flex h-full flex-col -mx-4 -mt-1"
+      className="flex flex-col -mx-4 -mb-28"
+      style={{ height: "calc(100% + 7rem)" }}
       onClick={() => {
         setPressedItem(null);
         setPressedGroup(null);
@@ -156,7 +157,7 @@ export function TodosPage() {
     >
       <ParticleLayer />
       {/* 固定头部：筛选 + 添加。完整显示、不被遮、不毛玻璃 */}
-      <div className="shrink-0 px-4 pt-0 pb-2 flex items-center justify-end gap-2">
+      <div className="shrink-0 px-4 pt-2 pb-2 flex items-center justify-end gap-2">
         <Popover>
           <PopoverTrigger asChild>
             <button
@@ -207,7 +208,7 @@ export function TodosPage() {
       </div>
 
       {/* 滚动区：任务条在按钮下方截断 */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-4">
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-32">
 
 
       {groups.length === 0 && (
@@ -337,8 +338,8 @@ export function TodosPage() {
           onClick={() => setAdding(false)}
         >
           <div
-            className="absolute left-1/2 -translate-x-1/2 w-[92%] max-w-sm rounded-[28px] bg-background shadow-2xl flex flex-col overflow-hidden animate-scale-in"
-            style={{ top: "30%" }}
+            className="absolute left-1/2 -translate-x-1/2 w-[92%] max-w-sm rounded-[28px] shadow-2xl flex flex-col overflow-hidden animate-scale-in"
+            style={{ top: "30%", background: "rgba(245, 250, 247, 1)" }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* 顶部：任务名 —— 固定不被挤压 */}

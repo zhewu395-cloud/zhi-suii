@@ -160,11 +160,11 @@ export function SummaryPage() {
   }, []);
 
   return (
-    <div className="flex h-full flex-col -mx-4 -mt-1">
+    <div className="flex flex-col -mx-4 -mb-28" style={{ height: "calc(100% + 7rem)" }}>
       {headerSlot && createPortal(calendarPopover, headerSlot)}
 
       {/* 固定头部：日期 + 维度切换。不滚动、不透明、不毛玻璃 */}
-      <div className="shrink-0 px-4 pt-1 pb-2">
+      <div className="shrink-0 px-4 pt-2 pb-2">
         <div className="px-1 pb-2 text-sm text-foreground/70">
           {rangeLabel}
         </div>
@@ -187,8 +187,8 @@ export function SummaryPage() {
         </div>
       </div>
 
-      {/* 滚动区：内容在按钮正下方截断 */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-4 pt-3 pb-4 space-y-5">
+      {/* 滚动区：内容在按钮正下方截断，下方完整接轨标签栏 */}
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 pt-3 pb-32 space-y-5">
 
       {merged.length === 0 ? (
         <div className="mt-20 text-center text-foreground/50 text-sm">

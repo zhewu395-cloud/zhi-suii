@@ -104,7 +104,7 @@ export function ReviewEditor({
       : allReviews.filter((r) => r.id !== review.id);
 
   return (
-    <div className="fixed inset-0 z-40 flex flex-col bg-background">
+    <div className="fixed inset-0 z-40 flex flex-col" style={{ background: "rgba(245, 250, 247, 1)" }}>
       <header className="flex items-center justify-between px-3 pt-10 pb-2">
         <LeafBack onClick={onClose} />
         <div className="text-sm text-foreground/60">{draft.date}</div>
@@ -127,7 +127,7 @@ export function ReviewEditor({
       </div>
 
       {/* 工具栏 */}
-      <div className="flex items-center gap-1 px-3 py-2 border-y border-border/60 bg-background/60">
+      <div className="flex items-center gap-1 px-3 py-2 border-y border-border/60" style={{ background: "rgba(245, 250, 247, 0.6)" }}>
         <ToolBtn onClick={() => exec("bold")}>
           <Bold className="h-4 w-4" />
         </ToolBtn>
