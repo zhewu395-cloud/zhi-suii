@@ -148,16 +148,15 @@ export function TodosPage() {
 
   return (
     <div
-      className="pt-0 -mt-1"
+      className="flex h-full flex-col -mx-4 -mt-1"
       onClick={() => {
         setPressedItem(null);
         setPressedGroup(null);
       }}
     >
       <ParticleLayer />
-      <div
-        className="sticky -top-2 z-20 -mx-4 px-4 pt-0 pb-2 flex items-center justify-end gap-2"
-      >
+      {/* 固定头部：筛选 + 添加。完整显示、不被遮、不毛玻璃 */}
+      <div className="shrink-0 px-4 pt-0 pb-2 flex items-center justify-end gap-2">
         <Popover>
           <PopoverTrigger asChild>
             <button
@@ -206,6 +205,10 @@ export function TodosPage() {
           <Plus className="h-5 w-5" />
         </button>
       </div>
+
+      {/* 滚动区：任务条在按钮下方截断 */}
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-4">
+
 
       {groups.length === 0 && (
         <div className="mt-16 text-center text-foreground/50 text-sm">
