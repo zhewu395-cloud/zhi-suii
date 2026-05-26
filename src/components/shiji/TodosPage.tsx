@@ -208,7 +208,7 @@ export function TodosPage() {
       </div>
 
       {/* 滚动区：任务条在按钮下方截断 */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-4">
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-32">
 
 
       {groups.length === 0 && (
