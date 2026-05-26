@@ -108,10 +108,12 @@ export function ReviewPage() {
       .sort((a, b) => (b.updatedAt ?? b.createdAt) - (a.updatedAt ?? a.createdAt));
     return (
       <div className="pt-2">
-        <LeafBack
-          onClick={() => setOpenCat(null)}
-          className="!fixed top-1 left-1 z-50"
-        />
+        {!editing && (
+          <LeafBack
+            onClick={() => setOpenCat(null)}
+            className="!fixed top-1 left-1 z-50"
+          />
+        )}
         <div className="flex items-center justify-end">
           <div className="flex gap-2">
             {(["week", "month"] as const).map((v) => (
@@ -149,10 +151,12 @@ export function ReviewPage() {
 
     return (
       <div className="pt-2">
-        <LeafBack
-          onClick={() => setOpenCat(null)}
-          className="!fixed top-1 left-1 z-50"
-        />
+        {!editing && (
+          <LeafBack
+            onClick={() => setOpenCat(null)}
+            className="!fixed top-1 left-1 z-50"
+          />
+        )}
         <CardList rows={rows} onOpen={setEditing} onRemove={removeReview} />
         {editing && (
           <ReviewEditor
