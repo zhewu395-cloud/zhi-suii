@@ -148,7 +148,8 @@ export function TodosPage() {
 
   return (
     <div
-      className="flex h-full flex-col -mx-4 -mt-1"
+      className="flex flex-col -mx-4 -mb-28"
+      style={{ height: "calc(100% + 7rem)" }}
       onClick={() => {
         setPressedItem(null);
         setPressedGroup(null);
@@ -156,7 +157,7 @@ export function TodosPage() {
     >
       <ParticleLayer />
       {/* 固定头部：筛选 + 添加。完整显示、不被遮、不毛玻璃 */}
-      <div className="shrink-0 px-4 pt-0 pb-2 flex items-center justify-end gap-2">
+      <div className="shrink-0 px-4 pt-2 pb-2 flex items-center justify-end gap-2">
         <Popover>
           <PopoverTrigger asChild>
             <button
