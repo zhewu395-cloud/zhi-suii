@@ -152,7 +152,7 @@ function Particle({
     animation: `petal-burst ${dur}s cubic-bezier(.18,.7,.3,1) ${delay}s forwards`,
     filter: blur > 0 ? `blur(${blur}px)` : undefined,
     boxShadow: extraShadow || undefined,
-    mixBlendMode: kind === "spark" ? "screen" : "multiply",
+    mixBlendMode: kind === "spark" ? "screen" : "normal",
     // @ts-ignore
     "--tx": `${dx}px`,
     "--ty": `${dy}px`,
@@ -165,25 +165,8 @@ function Particle({
 }
 
 // 完成处的柔和绿色玻璃光晕
-function Halo({ x, y }: { x: number; y: number }) {
-  const size = rand(160, 220);
-  const style: React.CSSProperties = {
-    position: "absolute",
-    left: `${x * 100}%`,
-    top: `${y * 100}%`,
-    width: size,
-    height: size,
-    transform: "translate(-50%, -50%)",
-    borderRadius: "9999px",
-    background:
-      "radial-gradient(circle, oklch(0.85 0.10 148 / 0.55) 0%, oklch(0.80 0.09 150 / 0.30) 35%, transparent 72%)",
-    filter: "blur(6px)",
-    mixBlendMode: "screen",
-    animation: "halo-pulse 1.4s ease-out forwards",
-    pointerEvents: "none",
-    opacity: 0,
-  };
-  return <span style={style} />;
+function Halo(_: { x: number; y: number }) {
+  return null;
 }
 
 export function ParticleLayer() {
