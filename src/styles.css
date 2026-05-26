@@ -38,22 +38,22 @@
   /* 取自背景图：薄荷青绿主调 (#b0e0c0 ≈ hue 145) */
   --background: oklch(0.88 0.055 145);
   --foreground: oklch(0.32 0.035 145);
-  --card: oklch(0.93 0.045145 / 0.62);
+  --card: oklch(0.93 0.045 145 / 0.62);
   --card-foreground: oklch(0.32 0.045 145);
   --popover: oklch(0.97 0.025 145);
   --popover-foreground: oklch(0.32 0.045 145);
   --primary: oklch(0.88 0.060 145);
   --primary-foreground: oklch(0.32 0.080 145);
-  --secondary: oklch(0.90 0.050145 / 0.55);
+  --secondary: oklch(0.90 0.050 145 / 0.55);
   --secondary-foreground: oklch(0.38 0.070 145);
-  --muted: oklch(0.90 0.045145 / 0.45);
+  --muted: oklch(0.90 0.045 145 / 0.45);
   --muted-foreground: oklch(0.44 0.050 145);
-  --accent: oklch(0.88 0.060145 / 0.55);
+  --accent: oklch(0.88 0.060 145 / 0.55);
   --accent-foreground: oklch(0.34 0.070 145);
   --destructive: oklch(0.82 0.060 145);
   --destructive-foreground: oklch(0.30 0.060 145);
-  --border: oklch(0.66 0.060145 / 0.30);
-  --input: oklch(0.93 0.040145 / 0.85);
+  --border: oklch(0.66 0.060 145 / 0.30);
+  --input: oklch(0.93 0.040 145 / 0.85);
   --ring: oklch(0.74 0.065 145);
 }
 
@@ -97,11 +97,11 @@ body::-webkit-scrollbar,
   -webkit-appearance: none;
   appearance: none;
   background-color: transparent;
-  background-image: linear-gradient(160deg, oklch(0.95 0.035145 / 0.82) 0%, oklch(0.90 0.055145 / 0.82) 100%);
+  background-image: linear-gradient(160deg, oklch(0.95 0.035 145 / 0.82) 0%, oklch(0.90 0.055 145 / 0.82) 100%);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  border: 1px solid oklch(0.74 0.055145 / 0.30);
-  box-shadow: 0 2px 10px -8px oklch(0.42 0.07145 / 0.24);
+  border: 1px solid oklch(0.74 0.055 145 / 0.30);
+  box-shadow: 0 2px 10px -8px oklch(0.42 0.07 145 / 0.24);
 }
 
 /* 指定按钮：温润玉石质感（不透背景；色相与新背景 hue145 协调） */
@@ -111,16 +111,16 @@ body::-webkit-scrollbar,
   background-color: oklch(0.945 0.045 145);
   background-image:
     radial-gradient(120% 85% at 30% 18%, oklch(1 0 0 / 0.55) 0%, oklch(1 0 0 / 0) 55%),
-    radial-gradient(140% 100% at 70% 110%, oklch(0.78 0.060145 / 0.28) 0%, oklch(0.78 0.060145 / 0) 60%),
+    radial-gradient(140% 100% at 70% 110%, oklch(0.78 0.060 145 / 0.28) 0%, oklch(0.78 0.060 145 / 0) 60%),
     linear-gradient(165deg, oklch(0.975 0.030 145) 0%, oklch(0.945 0.045 145) 48%, oklch(0.905 0.055 145) 100%);
-  border: 1px solid oklch(0.78 0.055145 / 0.55);
+  border: 1px solid oklch(0.78 0.055 145 / 0.55);
   color: oklch(0.36 0.085 145);
   box-shadow:
     inset 0 1px 0 0 oklch(1 0 0 / 0.75),
-    inset 0 -1px 0 0 oklch(0.70 0.060145 / 0.30),
+    inset 0 -1px 0 0 oklch(0.70 0.060 145 / 0.30),
     inset 0 0 10px 0 oklch(1 0 0 / 0.25),
-    0 1px 2px 0 oklch(0.40 0.06145 / 0.10),
-    0 4px 14px -8px oklch(0.40 0.07145 / 0.30);
+    0 1px 2px 0 oklch(0.40 0.06 145 / 0.10),
+    0 4px 14px -8px oklch(0.40 0.07 145 / 0.30);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
@@ -128,17 +128,17 @@ body::-webkit-scrollbar,
   background-color: oklch(0.915 0.060 145);
   background-image:
     radial-gradient(120% 85% at 30% 18%, oklch(1 0 0 / 0.50) 0%, oklch(1 0 0 / 0) 55%),
-    radial-gradient(140% 100% at 70% 110%, oklch(0.70 0.075145 / 0.35) 0%, oklch(0.70 0.075145 / 0) 60%),
+    radial-gradient(140% 100% at 70% 110%, oklch(0.70 0.075 145 / 0.35) 0%, oklch(0.70 0.075 145 / 0) 60%),
     linear-gradient(165deg, oklch(0.955 0.045 145) 0%, oklch(0.915 0.060 145) 48%, oklch(0.860 0.075 145) 100%);
-  border-color: oklch(0.70 0.075145 / 0.65);
+  border-color: oklch(0.70 0.075 145 / 0.65);
   color: oklch(0.30 0.110 145);
   font-weight: 600;
   box-shadow:
     inset 0 1px 0 0 oklch(1 0 0 / 0.70),
-    inset 0 -1px 0 0 oklch(0.62 0.080145 / 0.40),
+    inset 0 -1px 0 0 oklch(0.62 0.080 145 / 0.40),
     inset 0 0 12px 0 oklch(1 0 0 / 0.22),
-    0 1px 2px 0 oklch(0.35 0.07145 / 0.14),
-    0 6px 18px -10px oklch(0.35 0.08145 / 0.40);
+    0 1px 2px 0 oklch(0.35 0.07 145 / 0.14),
+    0 6px 18px -10px oklch(0.35 0.08 145 / 0.40);
 }
 /* 总结切换专用：选中时只加深绿色文字，底色保持 */
 .btn-jade-text-active {
