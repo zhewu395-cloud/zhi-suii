@@ -87,19 +87,34 @@ function Particle({
       : r < 0.92 ? "blot"
       : "spark";
 
+  // 层次：内核（米白绿，最短距离）/ 偏里（清新亮绿，中距离）/ 外层（莫兰迪绿）
+  const tierRoll = Math.random();
+  const tier: "cream" | "fresh" | "outer" =
+    tierRoll < 0.2 ? "cream" : tierRoll < 0.45 ? "fresh" : "outer";
+
+  const tierTravel =
+    tier === "cream" ? rand(0.3, 0.55)
+      : tier === "fresh" ? rand(0.55, 0.85)
+      : rand(0.85, 1.35);
+
   // 单次：横向满屏、纵向 ~1/3，且整体偏下（瓢洒下落感）
   const angle = rand(0, Math.PI * 2);
   const rx = full ? vw * rand(0.4, 0.55) : (vw / 2) * rand(0.55, 1.05);
   const ry = full ? vh * rand(0.4, 0.55) : (vh / 3) * rand(0.45, 0.95);
-  const jitter = rand(0.5, 1.35);
-  const dx = Math.cos(angle) * rx * jitter;
-  const dyBase = Math.sin(angle) * ry * jitter;
-  // 引入向下偏置，模拟落叶
+  const dx = Math.cos(angle) * rx * tierTravel;
+  const dyBase = Math.sin(angle) * ry * tierTravel;
   const gravity = full ? 0 : rand(20, 80);
   const dy = dyBase + gravity;
 
   const dur = full ? rand(1.3, 2.1) : rand(1.0, 1.7);
-  const delay = rand(0, full ? 0.25 : 0.14);
+  // 拉长并错开起播，避免开场所有粒子在中心叠成黑斑
+  const delay = full ? rand(0, 0.32) : rand(0.02, 0.28);
+
+  // 内层使用更亮的调色板（清新/米白），外层保留原莫兰迪
+  const palette =
+    tier === "cream" ? CREAM_GREENS
+      : tier === "fresh" ? FRESH_GREENS
+      : GREENS;
 
   let w = 12;
   let h = 12;
@@ -113,38 +128,34 @@ function Particle({
     w = rand(14, 26);
     h = rand(8, 14);
     borderRadius = leafRadius();
-    // 水墨叶：径向渐变制造宣纸晕染（深→浅）
-    const c1 = pick(GREENS.slice(0, 4));
-    const c2 = pick(GREENS.slice(3));
+    const c1 = pick(palette);
+    const c2 = pick(palette);
     background = `radial-gradient(ellipse at 30% 40%, ${c1} 0%, ${c2} 55%, transparent 95%)`;
-    opacity = rand(0.55, 0.8);
+    opacity = tier === "cream" ? rand(0.55, 0.78) : rand(0.55, 0.8);
   } else if (kind === "leaf-s") {
     w = rand(7, 13);
     h = rand(4, 8);
     borderRadius = leafRadius();
-    const c1 = pick(GREENS.slice(2));
-    const c2 = pick(GREENS.slice(4));
+    const c1 = pick(palette);
+    const c2 = pick(palette);
     background = `radial-gradient(ellipse at 40% 50%, ${c1} 0%, ${c2} 60%, transparent 100%)`;
-    opacity = rand(0.5, 0.75);
+    opacity = rand(0.5, 0.78);
   } else if (kind === "stroke") {
-    // 抽象笔触
     w = rand(16, 30);
     h = rand(1.8, 3.6);
     borderRadius = "9999px";
-    const c = pick(GREENS.slice(1, 5));
+    const c = pick(palette);
     background = `linear-gradient(90deg, transparent 0%, ${c} 30%, ${c} 70%, transparent 100%)`;
     opacity = rand(0.4, 0.65);
     blur = rand(0.2, 0.8);
   } else if (kind === "blot") {
-    // 水墨晕染斑
     w = h = rand(10, 22);
     borderRadius = `${rand(40, 70)}% ${rand(30, 60)}% ${rand(50, 80)}% ${rand(40, 70)}% / ${rand(40, 70)}% ${rand(40, 70)}% ${rand(40, 70)}% ${rand(40, 70)}%`;
-    const c = pick(GREENS);
+    const c = pick(palette);
     background = `radial-gradient(circle at 45% 45%, ${c} 0%, transparent 70%)`;
     opacity = rand(0.35, 0.6);
     blur = rand(0.6, 1.4);
   } else {
-    // 微光点
     w = h = rand(2.5, 5);
     borderRadius = "9999px";
     const c = pick(SPARKS);
@@ -155,6 +166,14 @@ function Particle({
 
   const rotate = rand(-180, 180);
   const endRotate = rotate + rand(-720, 720);
+
+  // 内层用 screen（提亮、避免叠黑），外层维持 multiply 的水墨叠墨；spark 始终 screen
+  const blend: React.CSSProperties["mixBlendMode"] =
+    kind === "spark" || tier === "cream"
+      ? "screen"
+      : tier === "fresh"
+        ? "normal"
+        : "multiply";
 
   const style: React.CSSProperties = {
     position: "absolute",
@@ -168,7 +187,7 @@ function Particle({
     animation: `petal-burst ${dur}s cubic-bezier(.18,.7,.3,1) ${delay}s forwards`,
     filter: blur > 0 ? `blur(${blur}px)` : undefined,
     boxShadow: extraShadow || undefined,
-    mixBlendMode: kind === "spark" ? "screen" : "multiply",
+    mixBlendMode: blend,
     // @ts-ignore
     "--tx": `${dx}px`,
     "--ty": `${dy}px`,
