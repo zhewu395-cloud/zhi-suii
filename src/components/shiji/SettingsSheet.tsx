@@ -51,19 +51,35 @@ export function SettingsSheet({
 
   const doExport = async () => {
     const data = await exportAll();
-    const blob = new Blob([JSON.stringify(data, null, 2)], {
-      type: "application/json",
-    });
-    const url = URL.createObjectURL(blob);
     const d = new Date();
     const stamp = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `时迹备份${stamp}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    setMsg("✓ 备份已下载");
-    setTimeout(() => setMsg(null), 2000);
+
+    // 1) 完整数据 JSON（用于导入恢复）
+    const jsonBlob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
+    const jsonUrl = URL.createObjectURL(jsonBlob);
+    const a1 = document.createElement("a");
+    a1.href = jsonUrl;
+    a1.download = `时迹备份${stamp}.json`;
+    a1.click();
+    URL.revokeObjectURL(jsonUrl);
+
+    // 2) 复盘 Markdown（Notion 可直接导入）
+    const reviews = ((data.data as Record<string, unknown[]>)?.reviews ?? []) as Review[];
+    const md = buildReviewsMarkdown(reviews);
+    const mdBlob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+    const mdUrl = URL.createObjectURL(mdBlob);
+    const a2 = document.createElement("a");
+    a2.href = mdUrl;
+    a2.download = `时迹复盘${stamp}.md`;
+    setTimeout(() => {
+      a2.click();
+      URL.revokeObjectURL(mdUrl);
+    }, 250);
+
+    setMsg("✓ 已导出 JSON + Markdown");
+    setTimeout(() => setMsg(null), 2500);
   };
 
   const doImport = async (file: File) => {
