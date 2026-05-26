@@ -264,7 +264,7 @@ export function TodosPage() {
                     background: "oklch(0.93 0.050 145 / 0.85)",
                     border: "1px solid oklch(0.75 0.060 145 / 0.40)",
                     boxShadow: "0 2px 8px -6px oklch(0.45 0.06 145 / 0.35)",
-                    filter: t.done ? "brightness(0.88)" : undefined,
+                    filter: t.done ? "brightness(0.96)" : undefined,
                   }}
                   onMouseDown={(e) => {
                     e.stopPropagation();
