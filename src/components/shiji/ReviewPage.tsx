@@ -37,6 +37,22 @@ export function ReviewPage() {
     load();
   }, []);
 
+  // 进入子视图时，把顶部"复盘"大标题换为对应分类名
+  useEffect(() => {
+    const titleMap: Record<string, string> = {
+      sundry: "琐碎记",
+      day: "日复盘",
+      week: "周复盘",
+      month: "月复盘",
+      long: "长复盘",
+    };
+    const detail = openCat ? titleMap[openCat] ?? null : null;
+    window.dispatchEvent(new CustomEvent("shiji-title", { detail }));
+    return () => {
+      window.dispatchEvent(new CustomEvent("shiji-title", { detail: null }));
+    };
+  }, [openCat]);
+
   const startNew = () => {
     const r: Review = {
       id: uid(),
@@ -109,9 +125,6 @@ export function ReviewPage() {
             ))}
           </div>
         </div>
-        <div className="mt-4 px-1 text-base font-medium leaf-underline">
-          {cat === "week" ? "周复盘" : "月复盘"}
-        </div>
         <CardList rows={rows} onOpen={setEditing} onRemove={removeReview} />
         {editing && (
           <ReviewEditor
@@ -130,13 +143,10 @@ export function ReviewPage() {
     const rows = list
       .filter((r) => r.category === openCat)
       .sort((a, b) => (b.updatedAt ?? b.createdAt) - (a.updatedAt ?? a.createdAt));
-    const label = openCat === "sundry" ? "琐碎记" : "日复盘";
+    
     return (
       <div className="pt-2">
         <LeafBack onClick={() => setOpenCat(null)} />
-        <div className="mt-4 px-1 text-base font-medium leaf-underline">
-          {label}
-        </div>
         <CardList rows={rows} onOpen={setEditing} onRemove={removeReview} />
         {editing && (
           <ReviewEditor
