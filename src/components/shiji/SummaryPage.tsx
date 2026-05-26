@@ -188,7 +188,7 @@ export function SummaryPage() {
       </div>
 
       {/* 滚动区：内容在按钮正下方截断，下方完整接轨标签栏 */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-4 pt-3 pb-2 space-y-5">
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 pt-3 pb-32 space-y-5">
 
       {merged.length === 0 ? (
         <div className="mt-20 text-center text-foreground/50 text-sm">
