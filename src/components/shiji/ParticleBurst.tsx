@@ -152,7 +152,7 @@ function Particle({
     animation: `petal-burst ${dur}s cubic-bezier(.18,.7,.3,1) ${delay}s forwards`,
     filter: blur > 0 ? `blur(${blur}px)` : undefined,
     boxShadow: extraShadow || undefined,
-    mixBlendMode: kind === "spark" ? "screen" : "multiply",
+    mixBlendMode: kind === "spark" ? "screen" : "normal",
     // @ts-ignore
     "--tx": `${dx}px`,
     "--ty": `${dy}px`,
