@@ -1,6 +1,7 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Long+Cang&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
@@ -80,7 +81,7 @@ body::-webkit-scrollbar,
   body {
     color: var(--color-foreground);
     background: var(--color-background);
-    font-family: "Kaiti SC", "STKaiti", "Kaiti", "楷体", "BiauKai", "DFKai-SB", Kai, serif;
+    font-family: "Ma Shan Zheng", "华文行楷", "STXingkai", "Xingkai SC", "KaiTi", "楷体", "STKaiti", serif;
     letter-spacing: 0.02em;
   }
   /* 关键：去掉 iOS/Safari 的系统按钮青蓝默认外观 */
