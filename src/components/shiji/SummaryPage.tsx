@@ -160,16 +160,22 @@ export function SummaryPage() {
   }, []);
 
   return (
-    <div className="pt-0 -mt-2 space-y-3">
+    <div className="pt-1 space-y-3">
       {headerSlot && createPortal(calendarPopover, headerSlot)}
 
-      {/* 日期 —— 在大标题"总结"正下方，会随滚动消失 */}
+      {/* 日期 —— 在大标题"总结"正下方，完整显示，会随滚动消失 */}
       <div className="px-1 pt-0 pb-1 text-sm text-foreground/70">
         {rangeLabel}
       </div>
 
-      {/* 维度切换 —— 固定在顶部，无背景遮罩，直接显出底图 */}
-      <div className="sticky -top-2 z-20 -mx-4 px-4 pt-2 pb-2">
+      {/* 维度切换 —— 固定在顶部；带毛玻璃模糊，使图表在按钮下方截断 */}
+      <div
+        className="sticky top-0 z-20 -mx-4 px-4 pt-2 pb-2"
+        style={{
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+        }}
+      >
         <div className="flex w-full items-center gap-2">
           {(
             [
