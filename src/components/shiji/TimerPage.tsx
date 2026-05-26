@@ -90,8 +90,8 @@ export function TimerPage({
   const elapsed = running && start ? now - start : 0;
 
   return (
-    <div className="flex flex-col items-center pt-2">
-      <div className="w-full -mt-10 -ml-1">
+    <div className="flex flex-col items-center pt-0">
+      <div className="w-full -ml-2 -mt-1">
         <LeafBack onClick={onDone} />
       </div>
 
