@@ -117,7 +117,7 @@ export function SettingsSheet({
             <Download className="h-5 w-5" />
             <div className="text-left">
               <div className="font-medium">导出备份</div>
-              <div className="text-xs opacity-80">下载所有数据为 JSON 文件</div>
+              <div className="text-xs opacity-80">JSON 全量备份 + Markdown 复盘（可导入 Notion）</div>
             </div>
           </button>
 
