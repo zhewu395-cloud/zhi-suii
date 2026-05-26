@@ -338,8 +338,8 @@ export function TodosPage() {
           onClick={() => setAdding(false)}
         >
           <div
-            className="absolute left-1/2 -translate-x-1/2 w-[92%] max-w-sm rounded-[28px] bg-background shadow-2xl flex flex-col overflow-hidden animate-scale-in"
-            style={{ top: "30%" }}
+            className="absolute left-1/2 -translate-x-1/2 w-[92%] max-w-sm rounded-[28px] shadow-2xl flex flex-col overflow-hidden animate-scale-in"
+            style={{ top: "30%", background: "rgba(245, 250, 247, 1)" }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* 顶部：任务名 —— 固定不被挤压 */}
