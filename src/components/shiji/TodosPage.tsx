@@ -160,7 +160,7 @@ export function TodosPage() {
           <PopoverTrigger asChild>
             <button
               onClick={(e) => e.stopPropagation()}
-              className="btn-jade grid h-10 w-10 place-items-center rounded-full active:scale-95 transition relative"
+              className="btn-jade btn-jade-soft grid h-10 w-10 place-items-center rounded-full active:scale-95 transition relative"
               aria-label="按日期筛选"
             >
               <Filter className="h-4 w-4" />
@@ -198,7 +198,7 @@ export function TodosPage() {
             e.stopPropagation();
             setAdding(true);
           }}
-          className="btn-jade grid h-10 w-10 place-items-center rounded-full active:scale-95 transition"
+          className="btn-jade btn-jade-soft grid h-10 w-10 place-items-center rounded-full active:scale-95 transition"
           aria-label="添加"
         >
           <Plus className="h-5 w-5" />

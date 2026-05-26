@@ -139,6 +139,19 @@ body::-webkit-scrollbar,
     0 2px 8px 0 oklch(0.30 0.05 145 / 0.08);
 
 }
+/* 进一步削弱左上高光（亮度再减半） */
+.btn-jade-soft {
+  background-image:
+    radial-gradient(120% 85% at 30% 18%, oklch(1 0 0 / 0.19) 0%, oklch(1 0 0 / 0) 55%),
+    radial-gradient(140% 100% at 70% 110%, oklch(0.78 0.060 145 / 0.28) 0%, oklch(0.78 0.060 145 / 0) 60%),
+    linear-gradient(165deg, oklch(0.975 0.030 145) 0%, oklch(0.945 0.045 145) 48%, oklch(0.905 0.055 145) 100%);
+}
+.btn-jade-soft.btn-jade-active {
+  background-image:
+    radial-gradient(120% 85% at 30% 18%, oklch(1 0 0 / 0.175) 0%, oklch(1 0 0 / 0) 55%),
+    radial-gradient(140% 100% at 70% 110%, oklch(0.70 0.075 145 / 0.35) 0%, oklch(0.70 0.075 145 / 0) 60%),
+    linear-gradient(165deg, oklch(0.955 0.045 145) 0%, oklch(0.915 0.060 145) 48%, oklch(0.860 0.075 145) 100%);
+}
 /* 总结切换专用：选中时只加深绿色文字，底色保持 */
 .btn-jade-text-active {
   color: oklch(0.34 0.120 145) !important;
