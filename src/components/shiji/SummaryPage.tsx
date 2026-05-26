@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
+
 import {
   PieChart,
   Pie,
@@ -105,79 +107,81 @@ export function SummaryPage() {
       ? `${ymd(date)} 所在周`
       : `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 
+  const calendarPopover = (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button
+          className="flex items-center justify-center bg-transparent p-1.5"
+          style={{ color: "oklch(0.45 0.07 145)" }}
+          aria-label="日历"
+        >
+          <CalendarIcon className="h-5 w-5" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="end">
+        {range === "month" ? (
+          <MonthYearPicker value={date} onChange={setDate} />
+        ) : (
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={(d) => {
+              if (!d) return;
+              if (range === "week") {
+                const r = new Date(d);
+                const day = (r.getDay() + 6) % 7;
+                r.setDate(r.getDate() - day);
+                setDate(r);
+              } else {
+                setDate(d);
+              }
+            }}
+            showWeekNumber={range === "week"}
+            modifiers={
+              range === "week"
+                ? { inweek: (d) => inRange(d, date, "week") }
+                : undefined
+            }
+            modifiersClassNames={
+              range === "week"
+                ? { inweek: "bg-primary/30 rounded-none" }
+                : undefined
+            }
+            className={cn("p-3 pointer-events-auto")}
+          />
+        )}
+      </PopoverContent>
+    </Popover>
+  );
+
+  const [headerSlot, setHeaderSlot] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    setHeaderSlot(document.getElementById("shiji-header-slot"));
+  }, []);
+
   return (
     <div className="pt-2 space-y-5">
-      {/* 维度切换 + 日期 —— 纯文字按钮，无气泡 */}
-      <div
-        className="sticky -top-2 z-20 -mx-4 px-4 pt-2 pb-3"
-      >
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex flex-1 items-center gap-2">
-            {(
-              [
-                ["day", "日总结"],
-                ["week", "周总结"],
-                ["month", "月总结"],
-              ] as [Range, string][]
-            ).map(([k, l]) => (
-              <button
-                key={k}
-                onClick={() => setRange(k)}
-                className={`btn-jade btn-jade-soft ${range === k ? "btn-jade-text-active" : ""} flex-1 rounded-full px-3 py-1.5 text-sm transition`}
-              >
-                {l}
-              </button>
-            ))}
-          </div>
-          <Popover>
-            <PopoverTrigger asChild>
-              <button
-                className="flex items-center justify-center bg-transparent p-1.5"
-                style={{ color: "oklch(0.45 0.07 145)" }}
-                aria-label="日历"
-              >
-                <CalendarIcon className="h-5 w-5" />
-              </button>
-            </PopoverTrigger>
-
-          <PopoverContent className="w-auto p-0" align="end">
-            {range === "month" ? (
-              <MonthYearPicker value={date} onChange={setDate} />
-            ) : (
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={(d) => {
-                  if (!d) return;
-                  if (range === "week") {
-                    // 归一到当周周一
-                    const r = new Date(d);
-                    const day = (r.getDay() + 6) % 7;
-                    r.setDate(r.getDate() - day);
-                    setDate(r);
-                  } else {
-                    setDate(d);
-                  }
-                }}
-                showWeekNumber={range === "week"}
-                modifiers={
-                  range === "week"
-                    ? {
-                        inweek: (d) => inRange(d, date, "week"),
-                      }
-                    : undefined
-                }
-                modifiersClassNames={
-                  range === "week"
-                    ? { inweek: "bg-primary/30 rounded-none" }
-                    : undefined
-                }
-                className={cn("p-3 pointer-events-auto")}
-              />
-            )}
-          </PopoverContent>
-          </Popover>
+      {headerSlot && createPortal(calendarPopover, headerSlot)}
+      {/* 维度切换 —— 整行平分 */}
+      <div className="sticky -top-2 z-20 -mx-4 px-4 pt-2 pb-3">
+        <div className="flex w-full items-center gap-2">
+          {(
+            [
+              ["day", "日总结"],
+              ["week", "周总结"],
+              ["month", "月总结"],
+            ] as [Range, string][]
+          ).map(([k, l]) => (
+            <button
+              key={k}
+              onClick={() => setRange(k)}
+              className={`btn-jade btn-jade-soft ${range === k ? "btn-jade-text-active" : ""} flex-1 rounded-full px-4 py-2.5 text-base transition`}
+            >
+              {l}
+            </button>
+          ))}
         </div>
+
         <div className="mt-2 px-1 text-xs text-foreground/55">{rangeLabel}</div>
       </div>
 

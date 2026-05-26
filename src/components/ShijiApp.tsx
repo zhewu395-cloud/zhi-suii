@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ClientOnly } from "@tanstack/react-router";
 import bg from "@/assets/bg-willow.png";
 import { EventsPage } from "./shiji/EventsPage";
@@ -7,7 +7,6 @@ import { TodosPage } from "./shiji/TodosPage";
 import { ReviewPage } from "./shiji/ReviewPage";
 import { SummaryPage } from "./shiji/SummaryPage";
 import { SettingsSheet } from "./shiji/SettingsSheet";
-import { Settings } from "lucide-react";
 import type { Activity } from "@/lib/db";
 
 type Tab = "events" | "summary" | "todos" | "review";
@@ -32,6 +31,20 @@ export function ShijiApp() {
     setInTimer(true);
   };
 
+  const longPressTimer = useRef<number | null>(null);
+  const startLongPress = () => {
+    if (longPressTimer.current) window.clearTimeout(longPressTimer.current);
+    longPressTimer.current = window.setTimeout(() => {
+      setSettingsOpen(true);
+    }, 550);
+  };
+  const cancelLongPress = () => {
+    if (longPressTimer.current) {
+      window.clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+
   return (
     <div
       className="relative mx-auto flex h-[100dvh] w-full max-w-[480px] flex-col overflow-hidden"
@@ -44,16 +57,17 @@ export function ShijiApp() {
       {/* 原图背景直出，无任何蒙层 */}
 
       <header className="relative z-10 flex items-center justify-between px-5 pt-12 pb-3">
-        <h1 className="text-3xl font-semibold tracking-[0.15em] text-foreground/90 drop-shadow-sm">
+        <h1
+          className="text-3xl font-semibold tracking-[0.15em] text-foreground/90 drop-shadow-sm select-none cursor-pointer"
+          onPointerDown={startLongPress}
+          onPointerUp={cancelLongPress}
+          onPointerLeave={cancelLongPress}
+          onPointerCancel={cancelLongPress}
+          onContextMenu={(e) => e.preventDefault()}
+        >
           {inTimer ? "" : TAB_TITLE[tab]}
         </h1>
-        <button
-          onClick={() => setSettingsOpen(true)}
-          className="btn-jade btn-jade-soft grid h-10 w-10 place-items-center rounded-full active:scale-95 transition"
-          aria-label="设置"
-        >
-          <Settings className="h-5 w-5" />
-        </button>
+        <div id="shiji-header-slot" className="flex items-center" />
       </header>
 
       <main className="relative z-10 flex-1 overflow-y-auto px-4 pb-28">
