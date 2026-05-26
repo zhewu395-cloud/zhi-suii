@@ -327,8 +327,10 @@ export function TodosPage() {
           </div>
         );
       })}
+      </div>
 
       {/* 视觉中心：屏幕上方 38%，高度随内容自适应 */}
+
       {adding && (
         <div
           className="fixed inset-0 z-30 bg-black/35 px-4"
