@@ -157,13 +157,6 @@ export function TodosPage() {
       <ParticleLayer />
       <div
         className="sticky -top-2 z-20 -mx-4 px-4 pt-0 pb-2 flex items-center justify-end gap-2"
-        style={{
-          backgroundImage:
-            "linear-gradient(180deg, oklch(0.985 0.018 145 / 0.92) 0%, oklch(0.975 0.025 145 / 0.92) 70%, oklch(0.965 0.030 145 / 0.92) 100%)",
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
-          borderBottom: "1px solid oklch(0.80 0.04 145 / 0.35)",
-        }}
       >
         <Popover>
           <PopoverTrigger asChild>

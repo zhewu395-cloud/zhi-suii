@@ -164,21 +164,12 @@ export function SummaryPage() {
       {headerSlot && createPortal(calendarPopover, headerSlot)}
 
       {/* 日期 —— 在大标题"总结"正下方，会随滚动消失 */}
-      <div className="px-1 pt-0 pb-1 text-xs text-foreground/55">
+      <div className="px-1 pt-0 pb-1 text-sm text-foreground/70">
         {rangeLabel}
       </div>
 
-      {/* 维度切换 —— 固定在顶部，下方有细分界线，内容滚到此截断 */}
-      <div
-        className="sticky -top-2 z-20 -mx-4 px-4 pt-2 pb-2"
-        style={{
-          backgroundImage:
-            "linear-gradient(180deg, oklch(0.985 0.018 145 / 0.92) 0%, oklch(0.975 0.025 145 / 0.92) 70%, oklch(0.965 0.030 145 / 0.92) 100%)",
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
-          borderBottom: "1px solid oklch(0.80 0.04 145 / 0.35)",
-        }}
-      >
+      {/* 维度切换 —— 固定在顶部，无背景遮罩，直接显出底图 */}
+      <div className="sticky -top-2 z-20 -mx-4 px-4 pt-2 pb-2">
         <div className="flex w-full items-center gap-2">
           {(
             [
