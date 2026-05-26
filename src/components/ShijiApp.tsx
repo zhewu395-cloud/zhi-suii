@@ -73,10 +73,10 @@ export function ShijiApp() {
         <nav
           className="absolute bottom-0 left-0 right-0 z-20 px-2 pt-3 pb-7 border-t"
           style={{
-            borderColor: "oklch(0.85 0.04 152 / 0.40)",
+            borderColor: "oklch(0.85 0.04 145 / 0.40)",
             backgroundImage:
-              "linear-gradient(180deg, oklch(0.995 0.008 152) 0%, oklch(0.975 0.030 152) 50%, oklch(0.935 0.055 152) 100%)",
-            boxShadow: "0 -6px 20px -14px oklch(0.55 0.07 152 / 0.30)",
+              "linear-gradient(180deg, oklch(0.995 0.008 145) 0%, oklch(0.975 0.030 145) 50%, oklch(0.935 0.055 145) 100%)",
+            boxShadow: "0 -6px 20px -14px oklch(0.55 0.07 145 / 0.30)",
           }}
         >
           <div className="grid grid-cols-4 gap-1">

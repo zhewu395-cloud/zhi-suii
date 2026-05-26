@@ -219,9 +219,9 @@ export function TodosPage() {
             className="relative mb-4 rounded-3xl px-3 py-3"
             style={{
               backgroundImage:
-                "linear-gradient(160deg, oklch(0.972 0.016 152 / 0.78) 0%, oklch(0.952 0.030 152 / 0.78) 100%)",
-              border: "1px solid oklch(0.80 0.040 152 / 0.24)",
-              boxShadow: "0 2px 10px -8px oklch(0.45 0.07 152 / 0.20)",
+                "linear-gradient(160deg, oklch(0.972 0.016 145 / 0.78) 0%, oklch(0.952 0.030 145 / 0.78) 100%)",
+              border: "1px solid oklch(0.80 0.040 145 / 0.24)",
+              boxShadow: "0 2px 10px -8px oklch(0.45 0.07 145 / 0.20)",
               backdropFilter: "blur(6px)",
               WebkitBackdropFilter: "blur(6px)",
             }}
@@ -261,9 +261,9 @@ export function TodosPage() {
                   data-todo-row
                   className="relative flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-500"
                   style={{
-                    background: "oklch(0.93 0.050 152 / 0.85)",
-                    border: "1px solid oklch(0.75 0.060 152 / 0.40)",
-                    boxShadow: "0 2px 8px -6px oklch(0.45 0.06 152 / 0.35)",
+                    background: "oklch(0.93 0.050 145 / 0.85)",
+                    border: "1px solid oklch(0.75 0.060 145 / 0.40)",
+                    boxShadow: "0 2px 8px -6px oklch(0.45 0.06 145 / 0.35)",
                     filter: t.done ? "brightness(0.94) saturate(0.7)" : undefined,
                   }}
                   onMouseDown={(e) => {

@@ -162,10 +162,10 @@ export function ReviewPage() {
         style={{
           height: "32vh",
           minHeight: 200,
-          backgroundColor: "oklch(0.945 0.045 152)",
+          backgroundColor: "oklch(0.945 0.045 145)",
           backgroundImage:
-            "repeating-linear-gradient(to bottom, transparent 0px, transparent 31px, oklch(0.70 0.07 152 / 0.35) 31px, oklch(0.70 0.07 152 / 0.35) 32px)",
-          border: "1px solid oklch(0.82 0.050 152 / 0.45)",
+            "repeating-linear-gradient(to bottom, transparent 0px, transparent 31px, oklch(0.70 0.07 145 / 0.35) 31px, oklch(0.70 0.07 145 / 0.35) 32px)",
+          border: "1px solid oklch(0.82 0.050 145 / 0.45)",
           lineHeight: "32px",
         }}
       >
@@ -263,7 +263,7 @@ export function ReviewPage() {
         {pending.length === 0 ? (
           <div
             className="rounded-3xl border border-dashed py-10 text-center text-xs text-foreground/40"
-            style={{ borderColor: "oklch(0.80 0.04 152 / 0.40)" }}
+            style={{ borderColor: "oklch(0.80 0.04 145 / 0.40)" }}
           >
             暂无待定内容
           </div>
@@ -284,8 +284,8 @@ export function ReviewPage() {
                   draggingId === r.id ? "opacity-50" : ""
                 }`}
                 style={{
-                  backgroundImage: "linear-gradient(160deg, oklch(0.968 0.018 152 / 0.80) 0%, oklch(0.948 0.035 152 / 0.80) 100%)",
-                  border: "1px solid oklch(0.78 0.045 152 / 0.26)",
+                  backgroundImage: "linear-gradient(160deg, oklch(0.968 0.018 145 / 0.80) 0%, oklch(0.948 0.035 145 / 0.80) 100%)",
+                  border: "1px solid oklch(0.78 0.045 145 / 0.26)",
                   backdropFilter: "blur(6px)",
                   WebkitBackdropFilter: "blur(6px)",
                 }}
@@ -373,9 +373,9 @@ function CardList({
           className="rounded-2xl px-4 py-3 cursor-pointer"
           style={{
             background:
-              "color-mix(in oklab, oklch(0.55 0.13 152) 10%, oklch(0.985 0.018 105))",
+              "color-mix(in oklab, oklch(0.55 0.13 145) 10%, oklch(0.985 0.018 105))",
             border:
-              "1px solid color-mix(in oklab, oklch(0.5 0.13 152) 18%, transparent)",
+              "1px solid color-mix(in oklab, oklch(0.5 0.13 145) 18%, transparent)",
           }}
         >
           <div className="flex items-center justify-between text-xs text-foreground/55">

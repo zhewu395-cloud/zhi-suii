@@ -100,9 +100,9 @@ export function TimerPage({
         className="mt-6 w-full rounded-[36px] py-10 px-4 flex flex-col items-center gap-7"
         style={{
           background:
-            "linear-gradient(180deg, oklch(0.97 0.035 152 / 0.55) 0%, oklch(0.985 0.020 152 / 0.40) 100%)",
-          border: "1px solid oklch(0.85 0.035 152 / 0.30)",
-          boxShadow: "0 10px 30px -24px oklch(0.50 0.06 152 / 0.35)",
+            "linear-gradient(180deg, oklch(0.97 0.035 145 / 0.55) 0%, oklch(0.985 0.020 145 / 0.40) 100%)",
+          border: "1px solid oklch(0.85 0.035 145 / 0.30)",
+          boxShadow: "0 10px 30px -24px oklch(0.50 0.06 145 / 0.35)",
         }}
       >
         <button
