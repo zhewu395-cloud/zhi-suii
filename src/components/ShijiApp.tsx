@@ -23,8 +23,20 @@ export function ShijiApp() {
   const [timing, setTiming] = useState<Activity | null>(null);
   const [inTimer, setInTimer] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [titleOverride, setTitleOverride] = useState<string | null>(null);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const h = (e: Event) => {
+      const d = (e as CustomEvent<string | null>).detail;
+      setTitleOverride(d ?? null);
+    };
+    window.addEventListener("shiji-title", h);
+    return () => window.removeEventListener("shiji-title", h);
+  }, []);
+
+  useEffect(() => {
+    setTitleOverride(null);
+  }, [tab]);
 
   const startTiming = (a: Activity) => {
     setTiming(a);
