@@ -73,14 +73,21 @@ export function TimelineView({ date }: { date: Date }) {
     );
   }
 
+  // 统一深柳绿字体色
+  const textColor = "oklch(0.32 0.06 145)";
+  // 轴线水平位置：对齐顶部标题“时间线”最后一个“线”字下方
+  const axisLeft = "9.9rem";
   return (
-    <div className="relative pl-24 pr-4 pt-3 pb-8">
-      {/* 时间轴细线 */}
+    <div
+      className="relative pr-4 pt-3 pb-8"
+      style={{ paddingLeft: "11.2rem" }}
+    >
+      {/* 时间轴细线（放大 1.3 倍：1px → 1.3px） */}
       <div
         className="absolute top-3 bottom-8"
         style={{
-          left: "5.4rem",
-          width: "1px",
+          left: axisLeft,
+          width: "1.3px",
           background:
             "linear-gradient(180deg, oklch(0.55 0.07 145 / 0) 0%, oklch(0.55 0.07 145 / 0.35) 8%, oklch(0.55 0.07 145 / 0.35) 92%, oklch(0.55 0.07 145 / 0) 100%)",
         }}
@@ -91,23 +98,28 @@ export function TimelineView({ date }: { date: Date }) {
           const dotColor = isStart
             ? "oklch(0.82 0.10 145)" // 浅绿
             : "oklch(0.45 0.10 145)"; // 深绿
-          const labelColor = isStart
-            ? "oklch(0.50 0.08 145)"
-            : "oklch(0.32 0.06 145)";
           return (
             <li key={n.key} className="relative min-h-[2.2rem]">
-              {/* 节点 */}
+              {/* 节点（放大 1.3 倍：0.6rem → 0.78rem） */}
               <span
-                className="absolute -left-[1.85rem] top-[0.55rem] block h-[0.6rem] w-[0.6rem] rounded-full"
+                className="absolute block rounded-full"
                 style={{
+                  left: `calc(${axisLeft} - 0.39rem)`,
+                  top: "0.55rem",
+                  height: "0.78rem",
+                  width: "0.78rem",
                   background: dotColor,
                   boxShadow: "0 0 0 3px oklch(0.96 0.022 140 / 0.9)",
                 }}
               />
               {/* 时间标签：在轴左侧 */}
               <div
-                className="absolute -left-[6.2rem] top-0 w-[4.2rem] text-right leading-tight"
-                style={{ color: "oklch(0.40 0.06 145)" }}
+                className="absolute top-0 text-right leading-tight"
+                style={{
+                  left: `calc(${axisLeft} - 5.2rem)`,
+                  width: "4.2rem",
+                  color: textColor,
+                }}
               >
                 <div className="text-[15.5px] tabular-nums font-medium">
                   {hm(n.ts)}
@@ -117,7 +129,7 @@ export function TimelineView({ date }: { date: Date }) {
               <div className="pt-0.5">
                 <div
                   className="text-[16.5px] leading-snug"
-                  style={{ color: labelColor, fontWeight: isStart ? 500 : 600 }}
+                  style={{ color: textColor, fontWeight: isStart ? 500 : 600 }}
                 >
                   {n.name}
                   <span
