@@ -111,16 +111,17 @@ function Particle({
   const jitter = rand(0.5, 1.35);
   const dx = Math.cos(angle) * rx * jitter;
   const dyBase = Math.sin(angle) * ry * jitter;
-  // 引入向下偏置，模拟落叶；quick 模式不下坠
-  const gravity = full || quick ? 0 : rand(20, 80);
+  // 引入极轻向下偏置，模拟落叶（quick / full 不下坠）
+  const gravity = full || quick ? 0 : rand(4, 14);
   const dy = dyBase + gravity;
 
   const dur = quick
-    ? rand(0.8, 1.2)
+    ? rand(0.55, 0.8)
     : full
-      ? rand(1.6, 1.9)
-      : rand(1.0, 1.7);
+      ? rand(1.0, 1.25)
+      : rand(0.7, 1.0);
   const delay = full ? rand(0, 0.03) : 0;
+
 
 
 
