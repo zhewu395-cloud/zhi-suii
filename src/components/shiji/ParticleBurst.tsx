@@ -161,7 +161,7 @@ function Particle({
     "--rot": `${endRotate}deg`,
     "--op": `${opacity}`,
     pointerEvents: "none",
-    opacity: 0,
+    opacity,
   };
   return <span style={style} />;
 }
