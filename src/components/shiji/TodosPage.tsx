@@ -117,7 +117,7 @@ export function TodosPage() {
       const willAllDone = todayItems.every((x) => x.id === t.id || x.done);
       if (t.date === todayStr && willAllDone && todayItems.length > 0) {
         window.setTimeout(() => {
-          fireBurst({ x: 0.5, y: 0.45, full: true });
+          fireFullScreenCelebration();
         }, 200);
       }
     } else {
