@@ -77,10 +77,12 @@ function Particle({
   x,
   y,
   full,
+  quick,
 }: {
   x: number;
   y: number;
   full?: boolean;
+  quick?: boolean;
 }) {
   const vw = typeof window !== "undefined" ? window.innerWidth : 400;
   const vh = typeof window !== "undefined" ? window.innerHeight : 700;
@@ -96,17 +98,30 @@ function Particle({
 
   // 单次：横向满屏、纵向 ~1/3，且整体偏下（瓢洒下落感）
   const angle = rand(0, Math.PI * 2);
-  const rx = full ? vw * rand(0.4, 0.55) : (vw / 2) * rand(0.55, 1.05);
-  const ry = full ? vh * rand(0.4, 0.55) : (vh / 3) * rand(0.45, 0.95);
+  const rx = full
+    ? vw * rand(0.4, 0.55)
+    : quick
+      ? (vw / 2) * rand(0.6, 1.1)
+      : (vw / 2) * rand(0.55, 1.05);
+  const ry = full
+    ? vh * rand(0.4, 0.55)
+    : quick
+      ? (vh / 3) * rand(0.55, 1.05)
+      : (vh / 3) * rand(0.45, 0.95);
   const jitter = rand(0.5, 1.35);
   const dx = Math.cos(angle) * rx * jitter;
   const dyBase = Math.sin(angle) * ry * jitter;
-  // 引入向下偏置，模拟落叶
-  const gravity = full ? 0 : rand(20, 80);
+  // 引入向下偏置，模拟落叶；quick 模式不下坠
+  const gravity = full || quick ? 0 : rand(20, 80);
   const dy = dyBase + gravity;
 
-  const dur = full ? rand(1.6, 1.9) : rand(1.0, 1.7);
+  const dur = quick
+    ? rand(0.8, 1.2)
+    : full
+      ? rand(1.6, 1.9)
+      : rand(1.0, 1.7);
   const delay = full ? rand(0, 0.03) : 0;
+
 
 
   let w = 12;
