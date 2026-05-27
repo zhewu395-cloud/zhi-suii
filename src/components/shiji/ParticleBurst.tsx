@@ -83,8 +83,8 @@ function Particle({
   const gravity = full ? 0 : rand(20, 80);
   const dy = dyBase + gravity;
 
-  const dur = full ? rand(1.3, 2.1) : rand(1.0, 1.7);
-  const delay = full ? rand(0, 0.06) : 0;
+  const dur = full ? rand(1.6, 1.9) : rand(1.0, 1.7);
+  const delay = full ? rand(0, 0.03) : 0;
 
 
   let w = 12;
