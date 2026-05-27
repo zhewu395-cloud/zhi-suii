@@ -39,7 +39,7 @@ const MUTED_COLOR = "oklch(0.40 0.05 145 / 0.72)";
 
 export function TimelineView({ date }: { date: Date }) {
   const [entries, setEntries] = useState<TimeEntry[]>([]);
-  const titleRef = useRef<HTMLSpanElement>(null);
+  const lastCharRef = useRef<HTMLSpanElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const [axisLeft, setAxisLeft] = useState(120);
 
@@ -49,10 +49,11 @@ export function TimelineView({ date }: { date: Date }) {
 
   useLayoutEffect(() => {
     function measure() {
-      if (!titleRef.current || !wrapRef.current) return;
-      const t = titleRef.current.getBoundingClientRect();
+      if (!lastCharRef.current || !wrapRef.current) return;
+      const t = lastCharRef.current.getBoundingClientRect();
       const w = wrapRef.current.getBoundingClientRect();
-      setAxisLeft(t.right - w.left);
+      // 对齐到 “线” 字的左侧正下方
+      setAxisLeft(t.left - w.left);
     }
     measure();
     const ro = new ResizeObserver(measure);
