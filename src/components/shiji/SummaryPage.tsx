@@ -117,6 +117,7 @@ export function SummaryPage() {
   const [date, setDate] = useState<Date>(new Date());
   const [range, setRange] = useState<Range>("day");
   const [view, setView] = useState<"grid" | "line">("grid");
+  const [mode, setMode] = useState<"timeline" | "summary">("timeline");
 
   useEffect(() => {
     getAll<TimeEntry>("entries").then(setEntries);
