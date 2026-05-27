@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getAll, type TimeEntry } from "@/lib/db";
 
 function pad(n: number) {
@@ -10,10 +10,10 @@ function hm(ts: number) {
 }
 function fmtDur(ms: number) {
   const m = Math.max(1, Math.round(ms / 60000));
-  if (m < 60) return `${m}min`;
+  if (m < 60) return `${m} 分`;
   const h = Math.floor(m / 60);
-  const rm = m % 60;
-  return rm === 0 ? `${h}h` : `${h}h${rm}min`;
+  const mm = m % 60;
+  return mm === 0 ? `${h} 时` : `${h} 时 ${mm} 分`;
 }
 
 /** 26 小时制：某天 02:00 → 次日 02:00 */
@@ -25,199 +25,100 @@ function dayBounds(d: Date) {
   return { start: start.getTime(), end: end.getTime() };
 }
 
-type Node = {
-  key: string;
-  ts: number;
-  kind: "start" | "end";
-  name: string;
-  duration: number;
-};
-
-// 统一深柳绿（与软件文字色一致）
-const TEXT_COLOR = "oklch(0.32 0.06 145)";
-const MUTED_COLOR = "oklch(0.40 0.05 145 / 0.72)";
-
 export function TimelineView({ date }: { date: Date }) {
   const [entries, setEntries] = useState<TimeEntry[]>([]);
-  const lastCharRef = useRef<HTMLSpanElement>(null);
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const [axisLeft, setAxisLeft] = useState(120);
 
   useEffect(() => {
     getAll<TimeEntry>("entries").then(setEntries);
   }, []);
 
-  useLayoutEffect(() => {
-    function measure() {
-      if (!lastCharRef.current || !wrapRef.current) return;
-      const t = lastCharRef.current.getBoundingClientRect();
-      const w = wrapRef.current.getBoundingClientRect();
-      // 对齐到 “线” 字的左侧正下方
-      setAxisLeft(t.left - w.left);
-    }
-    measure();
-    const ro = new ResizeObserver(measure);
-    if (wrapRef.current) ro.observe(wrapRef.current);
-    window.addEventListener("resize", measure);
-    return () => {
-      ro.disconnect();
-      window.removeEventListener("resize", measure);
-    };
-  }, []);
-
-  const nodes = useMemo<Node[]>(() => {
+  const list = useMemo(() => {
     const { start, end } = dayBounds(date);
-    const filtered = entries.filter(
-      (e) => e.startAt >= start && e.startAt < end,
-    );
-    const list: Node[] = [];
-    for (const e of filtered) {
-      list.push({
-        key: `${e.id}-s`,
-        ts: e.startAt,
-        kind: "start",
-        name: e.activityName,
-        duration: e.duration,
-      });
-      list.push({
-        key: `${e.id}-e`,
-        ts: e.endAt,
-        kind: "end",
-        name: e.activityName,
-        duration: e.duration,
-      });
-    }
-    return list.sort((a, b) => a.ts - b.ts);
+    return entries
+      .filter((e) => e.startAt >= start && e.startAt < end)
+      .sort((a, b) => a.startAt - b.startAt);
   }, [entries, date]);
 
-  // 1.3x 尺寸
-  const TIME_FS = 20; // 15.5 * 1.3
-  const EVENT_FS = 21; // 16.5 * 1.3
-  const DUR_FS = 16; // 12.5 * 1.3
-  const LINE_W = 1.5;
-  const GAP_LEFT = 12; // 线左侧到时间数字的间距
-  const GAP_RIGHT = 18; // 线右侧到事件文字的间距
+  if (list.length === 0) {
+    return (
+      <div className="mt-24 text-center text-foreground/50 text-sm">
+        这一天还没有留下脚印
+      </div>
+    );
+  }
 
   return (
-    <div ref={wrapRef} className="relative px-4 pt-3 pb-8">
-      {/* 顶部标题 */}
+    <div className="relative pl-20 pr-2 pt-2 pb-6">
+      {/* 时间轴细线 */}
       <div
-        className="mb-4 flex items-baseline gap-3"
-        style={{ color: TEXT_COLOR }}
-      >
-        <span className="text-sm" style={{ color: MUTED_COLOR }}>
-          {date.getFullYear()}-{pad(date.getMonth() + 1)}-{pad(date.getDate())}
-        </span>
-        <span
-          className="text-base font-medium tracking-wide"
-        >
-          时间
-          <span ref={lastCharRef}>线</span>
-        </span>
-      </div>
-
-      {nodes.length === 0 ? (
-        <div className="mt-20 text-center text-foreground/50 text-sm">
-          这一天还没有留下脚印
-        </div>
-      ) : (
-        <>
-          {/* 时间轴细线：垂直落在“线”字右下方 */}
-          <div
-            className="absolute"
-            style={{
-              left: axisLeft - LINE_W / 2,
-              top: "4.2rem",
-              bottom: "2rem",
-              width: LINE_W,
-              background:
-                "linear-gradient(180deg, oklch(0.55 0.07 145 / 0) 0%, oklch(0.5 0.07 145 / 0.4) 8%, oklch(0.5 0.07 145 / 0.4) 92%, oklch(0.55 0.07 145 / 0) 100%)",
-            }}
-          />
-          <ul className="relative space-y-5">
-            {nodes.map((n) => {
-              const isStart = n.kind === "start";
-              // 圆点：毛玻璃 + 内侧色彩区分
-              const dotInner = isStart
-                ? "oklch(0.82 0.10 145 / 0.55)"
-                : "oklch(0.42 0.10 145 / 0.55)";
-              return (
-                <li
-                  key={n.key}
-                  className="relative"
-                  style={{ minHeight: `${EVENT_FS * 1.6}px` }}
+        className="absolute top-2 bottom-6"
+        style={{
+          left: "4.6rem",
+          width: "1px",
+          background:
+            "linear-gradient(180deg, oklch(0.55 0.07 145 / 0) 0%, oklch(0.55 0.07 145 / 0.35) 8%, oklch(0.55 0.07 145 / 0.35) 92%, oklch(0.55 0.07 145 / 0) 100%)",
+        }}
+      />
+      <ul className="space-y-3.5">
+        {list.map((e) => (
+          <li key={e.id} className="relative">
+            {/* 节点 */}
+            <span
+              className="absolute -left-[1.45rem] top-3 block h-2 w-2 rounded-full"
+              style={{
+                background: "oklch(0.62 0.09 142)",
+                boxShadow: "0 0 0 3px oklch(0.95 0.025 140 / 0.85)",
+              }}
+            />
+            {/* 时间标签：在轴左侧 */}
+            <div
+              className="absolute -left-[5.0rem] top-1.5 w-[3.3rem] text-right leading-tight"
+              style={{ color: "oklch(0.40 0.06 145)" }}
+            >
+              <div className="text-[12px] tabular-nums font-medium">
+                {hm(e.startAt)}
+              </div>
+              <div
+                className="text-[10.5px] tabular-nums"
+                style={{ color: "oklch(0.55 0.045 145 / 0.85)" }}
+              >
+                {hm(e.endAt)}
+              </div>
+            </div>
+            {/* 卡片 */}
+            <div
+              className="rounded-2xl px-3.5 py-2.5"
+              style={{
+                background:
+                  "linear-gradient(180deg, oklch(0.985 0.012 140 / 0.85), oklch(0.955 0.022 140 / 0.75))",
+                border: "1px solid oklch(0.65 0.05 145 / 0.20)",
+                boxShadow: "0 1px 2px oklch(0.50 0.05 145 / 0.06)",
+              }}
+            >
+              <div
+                className="text-[14px] font-medium truncate"
+                style={{ color: "oklch(0.30 0.055 145)" }}
+              >
+                {e.activityName}
+              </div>
+              <div
+                className="mt-0.5 text-[11px] tabular-nums"
+                style={{ color: "oklch(0.46 0.045 145 / 0.85)" }}
+              >
+                持续 {fmtDur(e.duration)}
+              </div>
+              {e.note && (
+                <div
+                  className="mt-1 text-[11.5px] leading-snug"
+                  style={{ color: "oklch(0.42 0.04 145 / 0.90)" }}
                 >
-                  {/* 时间（轴左） */}
-                  <div
-                    className="absolute top-0 text-right leading-tight tabular-nums"
-                    style={{
-                      right: `calc(100% - ${axisLeft - GAP_LEFT}px)`,
-                      width: "4.6rem",
-                      color: TEXT_COLOR,
-                      fontSize: `${TIME_FS}px`,
-                      fontWeight: 500,
-                    }}
-                  >
-                    {hm(n.ts)}
-                  </div>
-                  {/* 毛玻璃圆点（精准居中在线上） */}
-                  <span
-                    className="absolute rounded-full"
-                    style={{
-                      left: axisLeft,
-                      top: `${TIME_FS * 0.55}px`,
-                      transform: "translate(-50%, -50%)",
-                      zIndex: 10,
-                      width: "0.36rem",
-                      height: "0.36rem",
-                      background: dotInner,
-                      border: "1px solid oklch(0.5 0.07 145 / 0.45)",
-                      backdropFilter: "blur(4px)",
-                      WebkitBackdropFilter: "blur(4px)",
-                      boxShadow:
-                        "0 0 0 2px oklch(0.96 0.022 140 / 0.85), 0 1px 2px oklch(0.3 0.05 145 / 0.15)",
-                    }}
-                  />
-                  {/* 事件（轴右） */}
-                  <div
-                    className="absolute top-0"
-                    style={{
-                      left: axisLeft + GAP_RIGHT,
-                      right: 0,
-                      color: TEXT_COLOR,
-                    }}
-                  >
-                    <div
-                      className="leading-snug"
-                      style={{
-                        fontSize: `${EVENT_FS}px`,
-                        fontWeight: 500,
-                      }}
-                    >
-                      {n.name}
-                      <span className="mx-1 opacity-55" style={{ fontWeight: 400 }}>
-                        ·
-                      </span>
-                      <span>{isStart ? "始" : "终"}</span>
-                    </div>
-                    {!isStart && (
-                      <div
-                        className="mt-0.5 tabular-nums"
-                        style={{
-                          fontSize: `${DUR_FS * 0.5}px`,
-                          color: MUTED_COLOR,
-                        }}
-                      >
-                        用时{fmtDur(n.duration)}
-                      </div>
-                    )}
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </>
-      )}
+                  {e.note}
+                </div>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
