@@ -111,16 +111,17 @@ function Particle({
   const jitter = rand(0.5, 1.35);
   const dx = Math.cos(angle) * rx * jitter;
   const dyBase = Math.sin(angle) * ry * jitter;
-  // 引入向下偏置，模拟落叶；quick 模式不下坠
-  const gravity = full || quick ? 0 : rand(20, 80);
+  // 引入极轻向下偏置，模拟落叶（quick / full 不下坠）
+  const gravity = full || quick ? 0 : rand(4, 14);
   const dy = dyBase + gravity;
 
   const dur = quick
-    ? rand(0.8, 1.2)
+    ? rand(0.55, 0.8)
     : full
-      ? rand(1.6, 1.9)
-      : rand(1.0, 1.7);
+      ? rand(1.0, 1.25)
+      : rand(0.7, 1.0);
   const delay = full ? rand(0, 0.03) : 0;
+
 
 
 
@@ -215,8 +216,8 @@ export function ParticleLayer() {
     _emit = (b) => {
       const id = ++_id;
       setBursts((prev) => [...prev, { ...b, id }]);
-      // quick 模式生命周期短，及时销毁
-      const ttl = b.quick ? 1300 : 2600;
+      // 生命周期：到达最大半径后立即销毁
+      const ttl = b.quick ? 900 : b.full ? 1400 : 1100;
       window.setTimeout(
         () => setBursts((prev) => prev.filter((x) => x.id !== id)),
         ttl,
@@ -236,14 +237,20 @@ export function ParticleLayer() {
             transform: translate(calc(-50% + var(--tx) * 0.05), calc(-50% + var(--ty) * 0.05)) rotate(0deg) scale(1);
             opacity: var(--op, 0.8);
           }
-          70% {
-            opacity: calc(var(--op, 0.8) * 0.85);
+          55% {
+            transform: translate(calc(-50% + var(--tx) * 0.95), calc(-50% + var(--ty) * 0.95)) rotate(calc(var(--rot) * 0.7)) scale(0.85);
+            opacity: var(--op, 0.8);
+          }
+          75% {
+            transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) rotate(var(--rot)) scale(0.7);
+            opacity: 0;
           }
           100% {
             transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) rotate(var(--rot)) scale(0.55);
             opacity: 0;
           }
         }
+
 
         @keyframes halo-pulse {
           0% { opacity: 0; transform: translate(-50%,-50%) scale(0.4); }
