@@ -236,14 +236,20 @@ export function ParticleLayer() {
             transform: translate(calc(-50% + var(--tx) * 0.05), calc(-50% + var(--ty) * 0.05)) rotate(0deg) scale(1);
             opacity: var(--op, 0.8);
           }
-          70% {
-            opacity: calc(var(--op, 0.8) * 0.85);
+          55% {
+            transform: translate(calc(-50% + var(--tx) * 0.95), calc(-50% + var(--ty) * 0.95)) rotate(calc(var(--rot) * 0.7)) scale(0.85);
+            opacity: var(--op, 0.8);
+          }
+          75% {
+            transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) rotate(var(--rot)) scale(0.7);
+            opacity: 0;
           }
           100% {
             transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) rotate(var(--rot)) scale(0.55);
             opacity: 0;
           }
         }
+
 
         @keyframes halo-pulse {
           0% { opacity: 0; transform: translate(-50%,-50%) scale(0.4); }
