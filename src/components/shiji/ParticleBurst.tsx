@@ -47,10 +47,8 @@ const SPARKS = [
 type Kind = "leaf-l" | "leaf-s" | "stroke" | "blot" | "spark";
 
 function leafRadius() {
-  // 不对称叶形
-  const a = rand(80, 100);
-  const b = rand(0, 20);
-  return `${a}% ${b}% ${a}% ${b}% / ${a}% ${b}% ${a}% ${b}%`;
+  // 不规则水墨斑块，避免出现椭圆轮廓
+  return `${rand(40, 75)}% ${rand(30, 65)}% ${rand(45, 80)}% ${rand(35, 70)}% / ${rand(40, 70)}% ${rand(45, 75)}% ${rand(35, 65)}% ${rand(45, 75)}%`;
 }
 
 function Particle({
