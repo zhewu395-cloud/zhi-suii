@@ -5,6 +5,7 @@ type Burst = {
   x: number; // 0..1 屏幕比例
   y: number;
   full?: boolean;
+  quick?: boolean; // 短生命周期（满卡多点联动）
 };
 
 let _id = 0;
@@ -12,6 +13,27 @@ let _emit: ((b: Omit<Burst, "id">) => void) | null = null;
 
 export function fireBurst(b: Omit<Burst, "id">) {
   _emit?.(b);
+}
+
+// 满卡：在 50ms 内触发 3 个独立小爆炸，覆盖屏幕不同象限
+export function fireFullScreenCelebration() {
+  // 三象限随机点：偏左上 / 偏中右 / 偏下
+  const zones: Array<[number, number, number, number]> = [
+    [0.12, 0.42, 0.12, 0.4],
+    [0.55, 0.85, 0.32, 0.6],
+    [0.2, 0.75, 0.62, 0.88],
+  ];
+  // 随机打乱顺序，进一步降低规律性
+  const shuffled = zones
+    .map((z) => ({ z, r: Math.random() }))
+    .sort((a, b) => a.r - b.r)
+    .map((o) => o.z);
+  shuffled.forEach(([xMin, xMax, yMin, yMax], i) => {
+    const x = xMin + Math.random() * (xMax - xMin);
+    const y = yMin + Math.random() * (yMax - yMin);
+    const delay = Math.random() * 50; // 0~50ms 微错峰
+    window.setTimeout(() => _emit?.({ x, y, quick: true }), delay + i * 8);
+  });
 }
 
 function rand(a: number, b: number) {
