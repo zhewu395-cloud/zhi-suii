@@ -221,11 +221,6 @@ export function SummaryPage() {
 
       {mode === "timeline" ? (
         <>
-          <div className="shrink-0 px-4 pt-2 pb-1">
-            <div className="px-1 text-sm text-foreground/70">
-              {ymd(date)} · 时间线
-            </div>
-          </div>
           <div className="flex-1 min-h-0 overflow-y-auto pb-32">
             <TimelineView date={date} />
           </div>
