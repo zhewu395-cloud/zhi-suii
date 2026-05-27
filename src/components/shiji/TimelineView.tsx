@@ -159,21 +159,21 @@ export function TimelineView({ date }: { date: Date }) {
                   >
                     {hm(n.ts)}
                   </div>
-                  {/* 毛玻璃圆点（叠在线上） */}
+                  {/* 毛玻璃圆点（精准居中在线上） */}
                   <span
                     className="absolute rounded-full"
                     style={{
                       left: axisLeft,
                       top: `${TIME_FS * 0.55}px`,
                       transform: "translate(-50%, -50%)",
-                      width: "0.62rem",
-                      height: "0.62rem",
+                      width: "0.36rem",
+                      height: "0.36rem",
                       background: dotInner,
                       border: "1px solid oklch(0.5 0.07 145 / 0.45)",
                       backdropFilter: "blur(4px)",
                       WebkitBackdropFilter: "blur(4px)",
                       boxShadow:
-                        "0 0 0 3px oklch(0.96 0.022 140 / 0.85), 0 1px 2px oklch(0.3 0.05 145 / 0.15)",
+                        "0 0 0 2px oklch(0.96 0.022 140 / 0.85), 0 1px 2px oklch(0.3 0.05 145 / 0.15)",
                     }}
                   />
                   {/* 事件（轴右） */}
@@ -189,7 +189,7 @@ export function TimelineView({ date }: { date: Date }) {
                       className="leading-snug"
                       style={{
                         fontSize: `${EVENT_FS}px`,
-                        fontWeight: isStart ? 500 : 600,
+                        fontWeight: 500,
                       }}
                     >
                       {n.name}
@@ -202,11 +202,11 @@ export function TimelineView({ date }: { date: Date }) {
                       <div
                         className="mt-0.5 tabular-nums"
                         style={{
-                          fontSize: `${DUR_FS}px`,
+                          fontSize: `${DUR_FS * 0.5}px`,
                           color: MUTED_COLOR,
                         }}
                       >
-                        历时 {fmtDur(n.duration)}
+                        用时{fmtDur(n.duration)}
                       </div>
                     )}
                   </div>
