@@ -10,10 +10,10 @@ function hm(ts: number) {
 }
 function fmtDur(ms: number) {
   const m = Math.max(1, Math.round(ms / 60000));
-  if (m < 60) return `${m} 分钟`;
-  const h = m / 60;
-  if (Number.isInteger(h)) return `${h} 小时`;
-  return `${h.toFixed(1)} 小时`;
+  if (m < 60) return `${m}min`;
+  const h = Math.floor(m / 60);
+  const rm = m % 60;
+  return rm === 0 ? `${h}h` : `${h}h${rm}min`;
 }
 
 /** 26 小时制：某天 02:00 → 次日 02:00 */
