@@ -257,13 +257,6 @@ export function ReviewEditor({
       {/* 顶部：叶子 / 关闭 */}
       <header className="flex items-center justify-between px-3 pt-10 pb-1">
         <LeafBack onClick={onClose} />
-        <button
-          onClick={onClose}
-          aria-label="关闭"
-          className="grid h-9 w-9 place-items-center rounded-full text-foreground/70 active:scale-90"
-        >
-          <X className="h-5 w-5" />
-        </button>
       </header>
 
       {/* 标题 + 日期 */}
