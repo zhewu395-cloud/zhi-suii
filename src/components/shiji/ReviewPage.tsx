@@ -343,12 +343,7 @@ export function ReviewPage() {
             load();
           }}
           onSave={onSave}
-          onOpenReview={async (id) => {
-            await load();
-            const rows = await getAll<Review>("reviews");
-            const tgt = rows.find((x) => x.id === id);
-            if (tgt) setEditing({ ...tgt, category: (tgt.category ?? tgt.type ?? "pending") as ReviewCategory });
-          }}
+          onOpenReview={(id) => openReviewById(id)}
         />
       )}
     </div>
