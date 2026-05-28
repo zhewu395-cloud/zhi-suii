@@ -1,0 +1,17 @@
+{
+  "name": "织岁",
+  "short_name": "织岁",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#e8efe6",
+  "theme_color": "#e8efe6",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}
