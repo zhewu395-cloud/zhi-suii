@@ -37,10 +37,12 @@ export function ReviewEditor({
   review,
   onClose,
   onSave,
+  onOpenReview,
 }: {
   review: Review;
   onClose: () => void;
   onSave: (r: Review) => void;
+  onOpenReview?: (id: string) => void;
 }) {
   const editorRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
