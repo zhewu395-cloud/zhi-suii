@@ -140,10 +140,14 @@ export function ShijiApp() {
   );
 }
 
+import { ActivationGate } from "./shiji/ActivationGate";
+
 export default function ShijiAppClient() {
   return (
     <ClientOnly fallback={<div className="h-[100dvh]" />}>
-      <ShijiApp />
+      <ActivationGate>
+        <ShijiApp />
+      </ActivationGate>
     </ClientOnly>
   );
 }
