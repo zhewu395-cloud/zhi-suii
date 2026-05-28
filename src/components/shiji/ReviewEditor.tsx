@@ -8,7 +8,6 @@ import {
   Image as ImageIcon,
   Plus,
   Calendar as CalendarIcon,
-  X,
   Minus,
 } from "lucide-react";
 import { LeafBack } from "./LeafBack";
@@ -38,10 +37,12 @@ export function ReviewEditor({
   review,
   onClose,
   onSave,
+  onOpenReview,
 }: {
   review: Review;
   onClose: () => void;
   onSave: (r: Review) => void;
+  onOpenReview?: (id: string) => void;
 }) {
   const editorRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -190,8 +191,11 @@ export function ReviewEditor({
     const a = document.createElement("a");
     a.href = `#review-${target.id}`;
     a.dataset.linkId = target.id;
-    a.className = "text-primary underline";
-    a.textContent = `🔗 ${target.title || target.date}（${CAT_LABEL[target.category]}）`;
+    // 主题淡柳绿 + 无下划线，与正文明显区分
+    a.style.color = "oklch(0.58 0.10 145)";
+    a.style.textDecoration = "none";
+    a.style.cursor = "pointer";
+    a.textContent = `@${target.title?.trim() || target.date}`;
     const sel = window.getSelection();
     if (sel && sel.rangeCount > 0 && editorRef.current?.contains(sel.anchorNode)) {
       sel.getRangeAt(0).insertNode(a);
@@ -207,6 +211,23 @@ export function ReviewEditor({
     put("reviews", next);
     onSave(next);
     setPanel(null);
+  };
+
+  // 点击正文中的 @链接 跳转到目标复盘
+  const onEditorClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    const a = target.closest<HTMLAnchorElement>("a[data-link-id]");
+    if (!a) return;
+    e.preventDefault();
+    const id = a.dataset.linkId;
+    if (!id || !onOpenReview) return;
+    // 先保存当前内容
+    const html = editorRef.current?.innerHTML ?? "";
+    const cur = { ...draft, content: html, updatedAt: Date.now() };
+    put("reviews", cur).then(() => {
+      onSave(cur);
+      onOpenReview(id);
+    });
   };
 
   const filteredLinkTargets =
@@ -256,13 +277,6 @@ export function ReviewEditor({
       {/* 顶部：叶子 / 关闭 */}
       <header className="flex items-center justify-between px-3 pt-10 pb-1">
         <LeafBack onClick={onClose} />
-        <button
-          onClick={onClose}
-          aria-label="关闭"
-          className="grid h-9 w-9 place-items-center rounded-full text-foreground/70 active:scale-90"
-        >
-          <X className="h-5 w-5" />
-        </button>
       </header>
 
       {/* 标题 + 日期 */}
@@ -293,6 +307,7 @@ export function ReviewEditor({
           onMouseUp={saveSelection}
           onKeyUp={saveSelection}
           onTouchEnd={saveSelection}
+          onClick={onEditorClick}
           className="min-h-[60vh] outline-none text-base leading-7 caret-[oklch(0.78_0.18_95)]"
           style={{ fontFamily, fontSize: `${fontSize}px` }}
         />

@@ -100,6 +100,19 @@ export function ReviewPage() {
     setList((prev) => prev.filter((x) => x.id !== id));
   };
 
+  // 跳转到指定复盘（用于正文里的 @链接）
+  const openReviewById = async (id: string) => {
+    const rows = await getAll<Review>("reviews");
+    const tgt = rows.find((x) => x.id === id);
+    if (!tgt) return;
+    const fixed = { ...tgt, category: (tgt.category ?? tgt.type ?? "pending") as ReviewCategory };
+    setList(
+      rows.map((r) => ({ ...r, category: (r.category ?? r.type ?? "pending") as ReviewCategory })),
+    );
+    setEditing(fixed);
+  };
+
+
   // ===== 长复盘视图 =====
   if (openCat === "long" || openCat === "week" || openCat === "month") {
     const cat = openCat === "long" ? longView : openCat;
@@ -139,6 +152,7 @@ export function ReviewPage() {
               load();
             }}
             onSave={onSave}
+            onOpenReview={(id) => openReviewById(id)}
           />
         )}
       </div>
@@ -166,6 +180,7 @@ export function ReviewPage() {
               load();
             }}
             onSave={onSave}
+            onOpenReview={(id) => openReviewById(id)}
           />
         )}
       </div>
@@ -198,6 +213,7 @@ export function ReviewPage() {
       <div className="grid grid-cols-3 gap-2 px-1">
         <HDropZone
           label="琐碎记"
+          cat="sundry"
           active={hoverCat === "sundry" && !!draggingId}
           onClick={() => setOpenCat("sundry")}
           onDragOver={(e) => {
@@ -209,6 +225,7 @@ export function ReviewPage() {
         />
         <HDropZone
           label="日复盘"
+          cat="day"
           active={hoverCat === "day" && !!draggingId}
           onClick={() => setOpenCat("day")}
           onDragOver={(e) => {
@@ -221,6 +238,7 @@ export function ReviewPage() {
         {!longSplit ? (
           <HDropZone
             label="长复盘"
+            cat="long"
             active={hoverCat === "long" && !!draggingId}
             onClick={() => {
               setLongView("week");
@@ -237,6 +255,7 @@ export function ReviewPage() {
           <div className="grid grid-rows-2 gap-1.5">
             <HDropZone
               label="周"
+              cat="week"
               active={hoverCat === "week" && !!draggingId}
               compact
               onClick={() => {
@@ -255,6 +274,7 @@ export function ReviewPage() {
             />
             <HDropZone
               label="月"
+              cat="month"
               active={hoverCat === "month" && !!draggingId}
               compact
               onClick={() => {
@@ -290,33 +310,31 @@ export function ReviewPage() {
         ) : (
           <div className="space-y-2">
             {pending.map((r) => (
-              <div
+              <DraggableCard
                 key={r.id}
-                draggable
-                onDragStart={() => setDraggingId(r.id)}
-                onDragEnd={() => {
+                r={r}
+                draggingId={draggingId}
+                onPickUp={(id) => setDraggingId(id)}
+                onMove={(x, y) => {
+                  const el = document.elementFromPoint(x, y) as HTMLElement | null;
+                  const zone = el?.closest<HTMLElement>("[data-drop-cat]");
+                  const cat = zone?.dataset.dropCat ?? null;
+                  if (cat === "long" && draggingId) setLongSplit(true);
+                  setHoverCat(cat);
+                }}
+                onDrop={(x, y) => {
+                  const el = document.elementFromPoint(x, y) as HTMLElement | null;
+                  const zone = el?.closest<HTMLElement>("[data-drop-cat]");
+                  const cat = zone?.dataset.dropCat;
+                  if (cat && cat !== "long" && cat !== "pending") {
+                    moveTo(r.id, cat as ReviewCategory);
+                  }
                   setDraggingId(null);
                   setHoverCat(null);
                   setLongSplit(false);
                 }}
-                onClick={() => setEditing(r)}
-                className={`rounded-2xl px-4 py-2.5 cursor-grab active:cursor-grabbing ${
-                  draggingId === r.id ? "opacity-50" : ""
-                }`}
-                style={{
-                  backgroundImage: "linear-gradient(160deg, oklch(0.968 0.018 145 / 0.80) 0%, oklch(0.948 0.035 145 / 0.80) 100%)",
-                  border: "1px solid oklch(0.78 0.045 145 / 0.26)",
-                  backdropFilter: "blur(6px)",
-                  WebkitBackdropFilter: "blur(6px)",
-                }}
-              >
-                <div className="flex justify-between text-xs text-foreground/55">
-                  <span>{r.date}</span>
-                </div>
-                <div className="truncate text-sm">
-                  {r.title || stripHtml(r.content).slice(0, 40) || "（空）"}
-                </div>
-              </div>
+                onTap={() => setEditing(r)}
+              />
             ))}
           </div>
         )}
@@ -330,6 +348,7 @@ export function ReviewPage() {
             load();
           }}
           onSave={onSave}
+          onOpenReview={(id) => openReviewById(id)}
         />
       )}
     </div>
@@ -340,6 +359,7 @@ function HDropZone({
   label,
   active,
   compact,
+  cat,
   onClick,
   onDragOver,
   onDragLeave,
@@ -348,6 +368,7 @@ function HDropZone({
   label: string;
   active: boolean;
   compact?: boolean;
+  cat?: string;
   onClick: () => void;
   onDragOver: (e: React.DragEvent) => void;
   onDragLeave: () => void;
@@ -359,12 +380,115 @@ function HDropZone({
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}
       onDrop={onDrop}
+      data-drop-cat={cat}
       className={`btn-jade ${active ? "btn-jade-active" : ""} w-full rounded-2xl text-center transition ${
         compact ? "py-2 text-sm" : "py-5 text-base"
       }`}
     >
       {label}
     </button>
+  );
+}
+
+function DraggableCard({
+  r,
+  draggingId,
+  onPickUp,
+  onMove,
+  onDrop,
+  onTap,
+}: {
+  r: Review;
+  draggingId: string | null;
+  onPickUp: (id: string) => void;
+  onMove: (x: number, y: number) => void;
+  onDrop: (x: number, y: number) => void;
+  onTap: () => void;
+}) {
+  const startRef = useRef<{ x: number; y: number; t: number } | null>(null);
+  const movedRef = useRef(false);
+  const armedRef = useRef(false);
+  const pressTimer = useRef<number | null>(null);
+  const [dragging, setDragging] = useState(false);
+
+  const cancelTimer = () => {
+    if (pressTimer.current) {
+      window.clearTimeout(pressTimer.current);
+      pressTimer.current = null;
+    }
+  };
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    startRef.current = { x: e.clientX, y: e.clientY, t: Date.now() };
+    movedRef.current = false;
+    armedRef.current = false;
+    cancelTimer();
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    pressTimer.current = window.setTimeout(() => {
+      armedRef.current = true;
+      setDragging(true);
+      onPickUp(r.id);
+    }, 220);
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!startRef.current) return;
+    const dx = e.clientX - startRef.current.x;
+    const dy = e.clientY - startRef.current.y;
+    if (Math.hypot(dx, dy) > 6) movedRef.current = true;
+    if (armedRef.current) onMove(e.clientX, e.clientY);
+  };
+  const onPointerUp = (e: React.PointerEvent) => {
+    cancelTimer();
+    const wasArmed = armedRef.current;
+    armedRef.current = false;
+    setDragging(false);
+    try {
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch {
+      /* ignore */
+    }
+    if (wasArmed) {
+      onDrop(e.clientX, e.clientY);
+    } else if (!movedRef.current) {
+      onTap();
+    }
+    startRef.current = null;
+    movedRef.current = false;
+  };
+  const onPointerCancel = () => {
+    cancelTimer();
+    armedRef.current = false;
+    movedRef.current = false;
+    setDragging(false);
+    startRef.current = null;
+  };
+
+  const isMe = draggingId === r.id;
+
+  return (
+    <div
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerCancel}
+      className={`rounded-2xl px-4 py-2.5 select-none touch-none cursor-grab active:cursor-grabbing transition ${
+        isMe ? "opacity-60 scale-[0.98]" : ""
+      } ${dragging ? "ring-2 ring-[oklch(0.55_0.13_145)/0.55]" : ""}`}
+      style={{
+        backgroundImage:
+          "linear-gradient(160deg, oklch(0.968 0.018 145 / 0.80) 0%, oklch(0.948 0.035 145 / 0.80) 100%)",
+        border: "1px solid oklch(0.78 0.045 145 / 0.26)",
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
+      }}
+    >
+      <div className="flex justify-between text-xs text-foreground/55">
+        <span>{r.date}</span>
+      </div>
+      <div className="truncate text-sm">
+        {r.title || stripHtml(r.content).slice(0, 40) || "（空）"}
+      </div>
+    </div>
   );
 }
 
