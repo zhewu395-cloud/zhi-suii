@@ -290,33 +290,31 @@ export function ReviewPage() {
         ) : (
           <div className="space-y-2">
             {pending.map((r) => (
-              <div
+              <DraggableCard
                 key={r.id}
-                draggable
-                onDragStart={() => setDraggingId(r.id)}
-                onDragEnd={() => {
+                r={r}
+                draggingId={draggingId}
+                onPickUp={(id) => setDraggingId(id)}
+                onMove={(x, y) => {
+                  const el = document.elementFromPoint(x, y) as HTMLElement | null;
+                  const zone = el?.closest<HTMLElement>("[data-drop-cat]");
+                  const cat = zone?.dataset.dropCat ?? null;
+                  if (cat === "long" && draggingId) setLongSplit(true);
+                  setHoverCat(cat);
+                }}
+                onDrop={(x, y) => {
+                  const el = document.elementFromPoint(x, y) as HTMLElement | null;
+                  const zone = el?.closest<HTMLElement>("[data-drop-cat]");
+                  const cat = zone?.dataset.dropCat;
+                  if (cat && cat !== "long" && cat !== "pending") {
+                    moveTo(r.id, cat as ReviewCategory);
+                  }
                   setDraggingId(null);
                   setHoverCat(null);
                   setLongSplit(false);
                 }}
-                onClick={() => setEditing(r)}
-                className={`rounded-2xl px-4 py-2.5 cursor-grab active:cursor-grabbing ${
-                  draggingId === r.id ? "opacity-50" : ""
-                }`}
-                style={{
-                  backgroundImage: "linear-gradient(160deg, oklch(0.968 0.018 145 / 0.80) 0%, oklch(0.948 0.035 145 / 0.80) 100%)",
-                  border: "1px solid oklch(0.78 0.045 145 / 0.26)",
-                  backdropFilter: "blur(6px)",
-                  WebkitBackdropFilter: "blur(6px)",
-                }}
-              >
-                <div className="flex justify-between text-xs text-foreground/55">
-                  <span>{r.date}</span>
-                </div>
-                <div className="truncate text-sm">
-                  {r.title || stripHtml(r.content).slice(0, 40) || "（空）"}
-                </div>
-              </div>
+                onTap={() => setEditing(r)}
+              />
             ))}
           </div>
         )}
@@ -330,6 +328,12 @@ export function ReviewPage() {
             load();
           }}
           onSave={onSave}
+          onOpenReview={async (id) => {
+            await load();
+            const rows = await getAll<Review>("reviews");
+            const tgt = rows.find((x) => x.id === id);
+            if (tgt) setEditing({ ...tgt, category: (tgt.category ?? tgt.type ?? "pending") as ReviewCategory });
+          }}
         />
       )}
     </div>
