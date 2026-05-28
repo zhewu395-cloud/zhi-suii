@@ -56,14 +56,14 @@ export function ActivationGate({ children }: { children: React.ReactNode }) {
         </div>
         <div className="mt-3 text-sm text-[oklch(0.40_0.06_145)]/80 leading-relaxed">
           {expiredHint
-            ? "您的 7 天体验已到期，请输入终身激活码继续使用"
-            : "请输入激活码解锁《织岁》全功能"}
+            ? "您的 7 天体验已到期，请输入终身邀请码继续使用"
+            : "请输入要邀请码解锁《织岁》全功能"}
         </div>
 
         <input
           value={code}
           onChange={(e) => setCode(e.target.value)}
-          placeholder="请输入激活码"
+          placeholder="请输入邀请码"
           className="mt-8 w-full rounded-2xl border bg-white/80 px-4 py-3 text-center text-base tracking-widest outline-none focus:ring-2"
           style={{
             borderColor: "oklch(0.80 0.05 145 / 0.7)",
