@@ -225,6 +225,7 @@ export function ReviewPage() {
         />
         <HDropZone
           label="日复盘"
+          cat="day"
           active={hoverCat === "day" && !!draggingId}
           onClick={() => setOpenCat("day")}
           onDragOver={(e) => {
