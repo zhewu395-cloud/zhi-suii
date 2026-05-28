@@ -213,6 +213,7 @@ export function ReviewPage() {
       <div className="grid grid-cols-3 gap-2 px-1">
         <HDropZone
           label="琐碎记"
+          cat="sundry"
           active={hoverCat === "sundry" && !!draggingId}
           onClick={() => setOpenCat("sundry")}
           onDragOver={(e) => {
