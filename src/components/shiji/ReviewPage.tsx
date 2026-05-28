@@ -274,6 +274,7 @@ export function ReviewPage() {
             />
             <HDropZone
               label="月"
+              cat="month"
               active={hoverCat === "month" && !!draggingId}
               compact
               onClick={() => {
