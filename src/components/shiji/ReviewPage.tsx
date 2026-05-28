@@ -255,6 +255,7 @@ export function ReviewPage() {
           <div className="grid grid-rows-2 gap-1.5">
             <HDropZone
               label="周"
+              cat="week"
               active={hoverCat === "week" && !!draggingId}
               compact
               onClick={() => {
