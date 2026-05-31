@@ -260,12 +260,23 @@ export function ReviewEditor({
     });
   };
 
-  const filteredLinkTargets =
-    linkMode === "date"
-      ? allReviews.filter(
-          (r) => r.id !== review.id && r.date === ymd(linkDate),
-        )
-      : allReviews.filter((r) => r.id !== review.id);
+  const filteredLinkTargets = (() => {
+    const base = allReviews.filter((r) => r.id !== review.id);
+    if (linkMode === "date") return base.filter((r) => r.date === ymd(linkDate));
+    if (linkMode === "cat") {
+      if (!linkCat) return [];
+      if (linkCat === "long")
+        return base.filter((r) => r.category === "week" || r.category === "month");
+      return base.filter((r) => r.category === linkCat);
+    }
+    const kw = linkKeyword.trim().toLowerCase();
+    if (!kw) return [];
+    return base.filter(
+      (r) =>
+        (r.title ?? "").toLowerCase().includes(kw) ||
+        stripHtml(r.content).toLowerCase().includes(kw),
+    );
+  })();
 
   // 字体上传
   const onPickFont = async (e: React.ChangeEvent<HTMLInputElement>) => {
