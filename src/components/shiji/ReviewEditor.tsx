@@ -85,9 +85,13 @@ export function ReviewEditor({
     };
   }, []);
 
-  const [linkMode, setLinkMode] = useState<"date" | "cat">("date");
+  const [linkMode, setLinkMode] = useState<"date" | "cat" | "keyword">("date");
   const [linkDate, setLinkDate] = useState<Date>(new Date());
   const [allReviews, setAllReviews] = useState<Review[]>([]);
+  const [linkCat, setLinkCat] = useState<"sundry" | "day" | "long" | null>(null);
+  const [linkKeyword, setLinkKeyword] = useState("");
+  const [linkFull, setLinkFull] = useState(false);
+  const [linkPreview, setLinkPreview] = useState<Review | null>(null);
 
   // 初始内容写入 contentEditable + 自动唤起键盘
   useEffect(() => {
