@@ -194,6 +194,28 @@ export function ReviewEditor({
     lastTap.current = now;
   };
 
+  // 输入时把光标始终保持在键盘 + 工具栏之上
+  const onEditorInput = () => {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return;
+    const r = sel.getRangeAt(0).cloneRange();
+    r.collapse(false);
+    let rect = r.getBoundingClientRect();
+    if (rect.width === 0 && rect.height === 0) {
+      const node =
+        sel.anchorNode?.nodeType === 1
+          ? (sel.anchorNode as HTMLElement)
+          : sel.anchorNode?.parentElement;
+      if (node) rect = node.getBoundingClientRect();
+    }
+    // 工具栏 ~ 56px；保留 24px 余地
+    const safeBottom = window.innerHeight - kbOffset - 56 - 24;
+    if (rect.bottom > safeBottom) {
+      const container = editorRef.current?.parentElement;
+      container?.scrollBy({ top: rect.bottom - safeBottom, behavior: "smooth" });
+    }
+  };
+
   const insertLink = (target: Review) => {
     restoreSelection();
     const a = document.createElement("a");
