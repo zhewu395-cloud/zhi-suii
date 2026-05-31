@@ -327,7 +327,7 @@ export function ReviewEditor({
       {/* 正文 */}
       <div
         className="flex-1 overflow-y-auto px-5 pt-3"
-        style={{ paddingBottom: `${kbOffset + 64}px` }}
+        style={{ paddingBottom: `${kbOffset + 96}px`, scrollPaddingBottom: `${kbOffset + 96}px` }}
         onPointerDown={onBodyTouch}
       >
         <div
@@ -335,7 +335,8 @@ export function ReviewEditor({
           contentEditable
           suppressContentEditableWarning
           onMouseUp={saveSelection}
-          onKeyUp={saveSelection}
+          onKeyUp={() => { saveSelection(); onEditorInput(); }}
+          onInput={onEditorInput}
           onTouchEnd={saveSelection}
           onClick={onEditorClick}
           className="min-h-[60vh] outline-none text-base leading-7 caret-[oklch(0.78_0.18_95)]"
