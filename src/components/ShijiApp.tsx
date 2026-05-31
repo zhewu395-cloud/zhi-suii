@@ -31,6 +31,17 @@ export function ShijiApp() {
       setTitleOverride(d ?? null);
     };
     window.addEventListener("shiji-title", h);
+    // 冷启动恢复后台计时
+    try {
+      const raw = localStorage.getItem("shiji-timer-running");
+      if (raw) {
+        const p = JSON.parse(raw) as { startAt: number; activityId: string; activityName: string };
+        if (p?.activityId) {
+          setTiming({ id: p.activityId, name: p.activityName, createdAt: 0 });
+          setInTimer(true);
+        }
+      }
+    } catch { /* ignore */ }
     return () => window.removeEventListener("shiji-title", h);
   }, []);
 

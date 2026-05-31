@@ -10,10 +10,10 @@ function hm(ts: number) {
 }
 function fmtDur(ms: number) {
   const m = Math.max(1, Math.round(ms / 60000));
-  if (m < 60) return `${m} 分`;
+  if (m < 60) return `${m} 分钟`;
   const h = Math.floor(m / 60);
   const mm = m % 60;
-  return mm === 0 ? `${h} 时` : `${h} 时 ${mm} 分`;
+  return mm === 0 ? `${h} 小时` : `${h} 小时 ${mm} 分`;
 }
 
 /** 26 小时制：某天 02:00 → 次日 02:00 */

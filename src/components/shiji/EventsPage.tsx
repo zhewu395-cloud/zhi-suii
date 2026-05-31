@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { Plus, X } from "lucide-react";
+import { Plus } from "lucide-react";
 import { getAll, put, del, uid, type Activity } from "@/lib/db";
+
+const SEEDED_KEY = "shiji-activities-seeded-v1";
 
 const DEFAULT: Activity[] = [
   { id: "a-class", name: "上课", color: "#bfe3c6", createdAt: 0 },
@@ -65,10 +67,14 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
 
   const load = async () => {
     const rows = await getAll<Activity>("activities");
-    if (rows.length === 0) {
+    const seeded = typeof window !== "undefined" && localStorage.getItem(SEEDED_KEY) === "1";
+    if (rows.length === 0 && !seeded) {
       for (const a of DEFAULT) await put("activities", a);
+      try { localStorage.setItem(SEEDED_KEY, "1"); } catch { /* ignore */ }
       setList(DEFAULT);
     } else {
+      // 即使被全部删除也不再自动复活；首次种子之后永久标记
+      try { localStorage.setItem(SEEDED_KEY, "1"); } catch { /* ignore */ }
       setList(rows.sort((a, b) => a.createdAt - b.createdAt));
     }
   };
@@ -126,9 +132,11 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
                 onMouseLeave={cancelPress}
                 onTouchStart={() => startPress(a.id)}
                 onTouchEnd={cancelPress}
+                onContextMenu={(e) => e.preventDefault()}
                 style={{
                   animationDelay: `${(i % 4) * 0.6}s`,
-                  backgroundColor: `color-mix(in oklab, ${color} 26%, transparent)`,
+                  // 弱色 + 强毛玻璃，把色彩留给底图
+                  backgroundColor: `color-mix(in oklab, ${color} 14%, transparent)`,
                 }}
                 className="event-blob h-full w-full text-base text-foreground/85 font-medium"
               >
@@ -141,12 +149,17 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
                     remove(a.id);
                   }}
                   style={{
-                    background: `color-mix(in oklab, ${color} 75%, oklch(0.4 0.08 150))`,
+                    background: `color-mix(in oklab, ${color} 28%, transparent)`,
+                    backdropFilter: "blur(8px)",
+                    WebkitBackdropFilter: "blur(8px)",
+                    color: "oklch(0.34 0.06 145 / 0.85)",
                   }}
-                  className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full text-foreground/90 text-[10px] shadow"
+                  className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full"
                   aria-label="删除"
                 >
-                  <X className="h-3 w-3" />
+                  <svg viewBox="0 0 12 12" className="h-2.5 w-2.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                    <path d="M3 3 L9 9 M9 3 L3 9" />
+                  </svg>
                 </button>
               )}
             </div>
@@ -159,7 +172,8 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
               e.stopPropagation();
               setAdding(true);
             }}
-            style={{ backgroundColor: "color-mix(in oklab, #BFE3C6 26%, transparent)" }}
+            onContextMenu={(e) => e.preventDefault()}
+            style={{ backgroundColor: "color-mix(in oklab, #BFE3C6 14%, transparent)" }}
             className="event-blob flex h-full w-full items-center justify-center gap-1 text-foreground/70 text-base"
           >
             <Plus className="h-4 w-4" /> 添加
