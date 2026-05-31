@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { Plus, X } from "lucide-react";
+import { Plus } from "lucide-react";
 import { getAll, put, del, uid, type Activity } from "@/lib/db";
+
+const SEEDED_KEY = "shiji-activities-seeded-v1";
 
 const DEFAULT: Activity[] = [
   { id: "a-class", name: "上课", color: "#bfe3c6", createdAt: 0 },
