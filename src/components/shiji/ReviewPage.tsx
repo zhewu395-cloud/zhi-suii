@@ -569,10 +569,17 @@ function SwipeCard({
     <div className="relative">
       {armed && (
         <div
-          className="absolute inset-y-0 right-3 flex items-center pointer-events-none"
-          style={{ opacity: 0.35 + trashOpacity * 0.65 }}
+          className="absolute inset-y-0 right-4 flex items-center pointer-events-none"
+          style={{ opacity: 0.4 + trashOpacity * 0.6 }}
         >
-          <span className="text-base">🗑️</span>
+          {/* 卡通扁平垃圾桶 —— 淡红色，柔和不刺眼 */}
+          <svg viewBox="0 0 28 30" className="h-7 w-7" fill="none">
+            <rect x="3" y="6.5" width="22" height="3.2" rx="1.6" fill="oklch(0.78 0.10 28)" />
+            <path d="M5.5 9.5 L7 26 Q7.2 28 9.2 28 H18.8 Q20.8 28 21 26 L22.5 9.5 Z"
+              fill="oklch(0.86 0.07 25)" stroke="oklch(0.62 0.13 25)" strokeWidth="1.1" strokeLinejoin="round" />
+            <path d="M10.5 5 Q10.5 3.6 12 3.6 H16 Q17.5 3.6 17.5 5 V6.5" stroke="oklch(0.62 0.13 25)" strokeWidth="1.2" strokeLinecap="round" fill="none" />
+            <path d="M12 13 V23 M14 13 V23 M16 13 V23" stroke="oklch(0.55 0.13 25 / 0.75)" strokeWidth="1.2" strokeLinecap="round" />
+          </svg>
         </div>
       )}
       <div
