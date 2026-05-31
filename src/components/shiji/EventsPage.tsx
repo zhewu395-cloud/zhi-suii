@@ -172,7 +172,8 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
               e.stopPropagation();
               setAdding(true);
             }}
-            style={{ backgroundColor: "color-mix(in oklab, #BFE3C6 26%, transparent)" }}
+            onContextMenu={(e) => e.preventDefault()}
+            style={{ backgroundColor: "color-mix(in oklab, #BFE3C6 14%, transparent)" }}
             className="event-blob flex h-full w-full items-center justify-center gap-1 text-foreground/70 text-base"
           >
             <Plus className="h-4 w-4" /> 添加
