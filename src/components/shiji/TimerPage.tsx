@@ -97,9 +97,12 @@ export function TimerPage({
 
   const toggle = async () => {
     if (!running) {
-      setStart(Date.now());
-      setNow(Date.now());
+      const t0 = Date.now();
+      setStart(t0);
+      setNow(t0);
       setRunning(true);
+      if (activity)
+        writePersist({ startAt: t0, activityId: activity.id, activityName: activity.name });
       return;
     }
     if (!start) return;
@@ -113,6 +116,7 @@ export function TimerPage({
       duration: endAt - start,
     };
     await put("entries", e);
+    clearPersist();
     setRunning(false);
     setStart(null);
     load();
