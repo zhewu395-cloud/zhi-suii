@@ -497,67 +497,167 @@ export function ReviewEditor({
 
         {panel === "link" && (
           <div
-            className="mx-3 mb-1 rounded-2xl p-3 shadow-lg max-h-[40vh] overflow-y-auto"
+            className={
+              linkFull
+                ? "fixed inset-0 z-[60] p-3 overflow-y-auto"
+                : "mx-3 mb-1 rounded-2xl p-3 shadow-lg max-h-[46vh] overflow-y-auto"
+            }
             style={{
               background: "oklch(0.99 0.006 145 / 0.98)",
-              border: "1px solid oklch(0.82 0.05 145 / 0.5)",
+              border: linkFull ? "none" : "1px solid oklch(0.82 0.05 145 / 0.5)",
             }}
           >
-            <div className="mb-2 flex items-center gap-2">
-              {(["date", "cat"] as const).map((m) => (
-                <button
-                  key={m}
-                  onClick={() => setLinkMode(m)}
-                  className={`rounded-full px-3 py-1 text-xs ${
-                    linkMode === m
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-foreground/65"
-                  }`}
-                >
-                  {m === "date" ? "按日期" : "按分类"}
-                </button>
-              ))}
-              {linkMode === "date" && (
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button className="ml-auto flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-xs">
-                      <CalendarIcon className="h-3.5 w-3.5" />
-                      {ymd(linkDate)}
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="end">
-                    <Calendar
-                      mode="single"
-                      selected={linkDate}
-                      onSelect={(d) => d && setLinkDate(d)}
-                      className={cn("p-3 pointer-events-auto")}
-                    />
-                  </PopoverContent>
-                </Popover>
-              )}
-            </div>
-            <div className="space-y-1">
-              {filteredLinkTargets.length === 0 && (
-                <div className="text-center text-xs text-foreground/50 py-4">
-                  没有可链接的记录
+            {linkPreview ? (
+              // 预览界面 —— 二次确认后才插入链接
+              <div className="flex flex-col h-full">
+                <div className="flex items-center gap-2 mb-2">
+                  <button
+                    onClick={() => setLinkPreview(null)}
+                    className="flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-xs"
+                  >
+                    <ChevronLeft className="h-3.5 w-3.5" /> 返回
+                  </button>
+                  <div className="text-xs text-foreground/55">
+                    {CAT_LABEL[linkPreview.category]} · {linkPreview.date}
+                  </div>
+                  <button
+                    onClick={() => {
+                      insertLink(linkPreview);
+                      setLinkPreview(null);
+                      setLinkFull(false);
+                    }}
+                    className="ml-auto rounded-full bg-primary px-4 py-1.5 text-xs text-primary-foreground font-medium"
+                  >
+                    添加
+                  </button>
                 </div>
-              )}
-              {filteredLinkTargets.map((r) => (
-                <button
-                  key={r.id}
-                  onClick={() => insertLink(r)}
-                  className="w-full text-left rounded-xl bg-muted/60 px-3 py-2 active:bg-muted"
-                >
-                  <div className="flex justify-between text-[11px] text-foreground/60">
-                    <span>{CAT_LABEL[r.category]}</span>
-                    <span>{r.date}</span>
+                <div className="text-lg font-medium mb-1.5">
+                  {linkPreview.title || "（无标题）"}
+                </div>
+                <div
+                  className="text-sm leading-7 text-foreground/85 overflow-y-auto"
+                  style={{ maxHeight: linkFull ? "calc(100dvh - 120px)" : "32vh" }}
+                  dangerouslySetInnerHTML={{ __html: linkPreview.content || "<i>（空）</i>" }}
+                />
+              </div>
+            ) : (
+              <>
+                <div className="mb-2 flex items-center gap-2 flex-wrap">
+                  {(["date", "cat", "keyword"] as const).map((m) => (
+                    <button
+                      key={m}
+                      onClick={() => setLinkMode(m)}
+                      className={`rounded-full px-3 py-1 text-xs ${
+                        linkMode === m
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-foreground/65"
+                      }`}
+                    >
+                      {m === "date" ? "按日期" : m === "cat" ? "按分类" : "关键字"}
+                    </button>
+                  ))}
+                  {linkMode === "date" && (
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button className="flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-xs">
+                          <CalendarIcon className="h-3.5 w-3.5" />
+                          {ymd(linkDate)}
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="end">
+                        <Calendar
+                          mode="single"
+                          selected={linkDate}
+                          onSelect={(d) => d && setLinkDate(d)}
+                          className={cn("p-3 pointer-events-auto")}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  )}
+                  <button
+                    onClick={() => setLinkFull((v) => !v)}
+                    aria-label="全屏"
+                    className="ml-auto grid h-7 w-7 place-items-center rounded-full bg-muted"
+                  >
+                    {linkFull ? (
+                      <Minimize2 className="h-3.5 w-3.5" />
+                    ) : (
+                      <Maximize2 className="h-3.5 w-3.5" />
+                    )}
+                  </button>
+                </div>
+
+                {linkMode === "cat" && (
+                  <div className="mb-2 flex items-center gap-2">
+                    {([
+                      ["sundry", "琐碎记"],
+                      ["day", "日复盘"],
+                      ["long", "长复盘"],
+                    ] as const).map(([k, l]) => (
+                      <button
+                        key={k}
+                        onClick={() => setLinkCat(k)}
+                        className={`rounded-full px-3 py-1 text-[11px] ${
+                          linkCat === k
+                            ? "bg-primary/85 text-primary-foreground"
+                            : "bg-muted/70 text-foreground/65"
+                        }`}
+                      >
+                        {l}
+                      </button>
+                    ))}
                   </div>
-                  <div className="text-sm truncate">
-                    {r.title || stripHtml(r.content) || "（空）"}
+                )}
+
+                {linkMode === "keyword" && (
+                  <div className="mb-2 flex items-center gap-2 rounded-full bg-muted px-3 py-1.5">
+                    <Search className="h-3.5 w-3.5 text-foreground/55" />
+                    <input
+                      autoFocus
+                      value={linkKeyword}
+                      onChange={(e) => setLinkKeyword(e.target.value)}
+                      placeholder="搜索标题或正文…"
+                      className="flex-1 bg-transparent text-xs outline-none"
+                    />
+                    {linkKeyword && (
+                      <button
+                        onClick={() => setLinkKeyword("")}
+                        className="text-foreground/45 text-xs"
+                      >
+                        清除
+                      </button>
+                    )}
                   </div>
-                </button>
-              ))}
-            </div>
+                )}
+
+                <div className="space-y-1">
+                  {filteredLinkTargets.length === 0 && (
+                    <div className="text-center text-xs text-foreground/50 py-4">
+                      {linkMode === "keyword" && !linkKeyword.trim()
+                        ? "请输入关键字"
+                        : linkMode === "cat" && !linkCat
+                        ? "请选择小分类"
+                        : "没有匹配的记录"}
+                    </div>
+                  )}
+                  {filteredLinkTargets.map((r) => (
+                    <button
+                      key={r.id}
+                      onClick={() => setLinkPreview(r)}
+                      className="w-full text-left rounded-xl bg-muted/60 px-3 py-2 active:bg-muted"
+                    >
+                      <div className="flex justify-between text-[11px] text-foreground/60">
+                        <span>{CAT_LABEL[r.category]}</span>
+                        <span>{r.date}</span>
+                      </div>
+                      <div className="text-sm truncate">
+                        {r.title || stripHtml(r.content) || "（空）"}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         )}
 
