@@ -9,6 +9,10 @@ import {
   Plus,
   Calendar as CalendarIcon,
   Minus,
+  Search,
+  Maximize2,
+  Minimize2,
+  ChevronLeft,
 } from "lucide-react";
 import { LeafBack } from "./LeafBack";
 import { put, getAll, type Review, type ReviewCategory } from "@/lib/db";
