@@ -10,6 +10,25 @@ function fmt(ms: number) {
   return `${hh}:${mm}:${ss}`;
 }
 
+const LS_TIMER = "shiji-timer-running";
+type Persist = { startAt: number; activityId: string; activityName: string };
+
+function readPersist(): Persist | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(LS_TIMER);
+    return raw ? (JSON.parse(raw) as Persist) : null;
+  } catch {
+    return null;
+  }
+}
+function writePersist(p: Persist) {
+  try { localStorage.setItem(LS_TIMER, JSON.stringify(p)); } catch { /* ignore */ }
+}
+function clearPersist() {
+  try { localStorage.removeItem(LS_TIMER); } catch { /* ignore */ }
+}
+
 export function TimerPage({
   activity,
   onDone,
@@ -32,12 +51,21 @@ export function TimerPage({
     load();
   }, []);
 
-  // 自动开始计时
+  // 自动开始 / 后台恢复
   useEffect(() => {
-    if (activity && !running && start === null) {
-      setStart(Date.now());
+    if (!activity) return;
+    const saved = readPersist();
+    if (saved && saved.activityId === activity.id) {
+      // 后台恢复：用本地写入的起始时间戳还原已计时长
+      setStart(saved.startAt);
       setNow(Date.now());
       setRunning(true);
+    } else if (!running && start === null) {
+      const t0 = Date.now();
+      setStart(t0);
+      setNow(t0);
+      setRunning(true);
+      writePersist({ startAt: t0, activityId: activity.id, activityName: activity.name });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activity]);
@@ -48,8 +76,11 @@ export function TimerPage({
         () => setNow(Date.now()),
         1000,
       ) as unknown as number;
+      const onVis = () => setNow(Date.now()); // 切回前台立刻刷新
+      document.addEventListener("visibilitychange", onVis);
       return () => {
         if (ref.current) clearInterval(ref.current);
+        document.removeEventListener("visibilitychange", onVis);
       };
     }
   }, [running]);
