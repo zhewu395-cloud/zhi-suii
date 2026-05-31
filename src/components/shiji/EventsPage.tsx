@@ -67,10 +67,14 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
 
   const load = async () => {
     const rows = await getAll<Activity>("activities");
-    if (rows.length === 0) {
+    const seeded = typeof window !== "undefined" && localStorage.getItem(SEEDED_KEY) === "1";
+    if (rows.length === 0 && !seeded) {
       for (const a of DEFAULT) await put("activities", a);
+      try { localStorage.setItem(SEEDED_KEY, "1"); } catch { /* ignore */ }
       setList(DEFAULT);
     } else {
+      // 即使被全部删除也不再自动复活；首次种子之后永久标记
+      try { localStorage.setItem(SEEDED_KEY, "1"); } catch { /* ignore */ }
       setList(rows.sort((a, b) => a.createdAt - b.createdAt));
     }
   };
