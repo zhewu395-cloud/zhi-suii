@@ -82,18 +82,21 @@ body::-webkit-scrollbar,
     background: var(--color-background);
     font-family: "Kaiti SC", "STKaiti", "华文楷体", "KaiTi", "楷体", "BiauKai", serif;
     letter-spacing: 0.02em;
-    /* PWA：消除浏览器原生长按菜单 / 文本选中 */
-    -webkit-touch-callout: none;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-    -webkit-user-select: none;
     overscroll-behavior: none;
   }
-  /* 可编辑 / 输入区允许选中 */
-  input, textarea, [contenteditable="true"], [contenteditable=""] {
-    -webkit-user-select: text;
-    user-select: text;
-    -webkit-touch-callout: default;
+  /* PWA：消除浏览器原生长按菜单 / 文本选中（强制全局） */
+  *, *::before, *::after {
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+  /* 输入区允许选中 / 长按粘贴 */
+  input, textarea, [contenteditable="true"], [contenteditable=""],
+  input *, textarea *, [contenteditable="true"] *, [contenteditable=""] * {
+    -webkit-user-select: text !important;
+    user-select: text !important;
+    -webkit-touch-callout: default !important;
   }
   /* 关键：去掉 iOS/Safari 的系统按钮青蓝默认外观 */
   button, [role="button"] {
