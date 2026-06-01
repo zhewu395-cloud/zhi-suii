@@ -505,7 +505,7 @@ export function ReviewEditor({
             style={{
               background: "oklch(0.99 0.006 145 / 0.98)",
               border: linkFull ? "none" : "1px solid oklch(0.82 0.05 145 / 0.5)",
-              maxHeight: linkFull ? "100dvh" : "46vh",
+              maxHeight: linkFull ? "100dvh" : "72vh",
             }}
           >
             {linkPreview ? (
@@ -631,7 +631,17 @@ export function ReviewEditor({
                   </div>
                 )}
 
-                <div className="space-y-1 overflow-y-auto flex-1 min-h-0 pr-1" style={{ WebkitOverflowScrolling: "touch", overscrollBehavior: "contain" }}>
+                <div
+                  className="space-y-1 flex-1 min-h-0 pr-1"
+                  style={{
+                    overflowY: "auto",
+                    maxHeight: linkFull ? "calc(100dvh - 160px)" : "60vh",
+                    WebkitOverflowScrolling: "touch",
+                    overscrollBehavior: "contain",
+                    touchAction: "pan-y",
+                  }}
+                >
+
                   {filteredLinkTargets.length === 0 && (
                     <div className="text-center text-xs text-foreground/50 py-4">
                       {linkMode === "keyword" && !linkKeyword.trim()

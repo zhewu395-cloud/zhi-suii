@@ -131,8 +131,8 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
                 onContextMenu={(e) => e.preventDefault()}
                 style={{
                   animationDelay: `${(i % 4) * 0.6}s`,
-                  // 恢复扎实色彩 + 轻雾化
-                  backgroundColor: `color-mix(in oklab, ${color} 62%, transparent)`,
+                  // 深度毛玻璃：色彩调弱、把视觉决定权交给底层
+                  backgroundColor: `color-mix(in oklab, ${color} 14%, transparent)`,
                 }}
                 className="event-blob h-full w-full text-base text-foreground/85 font-medium"
               >
@@ -169,7 +169,7 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
               setAdding(true);
             }}
             onContextMenu={(e) => e.preventDefault()}
-            style={{ backgroundColor: "color-mix(in oklab, #BFE3C6 55%, transparent)" }}
+            style={{ backgroundColor: "color-mix(in oklab, #BFE3C6 14%, transparent)" }}
             className="event-blob flex h-full w-full items-center justify-center gap-1 text-foreground/70 text-base"
           >
             <Plus className="h-4 w-4" /> 添加
