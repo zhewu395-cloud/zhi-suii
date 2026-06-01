@@ -499,12 +499,13 @@ export function ReviewEditor({
           <div
             className={
               linkFull
-                ? "fixed inset-0 z-[60] p-3 overflow-y-auto"
-                : "mx-3 mb-1 rounded-2xl p-3 shadow-lg max-h-[46vh] overflow-y-auto"
+                ? "fixed inset-0 z-[60] p-3 flex flex-col"
+                : "mx-3 mb-1 rounded-2xl p-3 shadow-lg flex flex-col"
             }
             style={{
               background: "oklch(0.99 0.006 145 / 0.98)",
               border: linkFull ? "none" : "1px solid oklch(0.82 0.05 145 / 0.5)",
+              maxHeight: linkFull ? "100dvh" : "46vh",
             }}
           >
             {linkPreview ? (
@@ -630,7 +631,7 @@ export function ReviewEditor({
                   </div>
                 )}
 
-                <div className="space-y-1">
+                <div className="space-y-1 overflow-y-auto flex-1 min-h-0 pr-1" style={{ WebkitOverflowScrolling: "touch", overscrollBehavior: "contain" }}>
                   {filteredLinkTargets.length === 0 && (
                     <div className="text-center text-xs text-foreground/50 py-4">
                       {linkMode === "keyword" && !linkKeyword.trim()

@@ -4,12 +4,8 @@ import { getAll, put, del, uid, type Activity } from "@/lib/db";
 
 const SEEDED_KEY = "shiji-activities-seeded-v1";
 
-const DEFAULT: Activity[] = [
-  { id: "a-class", name: "上课", color: "#bfe3c6", createdAt: 0 },
-  { id: "a-write", name: "文案", color: "#d6e7b8", createdAt: 0 },
-  { id: "a-walk", name: "走路", color: "#c6e3d4", createdAt: 0 },
-  { id: "a-read", name: "阅读", color: "#e7dcb8", createdAt: 0 },
-];
+// 不再硬编码默认事件 —— 新用户首次打开必须是干净空白
+const DEFAULT: Activity[] = [];
 
 const DEFAULT_COLOR = "#bfe3c6";
 
@@ -135,8 +131,8 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
                 onContextMenu={(e) => e.preventDefault()}
                 style={{
                   animationDelay: `${(i % 4) * 0.6}s`,
-                  // 弱色 + 强毛玻璃，把色彩留给底图
-                  backgroundColor: `color-mix(in oklab, ${color} 14%, transparent)`,
+                  // 恢复扎实色彩 + 轻雾化
+                  backgroundColor: `color-mix(in oklab, ${color} 62%, transparent)`,
                 }}
                 className="event-blob h-full w-full text-base text-foreground/85 font-medium"
               >
@@ -149,15 +145,15 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
                     remove(a.id);
                   }}
                   style={{
-                    background: `color-mix(in oklab, ${color} 28%, transparent)`,
-                    backdropFilter: "blur(8px)",
-                    WebkitBackdropFilter: "blur(8px)",
-                    color: "oklch(0.34 0.06 145 / 0.85)",
+                    background: "transparent",
+                    color: "oklch(0.55 0.12 145)",
+                    animation: "none",
+                    transition: "none",
                   }}
-                  className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full"
+                  className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center"
                   aria-label="删除"
                 >
-                  <svg viewBox="0 0 12 12" className="h-2.5 w-2.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                  <svg viewBox="0 0 12 12" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
                     <path d="M3 3 L9 9 M9 3 L3 9" />
                   </svg>
                 </button>
@@ -173,7 +169,7 @@ export function EventsPage({ onStart }: { onStart: (a: Activity) => void }) {
               setAdding(true);
             }}
             onContextMenu={(e) => e.preventDefault()}
-            style={{ backgroundColor: "color-mix(in oklab, #BFE3C6 14%, transparent)" }}
+            style={{ backgroundColor: "color-mix(in oklab, #BFE3C6 55%, transparent)" }}
             className="event-blob flex h-full w-full items-center justify-center gap-1 text-foreground/70 text-base"
           >
             <Plus className="h-4 w-4" /> 添加

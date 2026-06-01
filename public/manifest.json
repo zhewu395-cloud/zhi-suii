@@ -4,7 +4,9 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "fullscreen", "minimal-ui"],
   "orientation": "portrait",
+  "lang": "zh-CN",
   "background_color": "#e8efe6",
   "theme_color": "#e8efe6",
   "icons": [
