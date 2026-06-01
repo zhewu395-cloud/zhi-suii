@@ -175,25 +175,24 @@ body::-webkit-scrollbar,
   font-weight: 700;
 }
 
-/* 蒙蒙毛玻璃事件按钮 —— 不规则有机形 + 高模糊 + 可调底色（由 inline style 提供） */
+/* 事件按钮：温润玉石 + 轻雾化，颜色由 inline backgroundColor 决定 */
 .event-blob {
   -webkit-appearance: none;
   appearance: none;
-  /* 用户自调底色通过 --blob-color 注入；这里只叠光泽与雾化 */
   background-image:
-    radial-gradient(120% 100% at 28% 18%, oklch(1 0 0 / 0.35) 0%, transparent 58%),
-    linear-gradient(160deg, oklch(1 0 0 / 0.18) 0%, oklch(1 0 0 / 0) 100%);
-  backdrop-filter: blur(22px) saturate(1.25);
-  -webkit-backdrop-filter: blur(22px) saturate(1.25);
-  border: 1px solid oklch(1 0 0 / 0.32);
+    radial-gradient(120% 90% at 30% 18%, oklch(1 0 0 / 0.42) 0%, transparent 60%),
+    linear-gradient(160deg, oklch(1 0 0 / 0.12) 0%, oklch(1 0 0 / 0) 100%);
+  backdrop-filter: blur(6px) saturate(1.1);
+  -webkit-backdrop-filter: blur(6px) saturate(1.1);
+  border: 1px solid oklch(1 0 0 / 0.45);
   box-shadow:
     0 1px 0 0 oklch(1 0 0 / 0.55) inset,
-    0 10px 28px -20px oklch(0.35 0.05 130 / 0.40);
+    0 10px 24px -18px oklch(0.35 0.05 130 / 0.45);
   border-radius: 58% 42% 55% 45% / 60% 55% 45% 40%;
   animation: blob-morph 8s ease-in-out infinite;
-  transition: transform 0.25s ease;
+  transition: transform 0.2s ease;
 }
-.event-blob:active { transform: scale(0.94); }
+.event-blob:active { transform: scale(0.96); }
 
 @keyframes blob-morph {
   0%, 100% { border-radius: 58% 42% 55% 45% / 60% 55% 45% 40%; }
