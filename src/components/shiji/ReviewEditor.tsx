@@ -636,7 +636,6 @@ export function ReviewEditor({
                   className="space-y-1 flex-1 min-h-0 pr-1"
                   style={{
                     overflowY: "auto",
-                    maxHeight: linkFull ? "calc(100dvh - 160px)" : "60vh",
                     WebkitOverflowScrolling: "touch",
                     overscrollBehavior: "contain",
                     touchAction: "pan-y",
