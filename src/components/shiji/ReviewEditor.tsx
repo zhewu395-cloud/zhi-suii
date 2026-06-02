@@ -505,7 +505,8 @@ export function ReviewEditor({
             style={{
               background: "oklch(0.99 0.006 145 / 0.98)",
               border: linkFull ? "none" : "1px solid oklch(0.82 0.05 145 / 0.5)",
-              maxHeight: linkFull ? "100dvh" : "72vh",
+              // 固定高度：切换不同筛选标签时面板不再忽上忽下
+              height: linkFull ? "100dvh" : "72vh",
             }}
           >
             {linkPreview ? (
