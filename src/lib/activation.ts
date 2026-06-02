@@ -63,8 +63,10 @@ export async function activateCode(
     .maybeSingle();
 
   if (error) return { ok: false, error: "网络异常，请稍后再试" };
-  if (!data) return { ok: false, error: "该激活码无效或已被他人使用！" };
-  if (data.is_used) return { ok: false, error: "该激活码无效或已被他人使用！" };
+  // 数据库中查不到 → 输错 / 不存在
+  if (!data) return { ok: false, error: "邀请码错误" };
+  // 能查到，但已被使用 / 到期 / 失效
+  if (data.is_used) return { ok: false, error: "邀请码失效" };
 
   const type = String(data.type || "").toUpperCase();
   const nowIso = new Date().toISOString();

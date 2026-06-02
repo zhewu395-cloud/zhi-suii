@@ -184,10 +184,10 @@ body::-webkit-scrollbar,
     linear-gradient(160deg, oklch(1 0 0 / 0.18) 0%, oklch(1 0 0 / 0) 100%);
   backdrop-filter: blur(22px) saturate(1.15);
   -webkit-backdrop-filter: blur(22px) saturate(1.15);
-  border: 1px solid oklch(1 0 0 / 0.32);
-  box-shadow:
-    0 1px 0 0 oklch(1 0 0 / 0.55) inset,
-    0 10px 24px -18px oklch(0.35 0.05 130 / 0.45);
+  /* 边框锁定：始终跟随文字颜色（currentColor），不随按钮底色变化 */
+  border: 1px solid currentColor;
+  /* 去掉边缘那道白色高光（原 inset 1px 白线），仅保留外部柔影 */
+  box-shadow: 0 10px 24px -18px oklch(0.35 0.05 130 / 0.45);
   border-radius: 58% 42% 55% 45% / 60% 55% 45% 40%;
   animation: blob-morph 8s ease-in-out infinite;
   transition: transform 0.2s ease;
