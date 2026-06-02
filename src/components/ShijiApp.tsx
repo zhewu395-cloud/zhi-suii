@@ -152,12 +152,10 @@ export function ShijiApp() {
 }
 
 import { ActivationGate } from "./shiji/ActivationGate";
-import { SplashScreen } from "./shiji/SplashScreen";
 
 export default function ShijiAppClient() {
   return (
     <ClientOnly fallback={<div className="h-[100dvh]" style={{ backgroundColor: "#BFE3C6" }} />}>
-      <SplashScreen />
       <ActivationGate>
         <ShijiApp />
       </ActivationGate>
