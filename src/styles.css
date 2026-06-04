@@ -185,7 +185,7 @@ body::-webkit-scrollbar,
   backdrop-filter: blur(22px) saturate(1.15);
   -webkit-backdrop-filter: blur(22px) saturate(1.15);
   /* 边框锁定：固定为淡淡棕色，不随按钮底色变化 */
-  border: 1px solid oklch(0.72 0.02 65);
+  border: 1px solid oklch(0.85 0.035 145 / 0.30);
   /* 去掉边缘那道白色高光（原 inset 1px 白线），仅保留外部柔影 */
   box-shadow: 0 10px 24px -18px oklch(0.35 0.05 130 / 0.45);
   border-radius: 58% 42% 55% 45% / 60% 55% 45% 40%;
