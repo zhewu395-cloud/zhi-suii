@@ -612,19 +612,26 @@ export function ReviewEditor({
                 )}
 
                 {linkMode === "keyword" && (
-                  <div className="mb-2 flex items-center gap-2 rounded-full bg-muted px-3 py-1.5">
-                    <Search className="h-3.5 w-3.5 text-foreground/55" />
+                  <div className="mb-2 flex items-center gap-2 rounded-full bg-muted px-3 h-8">
+                    <Search className="h-3.5 w-3.5 text-foreground/55 shrink-0" />
                     <input
                       autoFocus
+                      type="text"
                       value={linkKeyword}
                       onChange={(e) => setLinkKeyword(e.target.value)}
                       placeholder="搜索标题或正文…"
-                      className="flex-1 bg-transparent text-xs outline-none"
+                      autoComplete="off"
+                      autoCorrect="off"
+                      autoCapitalize="off"
+                      spellCheck={false}
+                      name="link-search-noautofill"
+                      className="flex-1 min-w-0 bg-transparent text-xs leading-none text-foreground placeholder:text-foreground/45 outline-none border-0 p-0 m-0 h-8"
+                      style={{ lineHeight: "2rem" }}
                     />
                     {linkKeyword && (
                       <button
                         onClick={() => setLinkKeyword("")}
-                        className="text-foreground/45 text-xs"
+                        className="text-foreground/45 text-xs shrink-0"
                       >
                         清除
                       </button>
