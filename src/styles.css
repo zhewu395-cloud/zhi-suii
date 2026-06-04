@@ -182,14 +182,14 @@ body::-webkit-scrollbar,
   background-image:
     radial-gradient(120% 90% at 30% 18%, oklch(1 0 0 / 0.42) 0%, transparent 60%),
     linear-gradient(160deg, oklch(1 0 0 / 0.18) 0%, oklch(1 0 0 / 0) 100%);
-  backdrop-filter: blur(22px) saturate(1.15);
-  -webkit-backdrop-filter: blur(22px) saturate(1.15);
-  /* 边框锁定：固定为淡淡棕色，不随按钮底色变化（微微加厚至 1.5px） */
-  border: 1.5px solid oklch(0.72 0.035 65 / 0.42);
-  /* 去掉边缘那道白色高光（原 inset 1px 白线），仅保留外部柔影 + 淡棕呼吸光 */
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  /* 边框锁定：极细 0.75px 冷调灰褐（低饱和、中性），不随按钮底色变化 */
+  border: 0.75px solid oklch(0.70 0.012 70 / 0.45);
+  /* 去掉边缘白色高光，仅保留柔影 + 冷灰褐呼吸光 */
   box-shadow:
     0 10px 24px -18px oklch(0.35 0.05 130 / 0.45),
-    0 0 0 0 oklch(0.72 0.035 65 / 0.22);
+    0 0 0 0 oklch(0.70 0.012 70 / 0.20);
   border-radius: 58% 42% 55% 45% / 60% 55% 45% 40%;
   animation: blob-morph 8s ease-in-out infinite, event-blob-breathe 4.8s ease-in-out infinite;
   transition: transform 0.2s ease;
@@ -198,17 +198,17 @@ body::-webkit-scrollbar,
 
 @keyframes event-blob-breathe {
   0%, 100% {
-    border-color: oklch(0.72 0.035 65 / 0.36);
+    border-color: oklch(0.70 0.012 70 / 0.38);
     box-shadow:
       0 10px 24px -18px oklch(0.35 0.05 130 / 0.45),
-      0 0 0 0 oklch(0.72 0.035 65 / 0.18);
-    opacity: 0.92;
+      0 0 0 0 oklch(0.70 0.012 70 / 0.16);
+    opacity: 0.93;
   }
   50% {
-    border-color: oklch(0.72 0.035 65 / 0.48);
+    border-color: oklch(0.70 0.012 70 / 0.52);
     box-shadow:
       0 10px 24px -18px oklch(0.35 0.05 130 / 0.45),
-      0 0 6px 1px oklch(0.72 0.035 65 / 0.26);
+      0 0 6px 1px oklch(0.70 0.012 70 / 0.24);
     opacity: 1;
   }
 }
