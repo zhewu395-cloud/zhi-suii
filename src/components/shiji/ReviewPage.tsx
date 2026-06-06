@@ -334,6 +334,7 @@ export function ReviewPage() {
                   setLongSplit(false);
                 }}
                 onTap={() => setEditing(r)}
+                onRemove={() => removeReview(r.id)}
               />
             ))}
           </div>
