@@ -334,6 +334,7 @@ export function ReviewPage() {
                   setLongSplit(false);
                 }}
                 onTap={() => setEditing(r)}
+                onRemove={() => removeReview(r.id)}
               />
             ))}
           </div>
@@ -397,6 +398,7 @@ function DraggableCard({
   onMove,
   onDrop,
   onTap,
+  onRemove,
 }: {
   r: Review;
   draggingId: string | null;
@@ -404,12 +406,16 @@ function DraggableCard({
   onMove: (x: number, y: number) => void;
   onDrop: (x: number, y: number) => void;
   onTap: () => void;
+  onRemove: () => void;
 }) {
   const startRef = useRef<{ x: number; y: number; t: number } | null>(null);
   const movedRef = useRef(false);
   const armedRef = useRef(false);
+  const modeRef = useRef<"none" | "drag" | "swipe">("none");
   const pressTimer = useRef<number | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [armed, setArmed] = useState(false);
+  const [dx, setDx] = useState(0);
 
   const cancelTimer = () => {
     if (pressTimer.current) {
@@ -418,39 +424,76 @@ function DraggableCard({
     }
   };
 
+  const resetSwipe = () => {
+    setArmed(false);
+    setDx(0);
+  };
+
   const onPointerDown = (e: React.PointerEvent) => {
     startRef.current = { x: e.clientX, y: e.clientY, t: Date.now() };
     movedRef.current = false;
     armedRef.current = false;
+    modeRef.current = "none";
+    resetSwipe();
     cancelTimer();
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     pressTimer.current = window.setTimeout(() => {
       armedRef.current = true;
-      setDragging(true);
-      onPickUp(r.id);
-    }, 220);
+      // 默认进入“可删除”长按状态（与已分类一致：长按后水平滑动出现垃圾桶）
+      setArmed(true);
+    }, 450);
   };
   const onPointerMove = (e: React.PointerEvent) => {
     if (!startRef.current) return;
-    const dx = e.clientX - startRef.current.x;
-    const dy = e.clientY - startRef.current.y;
-    if (Math.hypot(dx, dy) > 6) movedRef.current = true;
-    if (armedRef.current) onMove(e.clientX, e.clientY);
+    const dxNow = e.clientX - startRef.current.x;
+    const dyNow = e.clientY - startRef.current.y;
+    if (Math.hypot(dxNow, dyNow) > 6) movedRef.current = true;
+
+    if (armedRef.current && modeRef.current === "none") {
+      // 决定走 swipe 删除 还是 drag 分类
+      if (Math.abs(dxNow) > Math.abs(dyNow) + 4) {
+        modeRef.current = "swipe";
+      } else if (Math.abs(dyNow) > 4) {
+        modeRef.current = "drag";
+        setArmed(false);
+        setDragging(true);
+        onPickUp(r.id);
+      }
+    }
+
+    if (modeRef.current === "swipe") {
+      setDx(dxNow);
+    } else if (modeRef.current === "drag") {
+      onMove(e.clientX, e.clientY);
+    }
   };
   const onPointerUp = (e: React.PointerEvent) => {
     cancelTimer();
     const wasArmed = armedRef.current;
+    const mode = modeRef.current;
     armedRef.current = false;
+    modeRef.current = "none";
     setDragging(false);
     try {
       (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
     } catch {
       /* ignore */
     }
-    if (wasArmed) {
+    if (mode === "drag") {
       onDrop(e.clientX, e.clientY);
-    } else if (!movedRef.current) {
+    } else if (mode === "swipe") {
+      if (Math.abs(dx) > 90) {
+        onRemove();
+        resetSwipe();
+        startRef.current = null;
+        movedRef.current = false;
+        return;
+      }
+      resetSwipe();
+    } else if (!wasArmed && !movedRef.current) {
       onTap();
+    } else {
+      resetSwipe();
     }
     startRef.current = null;
     movedRef.current = false;
@@ -458,35 +501,58 @@ function DraggableCard({
   const onPointerCancel = () => {
     cancelTimer();
     armedRef.current = false;
+    modeRef.current = "none";
     movedRef.current = false;
     setDragging(false);
+    resetSwipe();
     startRef.current = null;
   };
 
   const isMe = draggingId === r.id;
+  const trashOpacity = Math.min(1, Math.abs(dx) / 90);
 
   return (
-    <div
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerCancel}
-      className={`rounded-2xl px-4 py-2.5 select-none touch-none cursor-grab active:cursor-grabbing transition ${
-        isMe ? "opacity-60 scale-[0.98]" : ""
-      } ${dragging ? "ring-2 ring-[oklch(0.55_0.13_145)/0.55]" : ""}`}
-      style={{
-        backgroundImage:
-          "linear-gradient(160deg, oklch(0.968 0.018 145 / 0.80) 0%, oklch(0.948 0.035 145 / 0.80) 100%)",
-        border: "1px solid oklch(0.78 0.045 145 / 0.26)",
-        backdropFilter: "blur(6px)",
-        WebkitBackdropFilter: "blur(6px)",
-      }}
-    >
-      <div className="flex justify-between text-xs text-foreground/55">
-        <span>{r.date}</span>
-      </div>
-      <div className="truncate text-sm">
-        {r.title || stripHtml(r.content).slice(0, 40) || "（空）"}
+    <div className="relative">
+      {armed && (
+        <div
+          className="absolute inset-y-0 right-4 flex items-center pointer-events-none"
+          style={{ opacity: 0.4 + trashOpacity * 0.6 }}
+        >
+          <svg viewBox="0 0 28 30" className="h-7 w-7" fill="none">
+            <rect x="3" y="6.5" width="22" height="3.2" rx="1.6" fill="oklch(0.78 0.10 28)" />
+            <path d="M5.5 9.5 L7 26 Q7.2 28 9.2 28 H18.8 Q20.8 28 21 26 L22.5 9.5 Z"
+              fill="oklch(0.86 0.07 25)" stroke="oklch(0.62 0.13 25)" strokeWidth="1.1" strokeLinejoin="round" />
+            <path d="M10.5 5 Q10.5 3.6 12 3.6 H16 Q17.5 3.6 17.5 5 V6.5" stroke="oklch(0.62 0.13 25)" strokeWidth="1.2" strokeLinecap="round" fill="none" />
+            <path d="M12 13 V23 M14 13 V23 M16 13 V23" stroke="oklch(0.55 0.13 25 / 0.75)" strokeWidth="1.2" strokeLinecap="round" />
+          </svg>
+        </div>
+      )}
+      <div
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerCancel}
+        className={`rounded-2xl px-4 py-2.5 select-none touch-none cursor-grab active:cursor-grabbing transition ${
+          isMe ? "opacity-60 scale-[0.98]" : ""
+        } ${dragging ? "ring-2 ring-[oklch(0.55_0.13_145)/0.55]" : ""}`}
+        style={{
+          transform: `translateX(${dx}px)`,
+          transition: dx === 0 ? "transform 0.2s ease" : undefined,
+          backgroundImage:
+            "linear-gradient(160deg, oklch(0.968 0.018 145 / 0.80) 0%, oklch(0.948 0.035 145 / 0.80) 100%)",
+          border: armed
+            ? "1px solid oklch(0.55 0.13 145 / 0.55)"
+            : "1px solid oklch(0.78 0.045 145 / 0.26)",
+          backdropFilter: "blur(6px)",
+          WebkitBackdropFilter: "blur(6px)",
+        }}
+      >
+        <div className="flex justify-between text-xs text-foreground/55">
+          <span>{r.date}</span>
+        </div>
+        <div className="truncate text-sm">
+          {r.title || stripHtml(r.content).slice(0, 40) || "（空）"}
+        </div>
       </div>
     </div>
   );

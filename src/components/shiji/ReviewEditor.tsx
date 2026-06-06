@@ -201,7 +201,14 @@ export function ReviewEditor({
   }, []);
 
   useEffect(() => {
-    const h = () => detectFormat();
+    const h = () => {
+      detectFormat();
+      // 持续保存选区：长按选中已有文字后，点击工具栏也能命中原选区
+      const sel = window.getSelection();
+      if (sel && sel.rangeCount > 0 && editorRef.current?.contains(sel.anchorNode)) {
+        savedRange.current = sel.getRangeAt(0).cloneRange();
+      }
+    };
     document.addEventListener("selectionchange", h);
     return () => document.removeEventListener("selectionchange", h);
   }, [detectFormat]);
