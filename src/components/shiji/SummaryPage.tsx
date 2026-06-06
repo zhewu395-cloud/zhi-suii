@@ -266,6 +266,75 @@ export function SummaryPage() {
     <div className="flex flex-col -mx-4 -mb-28" style={{ height: "calc(100% + 7rem)" }}>
       {headerSlot && createPortal(headerControls, headerSlot)}
 
+      {quickOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 px-6"
+          onClick={() => setQuickOpen(false)}
+        >
+          <div
+            className="w-full max-w-sm rounded-3xl bg-background p-5 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-base font-medium text-foreground/85 mb-4">快捷添加事件</div>
+            <div className="space-y-3">
+              <div>
+                <div className="text-xs text-foreground/60 mb-1">事件名称</div>
+                <input
+                  type="text"
+                  value={qName}
+                  onChange={(e) => setQName(e.target.value)}
+                  autoFocus
+                  placeholder="例如：阅读"
+                  className="w-full h-10 px-3 rounded-xl bg-muted/60 text-sm text-foreground outline-none border border-foreground/10 focus:border-primary/40"
+                />
+              </div>
+              <div>
+                <div className="text-xs text-foreground/60 mb-1">持续时间</div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    min={0}
+                    value={qHour}
+                    onChange={(e) => setQHour(e.target.value)}
+                    placeholder="0"
+                    className="w-full h-10 px-3 rounded-xl bg-muted/60 text-sm text-foreground outline-none border border-foreground/10 focus:border-primary/40 tabular-nums"
+                  />
+                  <span className="text-xs text-foreground/60">小时</span>
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    min={0}
+                    max={59}
+                    value={qMin}
+                    onChange={(e) => setQMin(e.target.value)}
+                    placeholder="0"
+                    className="w-full h-10 px-3 rounded-xl bg-muted/60 text-sm text-foreground outline-none border border-foreground/10 focus:border-primary/40 tabular-nums"
+                  />
+                  <span className="text-xs text-foreground/60">分钟</span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-5 flex gap-2 justify-end">
+              <button
+                onClick={() => setQuickOpen(false)}
+                className="px-4 py-2 rounded-full text-sm text-foreground/70 bg-muted/60 active:scale-95 transition"
+              >
+                取消
+              </button>
+              <button
+                onClick={handleQuickAdd}
+                disabled={!qName.trim() || (parseInt(qHour || "0", 10) || 0) * 60 + (parseInt(qMin || "0", 10) || 0) <= 0}
+                className="px-4 py-2 rounded-full text-sm text-primary-foreground bg-primary active:scale-95 transition disabled:opacity-40"
+              >
+                确定添加
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
       {mode === "timeline" ? (
         <>
           <div className="shrink-0 px-4 pt-2 pb-1">
