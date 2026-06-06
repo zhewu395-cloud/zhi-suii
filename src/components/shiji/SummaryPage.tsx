@@ -213,8 +213,49 @@ export function SummaryPage() {
           )}
         </PopoverContent>
       </Popover>
+      <button
+        onClick={() => {
+          setQName("");
+          setQHour("");
+          setQMin("");
+          setQuickOpen(true);
+        }}
+        className="flex items-center justify-center bg-transparent p-1.5 active:scale-90 transition"
+        style={{ color: "oklch(0.45 0.07 145)" }}
+        aria-label="快捷添加事件"
+      >
+        <Plus className="h-5 w-5" strokeWidth={2} />
+      </button>
     </div>
   );
+
+  const handleQuickAdd = async () => {
+    const name = qName.trim();
+    const h = parseInt(qHour || "0", 10) || 0;
+    const m = parseInt(qMin || "0", 10) || 0;
+    const totalMin = h * 60 + m;
+    if (!name || totalMin <= 0) return;
+    const duration = totalMin * 60000;
+    // find or create activity by name
+    const acts = await getAll<Activity>("activities");
+    let act = acts.find((a) => a.name === name);
+    if (!act) {
+      act = { id: uid(), name, color: "#BFE3C6", createdAt: Date.now() };
+      await put("activities", act);
+    }
+    const endAt = date.getTime();
+    const entry: TimeEntry = {
+      id: uid(),
+      activityId: act.id,
+      activityName: name,
+      startAt: endAt - duration,
+      endAt,
+      duration,
+    };
+    await put("entries", entry);
+    setQuickOpen(false);
+    await reloadEntries();
+  };
 
   const [headerSlot, setHeaderSlot] = useState<HTMLElement | null>(null);
   useEffect(() => {
