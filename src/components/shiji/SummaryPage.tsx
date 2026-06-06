@@ -118,9 +118,15 @@ export function SummaryPage() {
   const [range, setRange] = useState<Range>("day");
   const [view, setView] = useState<"grid" | "line">("grid");
   const [mode, setMode] = useState<"timeline" | "summary">("timeline");
+  const [quickOpen, setQuickOpen] = useState(false);
+  const [qName, setQName] = useState("");
+  const [qHour, setQHour] = useState("");
+  const [qMin, setQMin] = useState("");
+
+  const reloadEntries = () => getAll<TimeEntry>("entries").then(setEntries);
 
   useEffect(() => {
-    getAll<TimeEntry>("entries").then(setEntries);
+    reloadEntries();
   }, []);
 
   useEffect(() => {
