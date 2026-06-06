@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import {
@@ -13,8 +13,8 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { getAll, type TimeEntry } from "@/lib/db";
+import { Calendar as CalendarIcon, Plus } from "lucide-react";
+import { getAll, put, uid, type TimeEntry, type Activity } from "@/lib/db";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
