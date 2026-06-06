@@ -13,8 +13,8 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { getAll, type TimeEntry } from "@/lib/db";
+import { Calendar as CalendarIcon, Plus } from "lucide-react";
+import { getAll, put, uid, type TimeEntry, type Activity } from "@/lib/db";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
@@ -118,9 +118,15 @@ export function SummaryPage() {
   const [range, setRange] = useState<Range>("day");
   const [view, setView] = useState<"grid" | "line">("grid");
   const [mode, setMode] = useState<"timeline" | "summary">("timeline");
+  const [quickOpen, setQuickOpen] = useState(false);
+  const [qName, setQName] = useState("");
+  const [qHour, setQHour] = useState("");
+  const [qMin, setQMin] = useState("");
+
+  const reloadEntries = () => getAll<TimeEntry>("entries").then(setEntries);
 
   useEffect(() => {
-    getAll<TimeEntry>("entries").then(setEntries);
+    reloadEntries();
   }, []);
 
   useEffect(() => {
@@ -207,8 +213,49 @@ export function SummaryPage() {
           )}
         </PopoverContent>
       </Popover>
+      <button
+        onClick={() => {
+          setQName("");
+          setQHour("");
+          setQMin("");
+          setQuickOpen(true);
+        }}
+        className="flex items-center justify-center bg-transparent p-1.5 active:scale-90 transition"
+        style={{ color: "oklch(0.45 0.07 145)" }}
+        aria-label="快捷添加事件"
+      >
+        <Plus className="h-5 w-5" strokeWidth={2} />
+      </button>
     </div>
   );
+
+  const handleQuickAdd = async () => {
+    const name = qName.trim();
+    const h = parseInt(qHour || "0", 10) || 0;
+    const m = parseInt(qMin || "0", 10) || 0;
+    const totalMin = h * 60 + m;
+    if (!name || totalMin <= 0) return;
+    const duration = totalMin * 60000;
+    // find or create activity by name
+    const acts = await getAll<Activity>("activities");
+    let act = acts.find((a) => a.name === name);
+    if (!act) {
+      act = { id: uid(), name, color: "#BFE3C6", createdAt: Date.now() };
+      await put("activities", act);
+    }
+    const endAt = date.getTime();
+    const entry: TimeEntry = {
+      id: uid(),
+      activityId: act.id,
+      activityName: name,
+      startAt: endAt - duration,
+      endAt,
+      duration,
+    };
+    await put("entries", entry);
+    setQuickOpen(false);
+    await reloadEntries();
+  };
 
   const [headerSlot, setHeaderSlot] = useState<HTMLElement | null>(null);
   useEffect(() => {
@@ -218,6 +265,75 @@ export function SummaryPage() {
   return (
     <div className="flex flex-col -mx-4 -mb-28" style={{ height: "calc(100% + 7rem)" }}>
       {headerSlot && createPortal(headerControls, headerSlot)}
+
+      {quickOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 px-6"
+          onClick={() => setQuickOpen(false)}
+        >
+          <div
+            className="w-full max-w-sm rounded-3xl bg-background p-5 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-base font-medium text-foreground/85 mb-4">快捷添加事件</div>
+            <div className="space-y-3">
+              <div>
+                <div className="text-xs text-foreground/60 mb-1">事件名称</div>
+                <input
+                  type="text"
+                  value={qName}
+                  onChange={(e) => setQName(e.target.value)}
+                  autoFocus
+                  placeholder="例如：阅读"
+                  className="w-full h-10 px-3 rounded-xl bg-muted/60 text-sm text-foreground outline-none border border-foreground/10 focus:border-primary/40"
+                />
+              </div>
+              <div>
+                <div className="text-xs text-foreground/60 mb-1">持续时间</div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    min={0}
+                    value={qHour}
+                    onChange={(e) => setQHour(e.target.value)}
+                    placeholder="0"
+                    className="w-full h-10 px-3 rounded-xl bg-muted/60 text-sm text-foreground outline-none border border-foreground/10 focus:border-primary/40 tabular-nums"
+                  />
+                  <span className="text-xs text-foreground/60">小时</span>
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    min={0}
+                    max={59}
+                    value={qMin}
+                    onChange={(e) => setQMin(e.target.value)}
+                    placeholder="0"
+                    className="w-full h-10 px-3 rounded-xl bg-muted/60 text-sm text-foreground outline-none border border-foreground/10 focus:border-primary/40 tabular-nums"
+                  />
+                  <span className="text-xs text-foreground/60">分钟</span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-5 flex gap-2 justify-end">
+              <button
+                onClick={() => setQuickOpen(false)}
+                className="px-4 py-2 rounded-full text-sm text-foreground/70 bg-muted/60 active:scale-95 transition"
+              >
+                取消
+              </button>
+              <button
+                onClick={handleQuickAdd}
+                disabled={!qName.trim() || (parseInt(qHour || "0", 10) || 0) * 60 + (parseInt(qMin || "0", 10) || 0) <= 0}
+                className="px-4 py-2 rounded-full text-sm text-primary-foreground bg-primary active:scale-95 transition disabled:opacity-40"
+              >
+                确定添加
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
       {mode === "timeline" ? (
         <>
