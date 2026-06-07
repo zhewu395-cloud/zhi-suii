@@ -120,8 +120,9 @@ export function SummaryPage() {
   const [mode, setMode] = useState<"timeline" | "summary">("timeline");
   const [quickOpen, setQuickOpen] = useState(false);
   const [qName, setQName] = useState("");
-  const [qHour, setQHour] = useState("");
-  const [qMin, setQMin] = useState("");
+  const [qStart, setQStart] = useState("09:00");
+  const [qEnd, setQEnd] = useState("10:00");
+  const [tlTick, setTlTick] = useState(0);
 
   const reloadEntries = () => getAll<TimeEntry>("entries").then(setEntries);
 
