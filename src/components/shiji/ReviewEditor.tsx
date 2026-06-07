@@ -744,7 +744,7 @@ export function ReviewEditor({
           <ToolBtn onClick={() => setPanel(panel === "heading" ? null : "heading")} label="标题"
             active={!!fmt.block || panel === "heading"}><Heading className="h-4 w-4" /></ToolBtn>
           <ToolBtn onClick={() => setPanel(panel === "size" ? null : "size")} label="A" active={panel === "size"}>
-            <span className="text-sm font-semibold">A</span>
+            <span className="inline-flex h-4 w-4 items-center justify-center text-[14px] leading-none font-semibold">A</span>
           </ToolBtn>
           <ToolBtn onClick={() => setPanel(panel === "font" ? null : "font")} label="字体" active={panel === "font"}>
             <TypeIcon className="h-4 w-4" />

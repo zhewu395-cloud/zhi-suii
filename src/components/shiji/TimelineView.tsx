@@ -25,12 +25,12 @@ function dayBounds(d: Date) {
   return { start: start.getTime(), end: end.getTime() };
 }
 
-export function TimelineView({ date }: { date: Date }) {
+export function TimelineView({ date, reloadKey = 0 }: { date: Date; reloadKey?: number }) {
   const [entries, setEntries] = useState<TimeEntry[]>([]);
 
   useEffect(() => {
     getAll<TimeEntry>("entries").then(setEntries);
-  }, []);
+  }, [reloadKey]);
 
   const list = useMemo(() => {
     const { start, end } = dayBounds(date);
