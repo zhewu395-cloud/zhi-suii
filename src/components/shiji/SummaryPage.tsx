@@ -349,7 +349,7 @@ export function SummaryPage() {
             </div>
           </div>
           <div className="flex-1 min-h-0 overflow-y-auto pb-32">
-            <TimelineView date={date} />
+            <TimelineView date={date} reloadKey={tlTick} />
           </div>
         </>
       ) : (
