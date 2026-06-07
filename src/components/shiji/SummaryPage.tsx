@@ -166,6 +166,19 @@ export function SummaryPage() {
 
   const headerControls = (
     <div className="flex items-center gap-0.5">
+      <button
+        onClick={() => {
+          setQName("");
+          setQStart("09:00");
+          setQEnd("10:00");
+          setQuickOpen(true);
+        }}
+        className="flex items-center justify-center bg-transparent p-1.5 active:scale-90 transition"
+        style={{ color: "oklch(0.45 0.07 145)" }}
+        aria-label="快捷添加事件"
+      >
+        <Plus className="h-5 w-5" strokeWidth={2} />
+      </button>
       <DualLeafToggle
         mode={mode}
         onToggle={() => setMode((m) => (m === "timeline" ? "summary" : "timeline"))}
@@ -214,19 +227,6 @@ export function SummaryPage() {
           )}
         </PopoverContent>
       </Popover>
-      <button
-        onClick={() => {
-          setQName("");
-          setQHour("");
-          setQMin("");
-          setQuickOpen(true);
-        }}
-        className="flex items-center justify-center bg-transparent p-1.5 active:scale-90 transition"
-        style={{ color: "oklch(0.45 0.07 145)" }}
-        aria-label="快捷添加事件"
-      >
-        <Plus className="h-5 w-5" strokeWidth={2} />
-      </button>
     </div>
   );
 
