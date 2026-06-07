@@ -298,25 +298,15 @@ export function SummaryPage() {
               />
             </div>
             <div className="mx-5 h-px bg-border shrink-0" />
-            {/* 起止时间 */}
-            <div className="px-5 pt-3 pb-2 space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-foreground/60">开始时间</span>
-                <input
-                  type="time"
-                  value={qStart}
-                  onChange={(e) => setQStart(e.target.value)}
-                  className="bg-muted/70 rounded-full px-3 py-1 text-sm text-foreground/80 outline-none tabular-nums"
-                />
+            {/* 起止时间 —— 滚动轴选择器 */}
+            <div className="px-3 pt-2 pb-2 space-y-2">
+              <div className="flex items-center gap-3">
+                <span className="text-[11px] text-foreground/55 w-12 shrink-0 pl-2">开始</span>
+                <TimeWheel value={qStart} onChange={setQStart} />
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-foreground/60">结束时间</span>
-                <input
-                  type="time"
-                  value={qEnd}
-                  onChange={(e) => setQEnd(e.target.value)}
-                  className="bg-muted/70 rounded-full px-3 py-1 text-sm text-foreground/80 outline-none tabular-nums"
-                />
+              <div className="flex items-center gap-3">
+                <span className="text-[11px] text-foreground/55 w-12 shrink-0 pl-2">结束</span>
+                <TimeWheel value={qEnd} onChange={setQEnd} />
               </div>
             </div>
             <div className="px-5 pb-4 pt-1 flex items-center justify-end gap-2 shrink-0">
