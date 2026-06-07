@@ -230,32 +230,42 @@ export function SummaryPage() {
     </div>
   );
 
+  const parseHM = (s: string): [number, number] => {
+    const [hh, mm] = s.split(":").map((v) => parseInt(v, 10));
+    return [isNaN(hh) ? 0 : hh, isNaN(mm) ? 0 : mm];
+  };
+
   const handleQuickAdd = async () => {
     const name = qName.trim();
-    const h = parseInt(qHour || "0", 10) || 0;
-    const m = parseInt(qMin || "0", 10) || 0;
-    const totalMin = h * 60 + m;
-    if (!name || totalMin <= 0) return;
-    const duration = totalMin * 60000;
-    // find or create activity by name
+    if (!name) return;
+    const [sh, sm] = parseHM(qStart);
+    const [eh, em] = parseHM(qEnd);
+    const startDate = new Date(date);
+    startDate.setHours(sh, sm, 0, 0);
+    const endDate = new Date(date);
+    endDate.setHours(eh, em, 0, 0);
+    let startAt = startDate.getTime();
+    let endAt = endDate.getTime();
+    if (endAt <= startAt) endAt = startAt + 60000; // 至少 1 分钟
+    const duration = endAt - startAt;
     const acts = await getAll<Activity>("activities");
     let act = acts.find((a) => a.name === name);
     if (!act) {
       act = { id: uid(), name, color: "#BFE3C6", createdAt: Date.now() };
       await put("activities", act);
     }
-    const endAt = date.getTime();
     const entry: TimeEntry = {
       id: uid(),
       activityId: act.id,
       activityName: name,
-      startAt: endAt - duration,
+      startAt,
       endAt,
       duration,
     };
     await put("entries", entry);
     setQuickOpen(false);
     await reloadEntries();
+    setTlTick((t) => t + 1);
   };
 
   const [headerSlot, setHeaderSlot] = useState<HTMLElement | null>(null);
@@ -269,64 +279,57 @@ export function SummaryPage() {
 
       {quickOpen && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 px-6"
+          className="fixed inset-0 z-[100] bg-black/35 px-4"
           onClick={() => setQuickOpen(false)}
         >
           <div
-            className="w-full max-w-sm rounded-3xl bg-background p-5 shadow-xl"
+            className="absolute left-1/2 -translate-x-1/2 w-[92%] max-w-sm rounded-[28px] shadow-2xl flex flex-col overflow-hidden animate-scale-in"
+            style={{ top: "22%", background: "rgba(245, 250, 247, 1)" }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="text-base font-medium text-foreground/85 mb-4">快捷添加事件</div>
-            <div className="space-y-3">
-              <div>
-                <div className="text-xs text-foreground/60 mb-1">事件名称</div>
+            {/* 事件名 */}
+            <div className="px-5 pt-4 pb-2 shrink-0">
+              <input
+                autoFocus
+                value={qName}
+                onChange={(e) => setQName(e.target.value)}
+                placeholder="事件名称"
+                className="w-full bg-transparent text-base font-medium outline-none"
+              />
+            </div>
+            <div className="mx-5 h-px bg-border shrink-0" />
+            {/* 起止时间 */}
+            <div className="px-5 pt-3 pb-2 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-foreground/60">开始时间</span>
                 <input
-                  type="text"
-                  value={qName}
-                  onChange={(e) => setQName(e.target.value)}
-                  autoFocus
-                  placeholder="例如：阅读"
-                  className="w-full h-10 px-3 rounded-xl bg-muted/60 text-sm text-foreground outline-none border border-foreground/10 focus:border-primary/40"
+                  type="time"
+                  value={qStart}
+                  onChange={(e) => setQStart(e.target.value)}
+                  className="bg-muted/70 rounded-full px-3 py-1 text-sm text-foreground/80 outline-none tabular-nums"
                 />
               </div>
-              <div>
-                <div className="text-xs text-foreground/60 mb-1">持续时间</div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    inputMode="numeric"
-                    min={0}
-                    value={qHour}
-                    onChange={(e) => setQHour(e.target.value)}
-                    placeholder="0"
-                    className="w-full h-10 px-3 rounded-xl bg-muted/60 text-sm text-foreground outline-none border border-foreground/10 focus:border-primary/40 tabular-nums"
-                  />
-                  <span className="text-xs text-foreground/60">小时</span>
-                  <input
-                    type="number"
-                    inputMode="numeric"
-                    min={0}
-                    max={59}
-                    value={qMin}
-                    onChange={(e) => setQMin(e.target.value)}
-                    placeholder="0"
-                    className="w-full h-10 px-3 rounded-xl bg-muted/60 text-sm text-foreground outline-none border border-foreground/10 focus:border-primary/40 tabular-nums"
-                  />
-                  <span className="text-xs text-foreground/60">分钟</span>
-                </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-foreground/60">结束时间</span>
+                <input
+                  type="time"
+                  value={qEnd}
+                  onChange={(e) => setQEnd(e.target.value)}
+                  className="bg-muted/70 rounded-full px-3 py-1 text-sm text-foreground/80 outline-none tabular-nums"
+                />
               </div>
             </div>
-            <div className="mt-5 flex gap-2 justify-end">
+            <div className="px-5 pb-4 pt-1 flex items-center justify-end gap-2 shrink-0">
               <button
                 onClick={() => setQuickOpen(false)}
-                className="px-4 py-2 rounded-full text-sm text-foreground/70 bg-muted/60 active:scale-95 transition"
+                className="rounded-full px-3 py-1 text-sm text-foreground/65"
               >
                 取消
               </button>
               <button
                 onClick={handleQuickAdd}
-                disabled={!qName.trim() || (parseInt(qHour || "0", 10) || 0) * 60 + (parseInt(qMin || "0", 10) || 0) <= 0}
-                className="px-4 py-2 rounded-full text-sm text-primary-foreground bg-primary active:scale-95 transition disabled:opacity-40"
+                disabled={!qName.trim()}
+                className="rounded-full bg-primary px-4 py-1 text-sm text-primary-foreground disabled:opacity-40"
               >
                 确定添加
               </button>
@@ -334,6 +337,8 @@ export function SummaryPage() {
           </div>
         </div>
       )}
+
+
 
 
       {mode === "timeline" ? (
