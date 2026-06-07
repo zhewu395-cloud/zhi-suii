@@ -686,3 +686,143 @@ function MonthYearPicker({
   );
 }
 
+
+/* ===== TimeWheel：iOS 风格双列滚动时间选择器，符合《织岁》绿色画风 ===== */
+const WHEEL_GREEN_LINE = "oklch(0.55 0.07 145 / 0.32)";
+const WHEEL_SELECTED_BG = "oklch(0.78 0.10 145 / 0.45)"; // 与工具栏激活淡绿一致
+const WHEEL_TEXT = "oklch(0.34 0.04 142)";
+
+function WheelColumn({
+  items,
+  value,
+  onChange,
+  pad = 2,
+  formatter = (n: number) => String(n).padStart(2, "0"),
+}: {
+  items: number[];
+  value: number;
+  onChange: (v: number) => void;
+  pad?: number;
+  formatter?: (n: number) => string;
+}) {
+  const ITEM_H = 30;
+  const ref = useRef<HTMLDivElement | null>(null);
+  const settleRef = useRef<number | null>(null);
+  const lastIdxRef = useRef<number>(-1);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const idx = items.indexOf(value);
+    if (idx < 0) return;
+    const target = idx * ITEM_H;
+    if (Math.abs(el.scrollTop - target) > 1) {
+      el.scrollTop = target;
+    }
+    lastIdxRef.current = idx;
+  }, [value, items]);
+
+  const handleScroll = () => {
+    const el = ref.current;
+    if (!el) return;
+    if (settleRef.current) window.clearTimeout(settleRef.current);
+    settleRef.current = window.setTimeout(() => {
+      const raw = el.scrollTop / ITEM_H;
+      const idx = Math.max(0, Math.min(items.length - 1, Math.round(raw)));
+      const snapTop = idx * ITEM_H;
+      if (Math.abs(el.scrollTop - snapTop) > 0.5) {
+        el.scrollTo({ top: snapTop, behavior: "smooth" });
+      }
+      if (idx !== lastIdxRef.current) {
+        lastIdxRef.current = idx;
+        onChange(items[idx]);
+      }
+    }, 90);
+  };
+
+  return (
+    <div className="relative flex-1" style={{ height: ITEM_H * 5 }}>
+      {/* 中央选中带 */}
+      <div
+        className="pointer-events-none absolute left-1 right-1 rounded-[10px]"
+        style={{
+          top: ITEM_H * 2,
+          height: ITEM_H,
+          background: WHEEL_SELECTED_BG,
+        }}
+      />
+      {/* 上下两根极细绿色分割线 */}
+      <div
+        className="pointer-events-none absolute left-2 right-2"
+        style={{ top: ITEM_H * 2, height: 1, background: WHEEL_GREEN_LINE }}
+      />
+      <div
+        className="pointer-events-none absolute left-2 right-2"
+        style={{ top: ITEM_H * 3, height: 1, background: WHEEL_GREEN_LINE }}
+      />
+      {/* 上下渐隐遮罩 */}
+      <div
+        ref={ref}
+        onScroll={handleScroll}
+        className="h-full overflow-y-scroll no-scrollbar"
+        style={{
+          scrollSnapType: "y mandatory",
+          WebkitMaskImage:
+            "linear-gradient(180deg, transparent 0, #000 28%, #000 72%, transparent 100%)",
+          maskImage:
+            "linear-gradient(180deg, transparent 0, #000 28%, #000 72%, transparent 100%)",
+        }}
+      >
+        <div style={{ height: ITEM_H * 2 }} />
+        {items.map((n) => (
+          <div
+            key={n}
+            className="flex items-center justify-center tabular-nums select-none"
+            style={{
+              height: ITEM_H,
+              scrollSnapAlign: "center",
+              fontSize: 13,
+              color: WHEEL_TEXT,
+              letterSpacing: "0.02em",
+            }}
+          >
+            {formatter(n).padStart(pad, "0")}
+          </div>
+        ))}
+        <div style={{ height: ITEM_H * 2 }} />
+      </div>
+    </div>
+  );
+}
+
+function TimeWheel({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const [hh, mm] = value.split(":").map((v) => parseInt(v, 10) || 0);
+  const hours = useMemo(() => Array.from({ length: 24 }, (_, i) => i), []);
+  const minutes = useMemo(() => Array.from({ length: 60 }, (_, i) => i), []);
+  const set = (h: number, m: number) =>
+    onChange(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`);
+  return (
+    <div
+      className="relative flex-1 flex items-stretch rounded-[14px]"
+      style={{
+        background: "oklch(0.985 0.008 145 / 0.85)",
+        border: "1px solid oklch(0.55 0.06 145 / 0.18)",
+      }}
+    >
+      <WheelColumn items={hours} value={hh} onChange={(h) => set(h, mm)} />
+      <div
+        className="self-center text-[12px] tabular-nums"
+        style={{ color: WHEEL_TEXT, opacity: 0.7 }}
+      >
+        :
+      </div>
+      <WheelColumn items={minutes} value={mm} onChange={(m) => set(hh, m)} />
+    </div>
+  );
+}
